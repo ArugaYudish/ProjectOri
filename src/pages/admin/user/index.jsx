@@ -4,10 +4,12 @@ import '../../../assets/css/user.css';
 import { Table, Button, Spin, message } from 'antd';
 import { AddCircle } from 'iconsax-react';
 import api from '../../../utils/api';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Users = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,7 +30,7 @@ const Users = () => {
   }, []);
 
   const handleButtonClick = record => {
-    console.log('Button clicked for record:', record);
+    navigate(`/asdhakdls/users/edit/${record.id}`);
   };
 
   const columns = [
@@ -86,12 +88,12 @@ const Users = () => {
           <div className='flex justify-between'>
             <div className='font-bold py-2'>Users</div>
             <div>
-              <button
-                type='button'
+              <Link
+                to={'/asdhakdls/users/add'}
                 className='text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>
                 <AddCircle size='16' color='#FFFFFF' />
                 Create New
-              </button>
+              </Link>
             </div>
           </div>
           <div className='pt-3'>
