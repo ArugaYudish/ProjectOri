@@ -21,24 +21,25 @@ import AddUsers from './pages/admin/user/add.jsx'
 import UserRoleMiddleware from './component/middleware/UserMiddleware.jsx'
 import AdminRoleMiddleware from './component/middleware/AdminMiddleware.jsx'
 import GuestMiddleware from './component/middleware/GuestMiddleware.jsx'
+import EditUserForm from './pages/admin/user/edit.jsx'
 
 const RoutesComponent = () => {
 	return (
 		<Router>
 			<Routes>
+				<Route
+					path="/"
+					element={<Home />}
+				/>
+				<Route
+					path="/testapi"
+					element={<TestApi />}
+				/>
+				<Route
+					path="/package"
+					element={<Subs />}
+				/>
 				<Route element={<GuestMiddleware />}>
-					<Route
-						path="/"
-						element={<Home />}
-					/>
-					<Route
-						path="/testapi"
-						element={<TestApi />}
-					/>
-					<Route
-						path="/package"
-						element={<Subs />}
-					/>
 					<Route
 						path="/register"
 						element={<RegisterForm />}
@@ -90,6 +91,10 @@ const RoutesComponent = () => {
 					<Route
 						path="/asdhakdls/users/add"
 						element={<AddUsers />}
+					/>
+          <Route
+						path="/asdhakdls/users/edit/:id"
+						element={<EditUserForm />}
 					/>
 					<Route
 						path="/asdhakdls/content"
