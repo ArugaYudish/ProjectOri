@@ -4,6 +4,8 @@ import '../../assets/css/auth.css';
 import OrinekoCat from '../../assets/img/Login.svg';
 import OriNekoLogo from '../../assets/img/OriNeko-Logo.png';
 import { decryptUserData } from '../../utils/api';
+import { useLocation } from 'react-router-dom';
+import { Alert } from 'antd';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +14,9 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [userData, setUserData] = useState(null);
   const [userBallance, setUserBallance] = useState(null);
+  const location = useLocation()
+  const verificationStatus = location.state && location.state.meta !== null ? location.state.meta.code : null
+  const verificationMessage = location.state && location.state.meta !== null ? location.state.meta.message : null
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -74,6 +79,9 @@ const LoginForm = () => {
 
   return (
     <>
+      {verificationStatus !== null ? <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
+        <Alert message={verificationMessage} type={verificationStatus === 200 ? 'success' : 'error'} showIcon closable />
+      </div> : null}
       <div className='authForm sm:grid grid-cols-2'>
         <div className='col-span-1 image-form flex items-center'>
           <img

@@ -18,6 +18,7 @@ import AdminWithdraw from './pages/admin/Withdraw.jsx';
 import Users from './pages/admin/user/index.jsx';
 import Content from './pages/admin/content/index.jsx';
 import AddUsers from './pages/admin/user/add.jsx';
+import Activation from './pages/register/Activation.jsx';
 
 const RoutesComponent = () => {
   return (
@@ -27,6 +28,7 @@ const RoutesComponent = () => {
         <Route path='/testapi' element={<TestApi />} />{' '}
         <Route path='/package' element={<Subs />} />{' '}
         <Route path='/register' element={<RegisterForm />} />{' '}
+        <Route path='/activation/:id' element={<Activation />} />{' '}
         <Route path='/login' element={<LoginForm />} />{' '}
         <Route path='/forgot' element={<ForgotForm />} />{' '}
         <Route path='/wallet' element={<Wallet />} />{' '}
