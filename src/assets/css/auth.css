@@ -1,0 +1,42 @@
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+.authForm {
+  background-color: #f4c437;
+  width: 100%;
+  height: 100vh;
+}
+
+.image-form {
+  padding: 3em;
+}
+
+.set-form {
+  border-top-left-radius: 42px;
+  border-bottom-left-radius: 42px;
+  padding: 3em;
+}
+
+.set-image-form {
+  width: 60%;
+  height: auto;
+  margin: 10px auto;
+}
+
+.bg-button-form {
+  background-color: #f4c437;
+}
+
+.set-logo-login {
+  width: 30%;
+}
+
+@media only screen and (max-width: 600px) {
+  .set-form {
+    border-top-left-radius: 36px;
+    border-top-right-radius: 36px;
+    border-bottom-left-radius: 0px;
+    padding: 3em;
+  }
+}

@@ -1,0 +1,78 @@
+* {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+}
+
+.navbar-gradient-bg {
+  background: rgba(245, 206, 91, 0.7);
+}
+
+.navbar-default-bg {
+  background-color: transparent;
+}
+
+.navbar-color > * {
+  /* background: linear-gradient(0deg, #866e36 0%, #866e36 100%); */
+  color: #4b4b4b;
+  font-weight: 500px;
+  font-size: 16px;
+}
+
+.navbar-text-color {
+  color: #4b4b4b;
+  font-weight: 500px;
+}
+
+.register-button {
+  background: var(
+    --Orineko-Gradient,
+    linear-gradient(102deg, #ffcd3a -4.62%, #b08c21 178.22%),
+    linear-gradient(102deg, #0bb1e3 -4.62%, #0f2976 178.22%),
+    #0e70af
+  );
+  color: #4f4f4f;
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sidebar-color {
+  color: #9b4b24;
+}
+
+.bg-sidebar {
+  background-color: #fff4df;
+}
+
+.bg-sidebar-sec {
+  color: grey;
+}
+
+.bg-sidebar-sec:hover {
+  background-color: #fff4df;
+  color: #9b4b24;
+  font-weight: bold;
+}
+
+.bg-sidebar-sec:hover .icon-Wallet,
+.bg-sidebar-sec:hover .icon-Wallet:hover {
+  color: #9b4b24;
+  /* Warna yang diinginkan ketika elemen li dihover */
+  font-weight: bold;
+}
+
+.icon-Wallet {
+  color: #9b4b24;
+  font-weight: bold;
+}
+
+/* .icon-Wallet:hover {
+  color: #9b4b24;
+  font-weight: bold;
+} */
+
+.padding-general {
+  padding-left: 10%;
+  padding-right: 10%;
+}

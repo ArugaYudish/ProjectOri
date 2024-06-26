@@ -1,0 +1,186 @@
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+.padding-general {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.text-primary-neko {
+  color: #d2a41a;
+}
+
+.title-landing {
+  color: #77601c;
+}
+
+.capt-landing {
+  font-size: 32px;
+}
+
+.capt-landing-detail {
+  font-size: 18px;
+}
+
+.capt-mission {
+  font-size: 21px;
+}
+
+.detail-mission {
+  font-size: 16px;
+}
+
+.text-about-us {
+  color: #403d35;
+}
+
+.about-padding {
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
+.why-neko {
+  background-color: #fdf5de;
+  color: black;
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
+.title-features {
+  font-size: 32px;
+  text-align: center;
+}
+
+.key-features {
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
+.capt-key-features {
+  color: #f85e9f;
+}
+
+.sub-key-features {
+  font-size: 38px;
+}
+
+.paragraph-features {
+  color: grey;
+}
+
+.card-features {
+  border-radius: 24px;
+}
+
+.title-card-features {
+  color: #ff5722;
+  font-size: 20px;
+  width: 70%;
+}
+
+.set-performance {
+  padding-top: 8em;
+  padding-bottom: 8em;
+}
+
+.set-feedback {
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
+.desc-feedback {
+  color: grey;
+}
+
+.subs-detail {
+  color: grey;
+  font-size: 14px;
+}
+
+.card-subs {
+  border-radius: 12px;
+}
+
+.title-card-subs {
+  color: #d6a925;
+  font-size: 12 px;
+  width: 70%;
+}
+
+.btn-card-subs {
+  width: 90%;
+  background-color: #fbf8ed;
+  color: #d6a925;
+  font-weight: 700;
+}
+
+.btn-card-subs:hover {
+  width: 85%;
+  background: var(
+    --Orineko,
+    linear-gradient(102deg, #cea017 -4.62%, #f5ce5b 178.22%)
+  );
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.btn-subs {
+  width: 85%;
+}
+
+.set-neko-money {
+  width: 70%;
+}
+
+.color-capt {
+  color: #d2a41a;
+}
+
+.set-image-exchange {
+  width: 70%;
+}
+
+.title-exchange {
+  color: #f85e9f;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.desc-exchange {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.set-footer {
+  width: 100%;
+  background-color: #ffca6a;
+}
+
+/* Package */
+
+.package-page {
+  background-color: #fefaef;
+}
+
+.capt-subs {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.desc-subs {
+  color: #161c2d;
+  text-align: center;
+}
+
+.card-subs {
+  width: 300px;
+  background-color: white;
+  margin: 0px auto;
+}
+
+.pos-card {
+  padding-top: 50px;
+  padding-bottom: 70px;
+}

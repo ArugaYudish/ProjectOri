@@ -1,0 +1,136 @@
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+.search-custom-size {
+  width: 35%;
+}
+
+.set-refferal {
+  background-color: #f7f9fd;
+}
+
+.logout {
+  padding-top: 45vh;
+}
+
+.set-logout {
+  padding-top: 24vh;
+}
+
+.text-orineko {
+  color: #fecd3a;
+}
+
+.bg-orineko-primary {
+  background-color: #29823b;
+}
+
+.bg-orineko-danger {
+  background-color: #dc2020;
+}
+
+.bg-color-orineko {
+  background-color: #ca9700;
+}
+
+.bg-color-orineko:hover {
+  background-color: #fecd3a;
+}
+
+.bg-color-orineko-sec {
+  background-color: white;
+  color: black;
+}
+
+.bg-color-orineko-sec:hover {
+  background-color: #ca9700;
+  color: white;
+}
+
+.bg-color-orineko-telegram {
+  background-color: #f0faff;
+  color: #34aadf;
+  border-color: #34aadf;
+  padding: 20px 24px;
+}
+
+.bg-color-orineko-ternary:hover {
+  background-color: #ca9700;
+  color: white;
+}
+
+@media only screen and (max-width: 600px) {
+  .search-custom-size {
+    width: 100%;
+  }
+  .set-logout {
+    padding-top: 10px;
+  }
+}
+
+/* CSS untuk mengubah warna header tabel */
+
+.table-ant .ant-table-thead > tr > th {
+  background-color: #ca9700;
+  /* Ubah sesuai dengan warna yang diinginkan */
+  color: #ffffff;
+  /* Ubah warna teks header */
+  font-weight: bold;
+  /* Menebalkan teks header */
+  text-align: center;
+  border: none;
+}
+
+/* CSS untuk mengubah warna konten tabel */
+
+.table-ant .ant-table-tbody > tr > td {
+  text-align: center;
+}
+
+.table-ant .ant-table-tbody > tr:nth-child(even) > td {
+  background-color: #fdf4e1;
+  /* Ubah sesuai dengan warna yang diinginkan */
+  color: #333;
+  /* Ubah warna teks konten */
+}
+
+/* CSS untuk mengubah warna baris tabel ketika di-hover */
+
+.table-ant .ant-table-tbody > tr:hover > td {
+  background-color: #e6f7ff;
+  /* Ubah sesuai dengan warna yang diinginkan */
+}
+
+/* CSS untuk mengubah warna header tabel */
+
+.table-ant .ant-table-thead > tr > th {
+  background-color: #ca9700;
+  /* Ubah sesuai dengan warna yang diinginkan */
+  color: #ffffff;
+  /* Ubah warna teks header */
+  font-weight: bold;
+  /* Menebalkan teks header */
+  text-align: center;
+  border: none;
+}
+
+/* CSS untuk mengubah warna konten tabel */
+
+.table-ant .ant-table-tbody > tr > td {
+  text-align: center;
+}
+
+.table-ant .ant-table-tbody > tr:nth-child(even) > td {
+  background-color: #fdf4e1;
+  /* Ubah sesuai dengan warna yang diinginkan */
+  color: #333;
+  /* Ubah warna teks konten */
+}
+
+/* CSS untuk mengubah warna baris tabel ketika di-hover */
+
+.table-ant .ant-table-tbody > tr:hover > td {
+  background-color: #e6f7ff;
+  /* Ubah sesuai dengan warna yang diinginkan */
+}
