@@ -24,31 +24,31 @@ const Navbar = () => {
   const items = [
     {
       key: '1',
-      label: <a href="/wallet" className='p-2'>Dashboard</a>,
+      label: <a href="/wallet" className='p-1 flex justify-center'>Dashboard</a>,
     },
     {
       key: '2',
-      label: <a href="#about" className='p-2'>About Us</a>,
+      label: <a href="#about" className='p-1 flex justify-center'>About Us</a>,
     },
     {
       key: '3',
-      label: <a href="#contact" className='p-2'>Contact Us</a>,
+      label: <a href="#contact" className='p-1 flex justify-center'>Contact Us</a>,
     },
     {
       key: '4',
-      label: <a href="#key-features" className='p-2'>Key Features</a>,
+      label: <a href="#key-features" className='p-1 flex justify-center'>Key Features</a>,
     },
     {
       key: '5',
-      label: <a href="#performance" className='p-2'>Performance</a>,
+      label: <a href="#performance" className='p-1 flex justify-center'>Performance</a>,
     },
     {
       key: '6',
-      label: <a href="#subscription" className='p-2'>Subscription Plan</a>,
+      label: <a href="#subscription" className='p-1 flex justify-center'>Subscription Plan</a>,
     },
     {
       key: '7',
-      label: <a href="/register" className="register-button m-2">Register</a>,
+      label: <a href="/register" className="register-button flex justify-center m-1">Register</a>,
     },
   ];
 
@@ -68,6 +68,7 @@ const Navbar = () => {
             menu={{ items }}
             trigger={['click']}
             className="block sm:hidden items-center inline-flex"
+            overlayClassName='w-64'
           >
             <button onClick={(e) => e.preventDefault()}>
               <Space>

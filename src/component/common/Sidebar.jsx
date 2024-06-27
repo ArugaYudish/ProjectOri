@@ -60,7 +60,6 @@ const Sidebar = ({ children }) => {
 				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full"
 			>
 				<LogoutCurve
-					size="20"
 					variant="Regular"
 				/>
 				<span className="ms-3 text-sidebar">Logout</span>
@@ -87,6 +86,7 @@ const Sidebar = ({ children }) => {
 						menu={{ items }}
 						trigger={['click']}
 						className="block sm:hidden items-center inline-flex"
+						overlayClassName='w-64'
 					>
 						<button onClick={(e) => e.preventDefault()}>
 							<Space>
