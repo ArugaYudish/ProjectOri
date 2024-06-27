@@ -43,8 +43,8 @@ const Users = () => {
 
       console.log('response3', response)
 
-			if (response.data && response.data.data) {
-				navigate('/asdhakdls/users') // Redirect to the users management page after success
+			if (response.data && response.data.meta.code === 200) {
+        window.location.reload();
 			} else {
 				setError('Failed to update user')
 			}
