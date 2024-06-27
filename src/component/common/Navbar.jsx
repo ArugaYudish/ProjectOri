@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../../assets/img/OriNeko-Logo.png';
 import '../../assets/css/navbar.css';
+import { Dropdown, Space } from 'antd';
 
 const Navbar = () => {
   const [scrollBackground, setScrollBackground] = useState(false);
@@ -19,6 +20,38 @@ const Navbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrollBackground]);
+
+  const items = [
+    {
+      key: '1',
+      label: <a href="/wallet" className='p-2'>Dashboard</a>,
+    },
+    {
+      key: '2',
+      label: <a href="#about" className='p-2'>About Us</a>,
+    },
+    {
+      key: '3',
+      label: <a href="#contact" className='p-2'>Contact Us</a>,
+    },
+    {
+      key: '4',
+      label: <a href="#key-features" className='p-2'>Key Features</a>,
+    },
+    {
+      key: '5',
+      label: <a href="#performance" className='p-2'>Performance</a>,
+    },
+    {
+      key: '6',
+      label: <a href="#subscription" className='p-2'>Subscription Plan</a>,
+    },
+    {
+      key: '7',
+      label: <a href="/register" className="register-button m-2">Register</a>,
+    },
+  ];
+
   return (
     <>
       <nav
@@ -31,28 +64,27 @@ const Navbar = () => {
             class='flex items-center space-x-3 rtl:space-x-reverse'>
             <img src={logo} class='h-8' alt='Flowbite Logo' />
           </a>
-          <button
-            data-collapse-toggle='navbar-default'
-            type='button'
-            class='inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-900 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
-            aria-controls='navbar-default'
-            aria-expanded='false'>
-            <span class='sr-only'>Open main menu</span>
-            <svg
-              class='w-5 h-5'
-              aria-hidden='true'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 17 14'>
-              <path
-                stroke='currentColor'
-                stroke-linecap='round'
-                stroke-linejoin='round'
-                stroke-width='2'
-                d='M1 1h15M1 7h15M1 13h15'
-              />
-            </svg>
-          </button>
+          <Dropdown
+            menu={{ items }}
+            trigger={['click']}
+            className="block sm:hidden items-center inline-flex"
+          >
+            <button onClick={(e) => e.preventDefault()}>
+              <Space>
+                <svg
+                  className="w-6 h-6 fill-current"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"
+                  />
+                </svg>
+              </Space>
+            </button>
+          </Dropdown>
           <div class='hidden w-full md:block md:w-auto' id='navbar-default'>
             <ul class='font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 '>
               <li>

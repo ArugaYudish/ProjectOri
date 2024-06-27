@@ -117,6 +117,7 @@ const Refferal = () => {
                 <div className='text-2xl pt-5'>Your referrals</div>
               </div>
               <div className='card'>
+              <div className="overflow-hidden overflow-x-auto">
                 <Table
                   className='table-ant'
                   columns={columns}
@@ -124,6 +125,7 @@ const Refferal = () => {
                   pagination={{ pageSize: 5 }}
                   rowKey='id'
                 />
+                </div>
               </div>
             </div>
           </div>
