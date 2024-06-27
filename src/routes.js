@@ -22,6 +22,9 @@ import GuestMiddleware from './component/middleware/GuestMiddleware.jsx'
 import EditUserForm from './pages/admin/user/edit.jsx'
 import Activation from './pages/register/Activation.jsx';
 import ForgotVerification from './pages/forgot/ForgotVerification.jsx';
+import NotFound from './pages/notFound/NotFound.jsx'
+import PurchaseSuccess from './pages/purchase/Success.jsx'
+import PurchaseFailed from './pages/purchase/Failed.jsx'
 
 const RoutesComponent = () => {
 	return (
@@ -38,6 +41,18 @@ const RoutesComponent = () => {
 				<Route
 					path="/package"
 					element={<Subs />}
+				/>
+				<Route
+					path="/notfound"
+					element={<NotFound />}
+				/>
+				<Route
+					path="/purchase-success"
+					element={<PurchaseSuccess />}
+				/>
+				<Route
+					path="/purchase-failed"
+					element={<PurchaseFailed />}
 				/>
 				<Route element={<GuestMiddleware />}>
 					<Route
