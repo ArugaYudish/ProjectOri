@@ -17,6 +17,7 @@ const SidebarAdmin = ({ children }) => {
 			if (response.status === 200) {
 				localStorage.removeItem('userId')
 				localStorage.removeItem('role')
+				localStorage.removeItem('accessToken');
 				navigate('/')
 			}
 		} catch (error) {
