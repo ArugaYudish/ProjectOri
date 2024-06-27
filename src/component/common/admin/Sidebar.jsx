@@ -53,7 +53,7 @@ const SidebarAdmin = ({ children }) => {
 		label: (
 			<Link
 				to={item.href}
-				className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${
+				className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${
 					location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
 				}`}
 			>
@@ -73,10 +73,9 @@ const SidebarAdmin = ({ children }) => {
 		label: (
 			<button
 				onClick={handleLogout}
-				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full"
+				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full text-black"
 			>
 				<LogoutCurve
-					size="20"
 					variant="Regular"
 				/>
 				<span className="ms-3 text-sidebar">Logout</span>
@@ -146,6 +145,7 @@ const SidebarAdmin = ({ children }) => {
 					<Dropdown
 						menu={{ items }}
 						trigger={['click']}
+            overlayClassName='w-64'
 					>
 						<button onClick={(e) => e.preventDefault()}>
 							<Space>
