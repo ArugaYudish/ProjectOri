@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/OriNeko-Logo.png';
 import { Wallet } from 'iconsax-react';
 import '../../assets/css/navbar.css';
+import api from '../../utils/api';
 
 import {
   BitcoinConvert,
@@ -13,14 +14,27 @@ import {
 
 const Sidebar = ({ children }) => {
   const location = useLocation();
+  const navigate = useNavigate()
 
   const menuItems = [
     { href: '/wallet', icon: Wallet, label: 'My Wallet' },
     { href: '/withdraw', icon: BitcoinConvert, label: 'Withdraw' },
     { href: '/refferal', icon: MessageAdd1, label: 'Refferal' },
     { href: '/history', icon: TableDocument, label: 'History' },
-    { href: '/logout', icon: LogoutCurve, label: 'Logout' },
   ];
+
+  const handleLogout = async () => {
+		try {
+			const response = await api.get('/api/v1/auth/logout')
+			if (response.status === 200) {
+				localStorage.removeItem('userId')
+				localStorage.removeItem('role')
+				navigate('/')
+			}
+		} catch (error) {
+			console.error('Logout failed', error)
+		}
+	}
 
   return (
     <div>
@@ -129,9 +143,9 @@ const Sidebar = ({ children }) => {
                 </div>
               </li>
               <li className='block sm:hidden py-5 '>
-                <a href='/logout' class=' mt-5 register-button'>
+                <button onClick={handleLogout} class=' mt-5 register-button'>
                   Logout
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -173,6 +187,18 @@ const Sidebar = ({ children }) => {
                 </Link>
               </li>
             ))}
+            <li>
+							<button
+								onClick={handleLogout}
+								className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full"
+							>
+								<LogoutCurve
+									size="20"
+									variant="Regular"
+								/>
+								<span className="ms-3 text-sidebar">Logout</span>
+							</button>
+						</li>
           </ul>
         </div>
       </aside>
