@@ -22,10 +22,20 @@ import coinbase from '../assets/img/coinbase.svg';
 import kucoin from '../assets/img/kucoin.svg';
 import iconPaw from '../assets/img/icon-paw.svg';
 import bgKucing from '../assets/img/Rocket.svg';
+import { Alert, Modal } from 'antd';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
+  const [open, setOpen] = useState(false)
+  const [currencies, setCurrencies] = useState([])
+  const [currency, setCurrency] = useState("")
+  const [id, setId] = useState("")
+  const [refferalCode, setRefferalCode] = useState("")
+  const [pack, setPack] = useState("")
   const apiUrl = process.env.REACT_APP_API_URL;
+  const accessToken = localStorage.getItem("accessToken")
+  const [error, setError] = useState("")
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -50,13 +60,142 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  const handleStartNowClick = id => {
-    // Melakukan navigasi ke halaman subs dengan menyertakan parameter id
-    navigate(`/package`);
+  const handleStartNowClick = async id => {
+    try {
+      const response = await fetch(`${apiUrl}/api/v1/transactions/rates`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      const data = await response.json();
+      const currenciesData = data.data.currency
+      const currenciesName = [];
+      const currenciesCode = [];
+      const currencies = []
+
+      let i = 1
+      for (let currencyCode in currenciesData) {
+        currenciesCode.push({
+          index: i,
+          data: currencyCode
+        })
+        i++
+      }
+
+      i = 1
+      for (let currencyName of Object.values(currenciesData)) {
+        currenciesName.push({
+          index: i,
+          data: currencyName.name
+        })
+        i++
+      }
+
+      currenciesCode.forEach(code => {
+        currenciesName.forEach(name => {
+          if (code.index === name.index) {
+            const tempData = {
+              name: name.data,
+              code: code.data
+            }
+
+            currencies.push(tempData)
+          }
+        })
+      })
+
+      setCurrencies(currencies);
+      setCurrency(currencies[0].code)
+
+      console.log(data.meta.message, data);
+      switch (data.meta.code) {
+        case 200:
+          console.log(currencies)
+          break;
+        default:
+          console.log(data)
+          break;
+      }
+    } catch (err) {
+      throw new Error(err.message)
+    }
+
+    setId(id)
+    setOpen(true)
   };
+
+  const handleCreateTransaction = async event => {
+    event.preventDefault()
+    setIsError(false)
+
+    try {
+      console.log(id, refferalCode, currency)
+      const response = await fetch(`${apiUrl}/api/v1/transactions/buy`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_package: id,
+          refferal_code: refferalCode,
+          currency
+        }),
+      })
+
+      const data = await response.json()
+      switch (data.meta.code) {
+        case 200:
+          const link = data.data.transaction.detail_checkout.checkout_url
+          window.location.href = link
+          break;
+        default:
+          const errMessage = data.meta.message
+          const errReason = data.meta.reason
+          setError(`${errMessage}, ${errReason}`)
+          setIsError(true)
+          console.log(data)
+          break;
+      }
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 
   return (
     <>
+      <Modal
+        title={pack}
+        open={open}
+        onOk={() => { setOpen(false) }}
+        onCancel={() => { setOpen(false) }}
+        cancelButtonProps={{
+          hidden: true
+        }}
+        okButtonProps={{
+          hidden: true
+        }}
+      >
+        <form className='flex flex-col max-w-sm mx-auto w-full' onSubmit={handleCreateTransaction}>
+          <div className='pb-2'>
+            <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' htmlFor='currency'>Select your currency</label>
+            <select name='currency' className='cursor-pointer border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' required value={currency} onChange={(e) => { setCurrency(e.target.value) }}>
+              {currencies.map((item, index) => (
+                <option className='cursor-pointer' key={index} value={item.code}>{item.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className='pb-2'>
+            <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' htmlFor='referral'>Input your referral code</label>
+            <input required className='border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' onChange={(e) => { setRefferalCode(e.target.value) }} type='text' name='referral' />
+          </div>
+          <Alert className={isError ? "" : "hidden"} message={error} type="error" showIcon />
+          <button className='w-full my-4 text-center text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-3 mb-2' type='submit'>Checkout</button>
+        </form>
+      </Modal>
+
       <Layout>
         {/* Landing Page */}
         <div
@@ -323,7 +462,10 @@ const Home = () => {
                   </p>
                   <p className='subs-detail'>{pack.desc_1}</p>
                   <button
-                    onClick={() => handleStartNowClick(index)}
+                    onClick={() => {
+                      handleStartNowClick(pack.id)
+                      setPack(pack.package_name)
+                    }}
                     type='button'
                     className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>
                     <span className='flex justify-between'>

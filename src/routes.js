@@ -1,5 +1,3 @@
-// routes.js
-
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home.jsx'
@@ -22,6 +20,8 @@ import UserRoleMiddleware from './component/middleware/UserMiddleware.jsx'
 import AdminRoleMiddleware from './component/middleware/AdminMiddleware.jsx'
 import GuestMiddleware from './component/middleware/GuestMiddleware.jsx'
 import EditUserForm from './pages/admin/user/edit.jsx'
+import Activation from './pages/register/Activation.jsx';
+import ForgotVerification from './pages/forgot/ForgotVerification.jsx';
 
 const RoutesComponent = () => {
 	return (
@@ -45,12 +45,20 @@ const RoutesComponent = () => {
 						element={<RegisterForm />}
 					/>
 					<Route
+						path='/activation/:id'
+						element={<Activation />}
+					/>
+					<Route
 						path="/login"
 						element={<LoginForm />}
 					/>
 					<Route
 						path="/forgot"
 						element={<ForgotForm />}
+					/>
+					<Route
+						path='/reset-password/:id'
+						element={<ForgotVerification />}
 					/>
 				</Route>
 				<Route element={<UserRoleMiddleware />}>
@@ -92,7 +100,7 @@ const RoutesComponent = () => {
 						path="/asdhakdls/users/add"
 						element={<AddUsers />}
 					/>
-          <Route
+					<Route
 						path="/asdhakdls/users/edit/:id"
 						element={<EditUserForm />}
 					/>
