@@ -19,6 +19,7 @@ import Users from './pages/admin/user/index.jsx';
 import Content from './pages/admin/content/index.jsx';
 import AddUsers from './pages/admin/user/add.jsx';
 import Activation from './pages/register/Activation.jsx';
+import ForgotVerification from './pages/forgot/ForgotVerification.jsx';
 
 const RoutesComponent = () => {
   return (
@@ -31,6 +32,7 @@ const RoutesComponent = () => {
         <Route path='/activation/:id' element={<Activation />} />{' '}
         <Route path='/login' element={<LoginForm />} />{' '}
         <Route path='/forgot' element={<ForgotForm />} />{' '}
+        <Route path='/reset-password/:id' element={<ForgotVerification />} />
         <Route path='/wallet' element={<Wallet />} />{' '}
         <Route path='/withdraw' element={<Withdraw />} />{' '}
         <Route path='/refferal' element={<Refferal />} />{' '}
