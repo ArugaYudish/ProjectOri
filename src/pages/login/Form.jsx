@@ -6,6 +6,7 @@ import OriNekoLogo from '../../assets/img/OriNeko-Logo.png';
 import { decryptUserData } from '../../utils/api';
 import { useLocation } from 'react-router-dom';
 import { Alert } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +18,7 @@ const LoginForm = () => {
   const location = useLocation()
   const verificationStatus = location.state && location.state.meta !== null ? location.state.meta.code : null
   const verificationMessage = location.state && location.state.meta !== null ? location.state.meta.message : null
+  const navigate = useNavigate();
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -28,11 +30,7 @@ const LoginForm = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('Form submitted');
     const apiUrl = process.env.REACT_APP_API_URL;
-    console.log(`API URL: ${apiUrl}`);
-    console.log('Email:', email);
-    console.log('Password:', password);
 
     try {
       const response = await axios.post(`${apiUrl}/api/v1/auth/login`, {
@@ -50,6 +48,9 @@ const LoginForm = () => {
         const accessToken = response.data.data.access_token;
         const encryptedUserData = response.data.data.user_data;
 
+        console.log(accessToken)
+        console.log(encryptedUserData)
+
         // Store access token in localStorage
         localStorage.setItem('accessToken', accessToken);
         console.log('Token stored:', localStorage.getItem('accessToken'));
@@ -58,12 +59,18 @@ const LoginForm = () => {
         const decryptedUserData = await decryptUserData(encryptedUserData);
         setUserData(decryptedUserData);
         localStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
+        localStorage.setItem('role', decryptedUserData.role);
         localStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
 
         // Set login status to success
         setLoginStatus('success');
         setErrorMessage('');
 
+        if (decryptedUserData.role === 'admin') {
+          navigate('/asdhakdls/dashboard')
+        } else {
+          navigate('/wallet')
+        }
         // Redirect user or handle successful login here
       } else {
         // Handle unexpected response format
