@@ -42,7 +42,7 @@ const Activation = () => {
             initialized.current = true
             activateUser()
         }
-    })
+    }, [])
 }
 
 export default Activation
