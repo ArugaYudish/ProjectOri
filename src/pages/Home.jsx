@@ -12,7 +12,7 @@ import Precision from '../assets/img/Precision.svg';
 import Proven from '../assets/img/Proven.svg';
 import Expertise from '../assets/img/Expertise.svg';
 import Feedback from '../assets/img/Feedback.png';
-import nekoMoney from '../assets/img/nekoMoney.png';
+import nekoMoney from '../assets/img/tryneko.svg';
 import binance from '../assets/img/binance.svg';
 import bybit from '../assets/img/bybit.svg';
 import bitget from '../assets/img/bitget.svg';
@@ -26,16 +26,17 @@ import { Alert, Modal } from 'antd';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
-  const [open, setOpen] = useState(false)
-  const [currencies, setCurrencies] = useState([])
-  const [currency, setCurrency] = useState("")
-  const [id, setId] = useState("")
-  const [refferalCode, setRefferalCode] = useState("")
-  const [pack, setPack] = useState("")
+  const [open, setOpen] = useState(false);
+  const [currencies, setCurrencies] = useState([]);
+  const [currency, setCurrency] = useState('');
+  const [id, setId] = useState('');
+  const [refferalCode, setRefferalCode] = useState('');
+  const [pack, setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
-  const accessToken = localStorage.getItem("accessToken")
-  const [error, setError] = useState("")
-  const [isError, setIsError] = useState(false)
+  const accessToken = localStorage.getItem('accessToken');
+  const [error, setError] = useState('');
+  const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -58,44 +59,42 @@ const Home = () => {
     fetchPackages();
   }, []);
 
-  const navigate = useNavigate();
-
   const handleStartNowClick = async id => {
     if (accessToken === null) {
-      navigate('/login')
-      return
+      navigate('/login');
+      return;
     }
 
     try {
       const response = await fetch(`${apiUrl}/api/v1/transactions/rates`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       const data = await response.json();
-      const currenciesData = data.data.currency
+      const currenciesData = data.data.currency;
       const currenciesName = [];
       const currenciesCode = [];
-      const currencies = []
+      const currencies = [];
 
-      let i = 1
+      let i = 1;
       for (let currencyCode in currenciesData) {
         currenciesCode.push({
           index: i,
-          data: currencyCode
-        })
-        i++
+          data: currencyCode,
+        });
+        i++;
       }
 
-      i = 1
+      i = 1;
       for (let currencyName of Object.values(currenciesData)) {
         currenciesName.push({
           index: i,
-          data: currencyName.name
-        })
-        i++
+          data: currencyName.name,
+        });
+        i++;
       }
 
       currenciesCode.forEach(code => {
@@ -103,70 +102,74 @@ const Home = () => {
           if (code.index === name.index) {
             const tempData = {
               name: name.data,
-              code: code.data
-            }
+              code: code.data,
+            };
 
-            currencies.push(tempData)
+            currencies.push(tempData);
           }
-        })
-      })
+        });
+      });
 
       setCurrencies(currencies);
-      setCurrency(currencies[0].code)
+      setCurrency(currencies[0].code);
 
       console.log(data.meta.message, data);
       switch (data.meta.code) {
         case 200:
-          console.log(currencies)
+          console.log(currencies);
           break;
         default:
-          console.log(data)
+          console.log(data);
           break;
       }
     } catch (err) {
-      throw new Error(err.message)
+      throw new Error(err.message);
     }
 
-    setId(id)
-    setOpen(true)
+    setId(id);
+    setOpen(true);
   };
 
   const handleCreateTransaction = async event => {
-    event.preventDefault()
-    setIsError(false)
+    event.preventDefault();
+    setIsError(false);
 
     try {
-      console.log(id, refferalCode, currency)
+      console.log(id, refferalCode, currency);
       const response = await fetch(`${apiUrl}/api/v1/transactions/buy`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           id_package: id,
           refferal_code: refferalCode,
-          currency
+          currency,
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
       switch (data.meta.code) {
         case 200:
-          const link = data.data.transaction.detail_checkout.checkout_url
-          window.location.href = link
+          const link = data.data.transaction.detail_checkout.checkout_url;
+          window.location.href = link;
           break;
         default:
-          const errMessage = data.meta.message
-          const errReason = data.meta.reason
-          setError(`${errMessage}, ${errReason}`)
-          setIsError(true)
-          console.log(data)
+          const errMessage = data.meta.message;
+          const errReason = data.meta.reason;
+          setError(`${errMessage}, ${errReason}`);
+          setIsError(true);
+          console.log(data);
           break;
       }
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
+  };
+
+  function buyPackage() {
+    navigate('/#subscription');
   }
 
   return (
@@ -174,30 +177,72 @@ const Home = () => {
       <Modal
         title={pack}
         open={open}
-        onOk={() => { setOpen(false) }}
-        onCancel={() => { setOpen(false) }}
+        onOk={() => {
+          setOpen(false);
+        }}
+        onCancel={() => {
+          setOpen(false);
+        }}
         cancelButtonProps={{
-          hidden: true
+          hidden: true,
         }}
         okButtonProps={{
-          hidden: true
-        }}
-      >
-        <form className='flex flex-col max-w-sm mx-auto w-full' onSubmit={handleCreateTransaction}>
+          hidden: true,
+        }}>
+        <form
+          className='flex flex-col max-w-sm mx-auto w-full'
+          onSubmit={handleCreateTransaction}>
           <div className='pb-2'>
-            <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' htmlFor='currency'>Select your currency</label>
-            <select name='currency' className='cursor-pointer border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' required value={currency} onChange={(e) => { setCurrency(e.target.value) }}>
+            <label
+              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              htmlFor='currency'>
+              Select your currency
+            </label>
+            <select
+              name='currency'
+              className='cursor-pointer border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              required
+              value={currency}
+              onChange={e => {
+                setCurrency(e.target.value);
+              }}>
               {currencies.map((item, index) => (
-                <option className='cursor-pointer' key={index} value={item.code}>{item.name}</option>
+                <option
+                  className='cursor-pointer'
+                  key={index}
+                  value={item.code}>
+                  {item.name}
+                </option>
               ))}
             </select>
           </div>
           <div className='pb-2'>
-            <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' htmlFor='referral'>Input your referral code</label>
-            <input className='border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' onChange={(e) => { setRefferalCode(e.target.value) }} type='text' name='referral' />
+            <label
+              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              htmlFor='referral'>
+              Input your referral code
+            </label>
+            <input
+              className='border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              onChange={e => {
+                setRefferalCode(e.target.value);
+              }}
+              type='text'
+              name='referral'
+            />
           </div>
-          <Alert className={isError ? "" : "hidden"} message={error} type="error" showIcon />
-          <button style={{ backgroundColor: "#d2a41a" }} className='w-full my-4 text-center text-white font-medium rounded-lg px-5 py-3 mb-2' type='submit'>Checkout</button>
+          <Alert
+            className={isError ? '' : 'hidden'}
+            message={error}
+            type='error'
+            showIcon
+          />
+          <button
+            style={{ backgroundColor: '#d2a41a' }}
+            className='w-full my-4 text-center text-white font-medium rounded-lg px-5 py-3 mb-2'
+            type='submit'>
+            Checkout
+          </button>
         </form>
       </Modal>
 
@@ -217,9 +262,12 @@ const Home = () => {
           <div className='sm:flex '>
             <div className='flex items-center justify-between container '>
               <div className=''>
-                <div className='text-5xl font-extrabold title-landing '>
+                <div
+                  className='text-5xl font-extrabold title-landing '
+                  onClick={buyPackage}>
                   Join Neko
                 </div>
+
                 <div className='py-3 text-5xl font-extrabold title-landing '>
                   Exclusive Channel
                 </div>
@@ -468,8 +516,8 @@ const Home = () => {
                   <p className='subs-detail'>{pack.desc_1}</p>
                   <button
                     onClick={() => {
-                      handleStartNowClick(pack.id)
-                      setPack(pack.package_name)
+                      handleStartNowClick(pack.id);
+                      setPack(pack.package_name);
                     }}
                     type='button'
                     className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>
@@ -541,11 +589,11 @@ const Home = () => {
             <div>
               <img className='h-auto max-w-full' src={nekoMoney} alt='' />
             </div>
-            <div className='sm:text-6xl text-5xl color-capt italic flex items-center font-extrabold'>
+            {/* <div className='sm:text-6xl text-5xl color-capt italic flex items-center font-extrabold'>
               TRY <br />
               NEKO <br />
               TODAY!
-            </div>
+            </div> */}
           </div>
         </div>
       </Layout>

@@ -43,7 +43,7 @@ const Wallets = ({ children }) => {
     };
 
     const fetchBalance = () => {
-      const userBalance = localStorage.getItem('Balance'); // Ambil balance dari localStorage
+      const userBalance = localStorage.getItem('Ballance'); // Ambil balance dari localStorage
       setBalance(userBalance ? parseFloat(userBalance) : 0); // Set state balance
     };
 

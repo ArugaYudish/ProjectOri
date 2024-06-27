@@ -15,9 +15,15 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [userData, setUserData] = useState(null);
   const [userBallance, setUserBallance] = useState(null);
-  const location = useLocation()
-  const verificationStatus = location.state && location.state.meta !== null ? location.state.meta.code : null
-  const verificationMessage = location.state && location.state.meta !== null ? location.state.meta.message : null
+  const location = useLocation();
+  const verificationStatus =
+    location.state && location.state.meta !== null
+      ? location.state.meta.code
+      : null;
+  const verificationMessage =
+    location.state && location.state.meta !== null
+      ? location.state.meta.message
+      : null;
   const navigate = useNavigate();
 
   const handleEmailChange = e => {
@@ -48,8 +54,8 @@ const LoginForm = () => {
         const accessToken = response.data.data.access_token;
         const encryptedUserData = response.data.data.user_data;
 
-        console.log(accessToken)
-        console.log(encryptedUserData)
+        console.log(accessToken);
+        console.log(encryptedUserData);
 
         // Store access token in localStorage
         localStorage.setItem('accessToken', accessToken);
@@ -67,9 +73,9 @@ const LoginForm = () => {
         setErrorMessage('');
 
         if (decryptedUserData.role === 'admin') {
-          navigate('/asdhakdls/dashboard')
+          navigate('/asdhakdls/dashboard');
         } else {
-          navigate('/wallet')
+          navigate('/wallet');
         }
         // Redirect user or handle successful login here
       } else {
@@ -86,9 +92,16 @@ const LoginForm = () => {
 
   return (
     <>
-      {verificationStatus !== null ? <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
-        <Alert message={verificationMessage} type={verificationStatus === 200 ? 'success' : 'error'} showIcon closable />
-      </div> : null}
+      {verificationStatus !== null ? (
+        <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
+          <Alert
+            message={verificationMessage}
+            type={verificationStatus === 200 ? 'success' : 'error'}
+            showIcon
+            closable
+          />
+        </div>
+      ) : null}
       <div className='authForm sm:grid grid-cols-2'>
         <div className='col-span-1 image-form flex items-center'>
           <img

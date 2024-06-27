@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../assets/img/OriNeko-Logo.png';
+import logo from '../../assets/img/Neko_logo.svg';
 import { Facebook } from 'iconsax-react';
 import { Youtube } from 'iconsax-react';
 import { Instagram } from 'iconsax-react';
@@ -11,7 +11,7 @@ const Footer = () => {
       <footer className='set-footer py-5 '>
         <div className='padding-general px-16 sm:px-0 mx-auto sm:flex justify-between  border-gray-700'>
           <div className='flex-1 '>
-            <img src={logo} alt='' />
+            <img src={logo} alt='' className='set-img-footer' />
             <div className='py-3 text-justify'>
               Results may not be typical and may vary from person to person. All
               content and information on our website, linked sites, associated

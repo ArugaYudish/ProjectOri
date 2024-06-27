@@ -5,17 +5,24 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert } from 'antd';
 
 const ForgotForm = () => {
-  const location = useLocation()
-  const verificationStatus = location.state && location.state.meta !== null ? location.state.meta.code : null
-  const verificationMessage = location.state && location.state.meta !== null ? location.state.meta.message : null
-  const id = location.state && location.state.id !== null ? location.state.id : null
-  const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
+  const location = useLocation();
+  const verificationStatus =
+    location.state && location.state.meta !== null
+      ? location.state.meta.code
+      : null;
+  const verificationMessage =
+    location.state && location.state.meta !== null
+      ? location.state.meta.message
+      : null;
+  const id =
+    location.state && location.state.id !== null ? location.state.id : null;
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
   const handleForgotPassword = async event => {
-    event.preventDefault()
+    event.preventDefault();
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -42,34 +49,37 @@ const ForgotForm = () => {
           break;
       }
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       const data = {
         meta: {
           code: 500,
-          message: error.message
-        }
-      }
+          message: error.message,
+        },
+      };
 
       navigate('/login', { state: data });
     }
-  }
+  };
 
   const handleResetPassword = async event => {
-    event.preventDefault()
+    event.preventDefault();
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
     try {
-      const response = await fetch(`${apiUrl}/api/v1/users/reset-password/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${apiUrl}/api/v1/users/reset-password/${id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            password: password,
+            password_confirm: passwordConfirm,
+          }),
         },
-        body: JSON.stringify({
-          password: password,
-          password_confirm: passwordConfirm
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -83,23 +93,30 @@ const ForgotForm = () => {
           break;
       }
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       const data = {
         meta: {
           code: 500,
-          message: error.message
-        }
-      }
+          message: error.message,
+        },
+      };
 
       navigate('/login', { state: data });
     }
-  }
+  };
 
   return (
     <>
-      {verificationStatus !== null ? <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
-        <Alert message={verificationMessage} type={verificationStatus === 200 ? 'success' : 'error'} showIcon closable />
-      </div> : null}
+      {verificationStatus !== null ? (
+        <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
+          <Alert
+            message={verificationMessage}
+            type={verificationStatus === 200 ? 'success' : 'error'}
+            showIcon
+            closable
+          />
+        </div>
+      ) : null}
       <div className='authForm sm:grid grid-cols-2'>
         <div className='col-span-1 image-form  flex items-center'>
           <img
@@ -110,13 +127,15 @@ const ForgotForm = () => {
           />
         </div>
         <div className='col-span-1 bg-white set-form flex items-center'>
-          {id !== null ?
-            <form onSubmit={handleResetPassword} className='max-w-sm mx-auto w-full'>
+          {id !== null ? (
+            <form
+              onSubmit={handleResetPassword}
+              className='max-w-sm mx-auto w-full'>
               <div className='text-2xl font-bold pb-3  '>
                 <div className='pt-6'> Create New Password 🔐</div>
               </div>
               <div className='pb-5 text-gray-600'>
-                Input your new password to access your account!
+                Input yfour new password to access your account!
               </div>
 
               <div className='pb-2'>
@@ -130,7 +149,9 @@ const ForgotForm = () => {
                   id='password'
                   placeholder='at least 8 caracters'
                   value={password}
-                  onChange={e => { setPassword(e.target.value) }}
+                  onChange={e => {
+                    setPassword(e.target.value);
+                  }}
                   className=' border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   required
                 />
@@ -145,7 +166,9 @@ const ForgotForm = () => {
                   type='confirmationPassword'
                   placeholder='at least 8 caracters'
                   value={passwordConfirm}
-                  onChange={e => { setPasswordConfirm(e.target.value) }}
+                  onChange={e => {
+                    setPasswordConfirm(e.target.value);
+                  }}
                   id='confirmationPassword'
                   className=' border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   required
@@ -165,8 +188,10 @@ const ForgotForm = () => {
                 </a>{' '}
               </div>
             </form>
-            :
-            <form onSubmit={handleForgotPassword} className='max-w-sm mx-auto w-full'>
+          ) : (
+            <form
+              onSubmit={handleForgotPassword}
+              className='max-w-sm mx-auto w-full'>
               <div className='text-2xl font-bold pb-3  '>
                 <div className='pt-6'> Create New Password 🔐</div>
               </div>
@@ -204,7 +229,7 @@ const ForgotForm = () => {
                 </a>{' '}
               </div>
             </form>
-          }
+          )}
         </div>
       </div>
     </>
