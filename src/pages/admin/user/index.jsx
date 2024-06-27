@@ -38,13 +38,13 @@ const Users = () => {
 		try {
 			const response = await api.post('/api/v1/users/change-status', {
 				userid: record.id,
-        status: 0
+				status: 0
 			})
 
-      console.log('response3', response)
+			console.log('response3', response)
 
 			if (response.data && response.data.meta.code === 200) {
-        window.location.reload();
+				window.location.reload()
 			} else {
 				setError('Failed to update user')
 			}
@@ -128,15 +128,17 @@ const Users = () => {
 							) : (
 								<>
 									{error && <div className="text-red-500 pb-3">{error}</div>}
-									<Table
-										className="table-ant"
-										columns={columns}
-										dataSource={data}
-										pagination={{
-											pageSize: 5
-										}}
-										rowKey={(record) => record.id} // Asumsikan setiap record memiliki id unik
-									/>
+									<div className="overflow-hidden overflow-x-auto">
+										<Table
+											className="table-ant"
+											columns={columns}
+											dataSource={data}
+											pagination={{
+												pageSize: 5
+											}}
+											rowKey={(record) => record.id} // Asumsikan setiap record memiliki id unik
+										/>
+									</div>
 								</>
 							)}
 						</div>
