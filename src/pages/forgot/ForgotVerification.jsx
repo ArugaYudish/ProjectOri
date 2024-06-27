@@ -19,7 +19,7 @@ const ForgotVerification = () => {
             console.log(data.meta.message, data);
             switch (data.meta.code) {
                 case 200:
-                    navigate('/login', { state: data });
+                    navigate('/forgot', { state: data });
                     break;
                 default:
                     navigate('/login', { state: data });

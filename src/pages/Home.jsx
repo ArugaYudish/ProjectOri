@@ -61,6 +61,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleStartNowClick = async id => {
+    if (accessToken === null) {
+      navigate('/login')
+      return
+    }
+
     try {
       const response = await fetch(`${apiUrl}/api/v1/transactions/rates`, {
         method: 'POST',
@@ -189,10 +194,10 @@ const Home = () => {
           </div>
           <div className='pb-2'>
             <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' htmlFor='referral'>Input your referral code</label>
-            <input required className='border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' onChange={(e) => { setRefferalCode(e.target.value) }} type='text' name='referral' />
+            <input className='border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' onChange={(e) => { setRefferalCode(e.target.value) }} type='text' name='referral' />
           </div>
           <Alert className={isError ? "" : "hidden"} message={error} type="error" showIcon />
-          <button className='w-full my-4 text-center text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-3 mb-2' type='submit'>Checkout</button>
+          <button style={{ backgroundColor: "#d2a41a" }} className='w-full my-4 text-center text-white font-medium rounded-lg px-5 py-3 mb-2' type='submit'>Checkout</button>
         </form>
       </Modal>
 
