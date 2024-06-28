@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import api from '../../../utils/api'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../../assets/img/OriNeko-Logo.png'
 import '../../../assets/css/navbar.css'
-import { Dropdown, Space } from 'antd'
-
-import { GalleryAdd, LogoutCurve, TransactionMinus, Grid3, ArrangeHorizontal, UserTick } from 'iconsax-react'
+import { Dropdown, Space, Modal, message } from 'antd'
+import { GalleryAdd, LogoutCurve, TransactionMinus, Grid3, ArrangeHorizontal, UserTick, Home } from 'iconsax-react'
 
 const SidebarAdmin = ({ children }) => {
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const location = useLocation()
 	const navigate = useNavigate()
 
@@ -17,15 +17,31 @@ const SidebarAdmin = ({ children }) => {
 			if (response.status === 200) {
 				localStorage.removeItem('userId')
 				localStorage.removeItem('role')
-				localStorage.removeItem('accessToken');
+				localStorage.removeItem('accessToken')
+				localStorage.removeItem('userName')
 				navigate('/')
+			} else {
+				message.error('Logout failed')
 			}
 		} catch (error) {
 			console.error('Logout failed', error)
 		}
 	}
 
+	const showModal = () => {
+		setIsModalOpen(true)
+	}
+
+	const handleOk = async () => {
+		await handleLogout()
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
+	}
+
 	const menuItems = [
+		{ href: '/', icon: Home, label: 'Home' },
 		{ href: '/asdhakdls/dashboard', icon: Grid3, label: 'Dashboard' },
 		{
 			href: '/asdhakdls/transaction',
@@ -72,12 +88,10 @@ const SidebarAdmin = ({ children }) => {
 	items.push({
 		label: (
 			<button
-				onClick={handleLogout}
+				onClick={showModal}
 				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full text-black"
 			>
-				<LogoutCurve
-					variant="Regular"
-				/>
+				<LogoutCurve variant="Regular" />
 				<span className="ms-3 text-sidebar">Logout</span>
 			</button>
 		),
@@ -126,7 +140,7 @@ const SidebarAdmin = ({ children }) => {
 						))}
 						<li>
 							<button
-								onClick={handleLogout}
+								onClick={showModal}
 								className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full"
 							>
 								<LogoutCurve
@@ -145,7 +159,7 @@ const SidebarAdmin = ({ children }) => {
 					<Dropdown
 						menu={{ items }}
 						trigger={['click']}
-            overlayClassName='w-64'
+						overlayClassName="w-64"
 					>
 						<button onClick={(e) => e.preventDefault()}>
 							<Space>
@@ -165,6 +179,16 @@ const SidebarAdmin = ({ children }) => {
 					</Dropdown>
 				</div>
 			</div>
+
+			<Modal
+				title="Notifications"
+				open={isModalOpen}
+				onOk={handleOk}
+				onCancel={handleCancel}
+				okButtonProps={{ style: { backgroundColor: '#ca9700' } }}
+			>
+				<p>Are you sure you want to logout?</p>
+			</Modal>
 
 			<div className="p-6 sm:ml-64">
 				<div className="p-4 mt-10">
