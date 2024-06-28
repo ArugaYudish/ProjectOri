@@ -41,7 +41,6 @@ const SidebarAdmin = ({ children }) => {
 	}
 
 	const menuItems = [
-		{ href: '/', icon: Home, label: 'Home' },
 		{ href: '/asdhakdls/dashboard', icon: Grid3, label: 'Dashboard' },
 		{
 			href: '/asdhakdls/transaction',
@@ -97,6 +96,27 @@ const SidebarAdmin = ({ children }) => {
 		),
 		key: 'logout'
 	})
+
+	const dropdownMenuItems = [
+		{
+			key: 'home',
+			label: (
+				<Link
+					to="/"
+					className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${
+						location.pathname === '/' ? 'bg-sidebar' : 'bg-sidebar-sec'
+					}`}
+				>
+					<Home
+						className={`${location.pathname === '/' ? 'icon-Wallet' : ''}`}
+						variant={location.pathname === '/' ? 'Bold' : 'Regular'}
+					/>
+					<span className={`ms-3 ${location.pathname === '/' ? 'sidebar-color font-bold' : 'text-sidebar'}`}>Home</span>
+				</Link>
+			)
+		},
+		...items
+	]
 
 	return (
 		<div>
@@ -157,7 +177,7 @@ const SidebarAdmin = ({ children }) => {
 			<div className="block sm:hidden px-6 sm:ml-64">
 				<div className="mt-10">
 					<Dropdown
-						menu={{ items }}
+						menu={{ items: dropdownMenuItems }}
 						trigger={['click']}
 						overlayClassName="w-64"
 					>
