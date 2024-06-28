@@ -39,12 +39,14 @@ const RegisterForm = () => {
 
       if (!response.ok) {
         // throw new Error(data.message || 'Something went wrong');
-        throw new Error(data.data[0].Message);
+        setError(data.data.Messsage)
+        console.log(data.data.Messsage)
+        throw new Error(data.data.Messsage)
       }
 
       // Handle successful registration, e.g., redirect to login page
       console.log('Registration successful', data);
-      navigate('/login'); // Redirect to login page
+      navigate('/login', { state: data }); // Redirect to login page
     } catch (error) {
       setError(error.message);
     }

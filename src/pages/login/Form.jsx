@@ -124,9 +124,6 @@ const LoginForm = () => {
             {loginStatus === 'success' && (
               <div className='pb-2 text-green-600'>Login successful!</div>
             )}
-            {loginStatus === 'error' && (
-              <div className='pb-2 text-red-600'>{errorMessage}</div>
-            )}
             <div className='pb-2'>
               <label
                 htmlFor='email'
@@ -165,6 +162,9 @@ const LoginForm = () => {
                 Forgot Password?
               </a>
             </div>
+            {loginStatus === 'error' && (
+              <div className='pb-2 text-red-600'>{errorMessage}</div>
+            )}
             <button
               type='submit'
               className='text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
