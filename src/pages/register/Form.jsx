@@ -35,7 +35,7 @@ const RegisterForm = () => {
         }),
       });
 
-      const data = await response.json();
+      let data = await response.json();
 
       if (!response.ok) {
         // throw new Error(data.message || 'Something went wrong');
@@ -45,7 +45,10 @@ const RegisterForm = () => {
       }
 
       // Handle successful registration, e.g., redirect to login page
+      data.meta.message = "Success Verification Link Sent to Your Email"
       console.log('Registration successful', data);
+      localStorage.setItem("email", email)
+      localStorage.setItem("password", password)
       navigate('/login', { state: data }); // Redirect to login page
     } catch (error) {
       setError(error.message);
