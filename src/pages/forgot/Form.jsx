@@ -20,6 +20,7 @@ const ForgotForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [error, setError] = useState('')
 
   const handleForgotPassword = async event => {
     event.preventDefault();
@@ -45,19 +46,16 @@ const ForgotForm = () => {
           navigate('/login', { state: data });
           break;
         default:
-          navigate('/login', { state: data });
+          if (data.meta.message === "record not found") {
+            setError(data.meta.reason)
+          } else {
+            setError(data.data[0].Message)
+          }
           break;
       }
     } catch (error) {
       console.log(error.message);
-      const data = {
-        meta: {
-          code: 500,
-          message: error.message,
-        },
-      };
-
-      navigate('/login', { state: data });
+      setError(error.message)
     }
   };
 
@@ -89,7 +87,7 @@ const ForgotForm = () => {
           navigate('/login', { state: data });
           break;
         default:
-          navigate('/login', { state: data });
+          setError(data.data[0].Message)
           break;
       }
     } catch (error) {
@@ -174,7 +172,7 @@ const ForgotForm = () => {
                   required
                 />
               </div>
-
+              {error !== '' ? <div className='pb-2 text-red-600'>{error}</div> : ''}
               <button
                 type='submit'
                 className=' text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
@@ -215,7 +213,7 @@ const ForgotForm = () => {
                   required
                 />
               </div>
-
+              {error !== '' ? <div className='pb-2 text-red-600'>{error}</div> : ''}
               <button
                 type='submit'
                 className=' text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>

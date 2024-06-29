@@ -35,16 +35,21 @@ const RegisterForm = () => {
         }),
       });
 
-      const data = await response.json();
+      let data = await response.json();
 
       if (!response.ok) {
         // throw new Error(data.message || 'Something went wrong');
-        throw new Error(data.data[0].Message);
+        setError(data.data.Messsage)
+        console.log(data.data.Messsage)
+        throw new Error(data.data.Messsage)
       }
 
       // Handle successful registration, e.g., redirect to login page
+      data.meta.message = "Success Verification Link Sent to Your Email"
       console.log('Registration successful', data);
-      navigate('/login'); // Redirect to login page
+      localStorage.setItem("email", email)
+      localStorage.setItem("password", password)
+      navigate('/login', { state: data }); // Redirect to login page
     } catch (error) {
       setError(error.message);
     }
@@ -66,7 +71,6 @@ const RegisterForm = () => {
             className='max-w-sm w-full mx-auto pt-8'
             onSubmit={handleSubmit}>
             <div className='text-2xl font-bold pb-3'>Create an Account 🌤️</div>
-            {error && <div className='text-red-500 pb-3'>{error}</div>}
             <div className='pb-2'>
               <label
                 htmlFor='name'
@@ -129,7 +133,7 @@ const RegisterForm = () => {
                 required
               />
             </div>
-
+            {error && <div className='text-red-500 pb-3'>{error}</div>}
             <button
               type='submit'
               className='text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
