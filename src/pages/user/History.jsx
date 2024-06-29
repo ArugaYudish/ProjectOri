@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Sidebar from '../../component/common/Sidebar';
-import { Table, Button, Input, Space, Spin } from 'antd'; // Import Spin from Ant Design
+import { Table, Button, Input, Space, Spin, DatePicker } from 'antd'; // Import Spin from Ant Design
 import { SearchOutlined } from '@ant-design/icons';
 import TelegramIcon from '../../assets/img/Telegram.svg';
 import '../../assets/css/user.css';
+import moment from 'moment';
 
 const History = () => {
   const [transactions, setTransactions] = useState([]); // Initialize transactions with an empty array
   const [activeTable, setActiveTable] = useState('openOrder');
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
   const [loading, setLoading] = useState(false); // State to handle loading
   const searchInput = useRef(null);
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -27,8 +30,8 @@ const History = () => {
         {
           user_id: userId,
           status: status,
-          start_date: '2023-05-01 11:04:05+07',
-          end_date: '2024-09-03 11:04:05+07',
+          start_date: startDate ? startDate.format('YYYY-MM-DD') : moment().subtract(3, 'years').format('YYYY-MM-DD'),
+          end_date: endDate ? endDate.format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
         },
         {
           headers: {
@@ -55,8 +58,8 @@ const History = () => {
     }
   };
   useEffect(() => {
-    fetchTransactions('openOrder'); // Fetch transactions for openOrder initially
-  }, []);
+    fetchTransactions(activeTable); // Fetch transactions for openOrder initially
+  }, [startDate, endDate]);
 
   const handleButtonClick = record => {
     if (activeTable === 'openOrder' && record.telegram_url) {
@@ -210,6 +213,19 @@ const History = () => {
               History Order
             </button>
           </div>
+          <DatePicker.RangePicker
+            className='ml-2'
+            value={[startDate, endDate]}
+            onChange={(dates) => {
+              if (dates && dates.length === 2) {
+                setStartDate(dates[0])
+                setEndDate(dates[1])
+              } else {
+                setStartDate(null)
+                setEndDate(null)
+              }
+            }}
+          />
         </div>
 
         <div className='py-3'>
