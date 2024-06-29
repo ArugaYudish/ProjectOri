@@ -27,7 +27,7 @@ const History = () => {
         {
           user_id: userId,
           status: status,
-          start_date: '2023-06-01 11:04:05+07',
+          start_date: '2023-05-01 11:04:05+07',
           end_date: '2024-09-03 11:04:05+07',
         },
         {
@@ -38,15 +38,14 @@ const History = () => {
       );
 
       if (
-        response.data &&
-        response.data.data &&
-        response.data.data.transaction
+        response.data.meta.code === 200
       ) {
+        console.log("success", response.data)
         setTransactions(response.data.data.transaction);
       } else {
         console.error(
           'Failed to fetch transactions:',
-          response.data.meta.message,
+          response.data,
         );
       }
     } catch (error) {
@@ -187,11 +186,10 @@ const History = () => {
           <div className='w-1/2'>
             <button
               type='button'
-              className={`text-gray-900 border bg-color-orineko-ternary border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${
-                activeTable === 'openOrder'
-                  ? 'bg-color-orineko text-white'
-                  : 'bg-white'
-              }`}
+              className={`text-gray-900 border bg-color-orineko-ternary border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${activeTable === 'openOrder'
+                ? 'bg-color-orineko text-white'
+                : 'bg-white'
+                }`}
               onClick={() => {
                 setActiveTable('openOrder');
                 fetchTransactions('openOrder');
@@ -201,11 +199,10 @@ const History = () => {
 
             <button
               type='button'
-              className={`py-2.5 px-5 me-2 mb-2 text-sm bg-color-orineko-ternary font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 ${
-                activeTable === 'historyOrder'
-                  ? 'bg-color-orineko text-white'
-                  : 'bg-white'
-              }`}
+              className={`py-2.5 px-5 me-2 mb-2 text-sm bg-color-orineko-ternary font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 ${activeTable === 'historyOrder'
+                ? 'bg-color-orineko text-white'
+                : 'bg-white'
+                }`}
               onClick={() => {
                 setActiveTable('historyOrder');
                 fetchTransactions('historyOrder');

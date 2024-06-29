@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SidebarAdmin from '../../component/common/admin/Sidebar'
 import '../../assets/css/user.css'
-import { Table, Spin, message, DatePicker, Button } from 'antd'
+import { Table, Spin, message, DatePicker, Button, Select } from 'antd'
 import moment from 'moment'
 import api from '../../utils/api'
 import * as XLSX from 'xlsx' // Import xlsx for Excel export
@@ -11,15 +11,17 @@ const Transaction = () => {
 	const [loading, setLoading] = useState(true)
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
+	const [status, setStatus] = useState("Active")
 
 	useEffect(() => {
 		fetchTransactions(startDate, endDate)
-	}, [startDate, endDate])
+	}, [startDate, endDate, status])
 
 	const fetchTransactions = async (startDate, endDate) => {
 		setLoading(true)
 		try {
 			const payload = {
+				status: status === 'both' ? null : status,
 				start_date: startDate ? startDate.format('YYYY-MM-DD') : moment().subtract(3, 'years').format('YYYY-MM-DD'),
 				end_date: endDate ? endDate.format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
 			}
@@ -95,6 +97,21 @@ const Transaction = () => {
 		}
 	]
 
+	const statusFilter = [
+		{
+			value: "Active",
+			label: "Active"
+		},
+		{
+			value: "Inactive",
+			label: "Inactive"
+		},
+		{
+			value: "Both",
+			label: "Both"
+		}
+	]
+
 	return (
 		<SidebarAdmin>
 			<div>
@@ -103,7 +120,12 @@ const Transaction = () => {
 					<div className="flex justify-between">
 						<div className="font-bold py-2">Transaction</div>
 						<div>
+							<Select onChange={value => {
+								setStatus(value)
+							}} value={status} options={statusFilter} />
+
 							<DatePicker.RangePicker
+								className='ml-2'
 								value={[startDate, endDate]}
 								onChange={(dates) => {
 									if (dates && dates.length === 2) {
