@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import SidebarAdmin from '../../../component/common/admin/Sidebar'
 import '../../../assets/css/user.css'
-import { Table, Button, Spin, message } from 'antd'
-import { AddCircle } from 'iconsax-react'
+import { Table, Button, Spin, message, Select } from 'antd'
+import { AddCircle, Data } from 'iconsax-react'
 import api from '../../../utils/api'
 import { Link, useNavigate } from 'react-router-dom'
 
 const Users = () => {
 	const [data, setData] = useState([])
+	const [showData, setShowData] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
+	const [status, setStatus] = useState("Active")
 	const navigate = useNavigate()
 
 	useEffect(() => {
@@ -17,7 +19,11 @@ const Users = () => {
 			try {
 				const response = await api.get('/api/v1/users')
 				if (response.data && response.data.data) {
-					setData(response.data.data.users) // Sesuaikan dengan struktur respons API
+					const users = response.data.data.users
+
+					const filtered = users.filter(item => item.status === status)
+					setData(users) // Sesuaikan dengan struktur respons API
+					setShowData(filtered)
 				}
 				setLoading(false)
 			} catch (error) {
@@ -51,6 +57,21 @@ const Users = () => {
 		} catch (error) {
 			setError(error.response?.data?.message || 'Failed to update user')
 		}
+	}
+
+	const handleStatusFilter = (e) => {
+		setStatus(e)
+
+		let filtered
+		switch (e) {
+			case 'Both':
+				filtered = data
+				break;
+			default:
+				filtered = data.filter(item => item.status === e)
+		}
+
+		setShowData(filtered)
 	}
 
 	const columns = [
@@ -112,6 +133,21 @@ const Users = () => {
 		}
 	]
 
+	const statusFilter = [
+		{
+			value: "Active",
+			label: "Active"
+		},
+		{
+			value: "Inactive",
+			label: "Inactive"
+		},
+		{
+			value: "Both",
+			label: "Both"
+		}
+	]
+
 	return (
 		<SidebarAdmin>
 			<div>
@@ -119,10 +155,12 @@ const Users = () => {
 				<div className="mt-5">
 					<div className="flex justify-between">
 						<div className="font-bold py-2">Users</div>
-						<div>
+						<div className="flex justify-between items-center">
+							<Select onChange={e => { handleStatusFilter(e) }} value={status} options={statusFilter} />
+
 							<Link
 								to={'/asdhakdls/users/add'}
-								className="text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+								className="ms-2 text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 							>
 								<AddCircle
 									size="16"
@@ -143,7 +181,7 @@ const Users = () => {
 										<Table
 											className="table-ant"
 											columns={columns}
-											dataSource={data}
+											dataSource={showData}
 											pagination={{
 												pageSize: 5
 											}}
