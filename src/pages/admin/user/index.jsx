@@ -77,7 +77,18 @@ const Users = () => {
 		{
 			title: 'Status',
 			dataIndex: 'status',
-			width: 150
+			width: 150,
+			filters: [
+				{
+					text: 'Active',
+					value: 'Active'
+				},
+				{
+					text: 'Inactive',
+					value: 'Inactive'
+				}
+			],
+			onFilter: (value, record) => record.status.indexOf(value) === 0,
 		},
 		{
 			title: 'Action',

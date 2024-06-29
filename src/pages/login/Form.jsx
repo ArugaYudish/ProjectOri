@@ -66,6 +66,7 @@ const LoginForm = () => {
         setUserData(decryptedUserData);
         localStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
         localStorage.setItem('role', decryptedUserData.role);
+        localStorage.setItem('userName', decryptedUserData.name)
         localStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
 
         // Set login status to success

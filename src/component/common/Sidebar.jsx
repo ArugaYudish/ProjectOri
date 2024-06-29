@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../assets/img/OriNeko-Logo.png'
 import { Wallet } from 'iconsax-react'
 import '../../assets/css/navbar.css'
 import api from '../../utils/api'
-import { Dropdown, Space } from 'antd'
+import { Dropdown, Space, Modal, message } from 'antd'
 import { BitcoinConvert, MessageAdd1, TableDocument, LogoutCurve, Home } from 'iconsax-react'
 
 const Sidebar = ({ children }) => {
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const location = useLocation()
 	const navigate = useNavigate()
 
@@ -17,12 +18,28 @@ const Sidebar = ({ children }) => {
 			if (response.status === 200) {
 				localStorage.removeItem('userId')
 				localStorage.removeItem('role')
-        localStorage.removeItem('accessToken');
+				localStorage.removeItem('accessToken')
+				localStorage.removeItem('userName')
+				setIsModalOpen(false)
 				navigate('/')
+			} else {
+				message.error('Logout failed')
 			}
 		} catch (error) {
 			console.error('Logout failed', error)
 		}
+	}
+
+	const showModal = () => {
+		setIsModalOpen(true)
+	}
+
+	const handleOk = async () => {
+		await handleLogout()
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
 	}
 
 	const menuItems = [
@@ -56,12 +73,10 @@ const Sidebar = ({ children }) => {
 	items.push({
 		label: (
 			<button
-				onClick={handleLogout}
+				onClick={showModal}
 				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full"
 			>
-				<LogoutCurve
-					variant="Regular"
-				/>
+				<LogoutCurve variant="Regular" />
 				<span className="ms-3 text-sidebar">Logout</span>
 			</button>
 		),
@@ -86,7 +101,7 @@ const Sidebar = ({ children }) => {
 						menu={{ items }}
 						trigger={['click']}
 						className="block sm:hidden items-center inline-flex"
-						overlayClassName='w-64'
+						overlayClassName="w-64"
 					>
 						<button onClick={(e) => e.preventDefault()}>
 							<Space>
@@ -199,7 +214,7 @@ const Sidebar = ({ children }) => {
 							</li>
 							<li className="block sm:hidden py-5 ">
 								<button
-									onClick={handleLogout}
+									onClick={showModal}
 									class=" mt-5 register-button"
 								>
 									Logout
@@ -240,7 +255,7 @@ const Sidebar = ({ children }) => {
 						))}
 						<li>
 							<button
-								onClick={handleLogout}
+								onClick={showModal}
 								className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full"
 							>
 								<LogoutCurve
@@ -253,6 +268,16 @@ const Sidebar = ({ children }) => {
 					</ul>
 				</div>
 			</aside>
+
+			<Modal
+				title="Notifications"
+				open={isModalOpen}
+				onOk={handleOk}
+				onCancel={handleCancel}
+				okButtonProps={{ style: {backgroundColor : '#ca9700'} }}
+			>
+				<p>Are you sure you want to logout?</p>
+			</Modal>
 
 			<div class="p-6 sm:ml-64">
 				<div class="p-4 mt-10">
