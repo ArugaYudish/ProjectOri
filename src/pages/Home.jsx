@@ -61,6 +61,11 @@ const Home = () => {
 
   const handleStartNowClick = async id => {
     if (accessToken === null) {
+      localStorage.removeItem("accessToken")
+      localStorage.removeItem("role")
+      localStorage.removeItem("userName")
+      localStorage.removeItem("userId")
+      localStorage.removeItem("Ballance")
       navigate('/login');
       return;
     }
@@ -74,6 +79,19 @@ const Home = () => {
       });
 
       const data = await response.json();
+
+      if (!response.ok) {
+        if (data.meta.reason === "Invalid token") {
+          localStorage.removeItem("accessToken")
+          localStorage.removeItem("role")
+          localStorage.removeItem("userName")
+          localStorage.removeItem("userId")
+          localStorage.removeItem("Ballance")
+          navigate("/login")
+          return
+        }
+      }
+
       const currenciesData = data.data.currency;
       const currenciesName = [];
       const currenciesCode = [];
@@ -114,14 +132,6 @@ const Home = () => {
       setCurrency(currencies[0].code);
 
       console.log(data.meta.message, data);
-      switch (data.meta.code) {
-        case 200:
-          console.log(currencies);
-          break;
-        default:
-          console.log(data);
-          break;
-      }
     } catch (err) {
       throw new Error(err.message);
     }
