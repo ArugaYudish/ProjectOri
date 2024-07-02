@@ -20,7 +20,7 @@ const Dashboard = () => {
 
 	const fetchSalesData = async (start, end) => {
 		try {
-			const token = localStorage.getItem('accessToken')
+			const token = sessionStorage.getItem('accessToken')
 
 			const salesResponse = await fetch(`${apiUrl}/api/v1/transactions/sales-reporting`, {
 				method: 'POST',
@@ -43,7 +43,7 @@ const Dashboard = () => {
 
 	const fetchTransactions = async (start, end) => {
 		try {
-			const token = localStorage.getItem('accessToken')
+			const token = sessionStorage.getItem('accessToken')
 
 			const transactionResponse = await fetch(`${apiUrl}/api/v1/transactions/get`, {
 				method: 'POST',

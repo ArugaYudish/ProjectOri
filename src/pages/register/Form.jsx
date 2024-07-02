@@ -47,8 +47,8 @@ const RegisterForm = () => {
       // Handle successful registration, e.g., redirect to login page
       data.meta.message = "Success Verification Link Sent to Your Email"
       console.log('Registration successful', data);
-      localStorage.setItem("email", email)
-      localStorage.setItem("password", password)
+      sessionStorage.setItem("email", email)
+      sessionStorage.setItem("password", password)
       navigate('/login', { state: data }); // Redirect to login page
     } catch (error) {
       setError(error.message);

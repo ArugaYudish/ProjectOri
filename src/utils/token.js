@@ -16,7 +16,7 @@ const setupTokenRefresh = () => {
       ) {
         originalRequest._retry = true;
         try {
-          const refreshToken = localStorage.getItem('refreshToken');
+          const refreshToken = sessionStorage.getItem('refreshToken');
           console.log('Refresh token:', refreshToken);
           if (!refreshToken) {
             console.error('No refresh token available');
@@ -38,8 +38,8 @@ const setupTokenRefresh = () => {
             const newAccessToken = response.data.data.access_token;
             console.log('New access token:', newAccessToken);
 
-            // Simpan access token baru di localStorage
-            localStorage.setItem('accessToken', newAccessToken);
+            // Simpan access token baru di sessionStorage
+            sessionStorage.setItem('accessToken', newAccessToken);
 
             // Perbarui header Authorization dari request asli
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

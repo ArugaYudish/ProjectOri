@@ -33,7 +33,7 @@ const Home = () => {
   const [refferalCode, setRefferalCode] = useState('');
   const [pack, setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();

@@ -5,8 +5,8 @@ import { Dropdown, Space } from 'antd'
 
 const Navbar = () => {
 	const [scrollBackground, setScrollBackground] = useState(false)
-	const name = localStorage.getItem('userName')
-	const role = localStorage.getItem('role')
+	const name = sessionStorage.getItem('userName')
+	const role = sessionStorage.getItem('role')
 
 	useEffect(() => {
 		const handleScroll = () => {

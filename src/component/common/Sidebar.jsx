@@ -16,10 +16,11 @@ const Sidebar = ({ children }) => {
 		try {
 			const response = await api.get('/api/v1/auth/logout')
 			if (response.status === 200) {
-				localStorage.removeItem('userId')
-				localStorage.removeItem('role')
-				localStorage.removeItem('accessToken')
-				localStorage.removeItem('userName')
+				sessionStorage.removeItem('userId')
+				sessionStorage.removeItem('role')
+				sessionStorage.removeItem('accessToken')
+				sessionStorage.removeItem('userName')
+				sessionStorage.removeItem('Ballance')
 				setIsModalOpen(false)
 				navigate('/')
 			} else {

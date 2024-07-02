@@ -6,7 +6,7 @@ const api = axios.create({
 
 // Tambahkan interceptor untuk menyertakan token dalam setiap permintaan
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('accessToken');
+  const token = sessionStorage.getItem('accessToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -25,7 +25,7 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const refreshToken = localStorage.getItem('accessToken');
+        const refreshToken = sessionStorage.getItem('accessToken');
         const response = await axios.get(
           `${api.defaults.baseURL}/api/v1/auth/refresh-token`,
           {
@@ -41,16 +41,16 @@ api.interceptors.response.use(
           response.data.data.access_token
         ) {
           const newAccessToken = response.data.data.access_token;
-          localStorage.setItem('accessToken', newAccessToken);
+          sessionStorage.setItem('accessToken', newAccessToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(originalRequest);
         }
       } catch (refreshError) {
         console.error('Failed to refresh token:', refreshError);
         // Handle refresh token failure, logout user or show error message
-        // You might want to log out the user here or clear localStorage
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        // You might want to log out the user here or clear sessionStorage
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
         // Redirect to login page or handle error accordingly
       }
     }
@@ -60,7 +60,7 @@ api.interceptors.response.use(
 
 export const refreshToken = async () => {
   try {
-    const refreshToken = localStorage.getItem('accessToken');
+    const refreshToken = sessionStorage.getItem('accessToken');
     const response = await axios.get(
       `${api.defaults.baseURL}/api/v1/auth/refresh-token`,
       {
@@ -76,7 +76,7 @@ export const refreshToken = async () => {
       response.data.data.access_token
     ) {
       const newAccessToken = response.data.data.access_token;
-      localStorage.setItem('accessToken', newAccessToken);
+      sessionStorage.setItem('accessToken', newAccessToken);
       return newAccessToken;
     }
   } catch (error) {

@@ -31,7 +31,7 @@ const Wallets = ({ children }) => {
 
 	useEffect(() => {
 		const fetchRates = async () => {
-			const token = localStorage.getItem("accessToken") // Ambil token dari localStorage
+			const token = sessionStorage.getItem("accessToken") // Ambil token dari sessionStorage
 
 			try {
 				const response = await axios.post(
@@ -57,7 +57,7 @@ const Wallets = ({ children }) => {
 		}
 
 		const fetchBalance = () => {
-			const userBalance = localStorage.getItem("Ballance") // Ambil balance dari localStorage
+			const userBalance = sessionStorage.getItem("Ballance") // Ambil balance dari sessionStorage
 			setBalance(userBalance ? parseFloat(userBalance) : 0) // Set state balance
 		}
 
@@ -70,7 +70,7 @@ const Wallets = ({ children }) => {
 	}
 
 	const handleWithdraw = async () => {
-		const token = localStorage.getItem("accessToken") // Ambil token dari localStorage
+		const token = sessionStorage.getItem("accessToken") // Ambil token dari sessionStorage
 
 		if (amount >= 10) {
 			try {
@@ -88,14 +88,12 @@ const Wallets = ({ children }) => {
 					}
 				)
         
-        console.log(response)
-
 				if (response.data.meta.status === "success") {
 					message.success("Withdrawal request submitted successfully")
 					// Update balance locally if needed
 					const newBalance = balance - parseFloat(amount)
 					setBalance(newBalance)
-					localStorage.setItem("Balance", newBalance.toString())
+					sessionStorage.setItem("Balance", newBalance.toString())
 					// Kosongkan form
 					setWalletAddress("")
 					setAmount("")
@@ -111,6 +109,8 @@ const Wallets = ({ children }) => {
 			}
 		} else {
 			message.error("Minimun withdraw $10")
+			setWalletAddress("")
+			setAmount("")
 		}
 	}
 

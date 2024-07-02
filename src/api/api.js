@@ -7,7 +7,7 @@ const api = axios.create({
 // Tambahkan interceptor untuk menyertakan token dalam setiap permintaan
 api.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +30,7 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const refreshToken = localStorage.getItem('accessToken');
+        const refreshToken = sessionStorage.getItem('accessToken');
         const response = await axios.post(
           `${api.defaults.baseURL}/api/v1/auth/refresh-token`,
           {},
@@ -47,7 +47,7 @@ api.interceptors.response.use(
           response.data.data.access_token
         ) {
           const newAccessToken = response.data.data.access_token;
-          localStorage.setItem('accessToken', newAccessToken);
+          sessionStorage.setItem('accessToken', newAccessToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(originalRequest);
         }
@@ -62,7 +62,7 @@ api.interceptors.response.use(
 
 export const refreshToken = async () => {
   try {
-    const refreshToken = localStorage.getItem('accessToken');
+    const refreshToken = sessionStorage.getItem('accessToken');
     const response = await axios.post(
       `${api.defaults.baseURL}/api/v1/auth/refresh-token`,
       {},
@@ -79,7 +79,7 @@ export const refreshToken = async () => {
       response.data.data.access_token
     ) {
       const newAccessToken = response.data.data.access_token;
-      localStorage.setItem('accessToken', newAccessToken);
+      sessionStorage.setItem('accessToken', newAccessToken);
       return newAccessToken;
     }
   } catch (error) {
@@ -99,7 +99,7 @@ export default api;
 // // Fungsi untuk memperbarui token menggunakan refresh token
 // const refreshToken = async () => {
 //   try {
-//     const refreshToken = localStorage.getItem('refreshToken');
+//     const refreshToken = sessionStorage.getItem('refreshToken');
 //     const response = await axios.post(
 //       `${process.env.REACT_APP_API_URL}/api/v1/auth/refresh-token`,
 //       {
@@ -107,7 +107,7 @@ export default api;
 //       },
 //     );
 //     const newAccessToken = response.data.accessToken;
-//     localStorage.setItem('accessToken', newAccessToken);
+//     sessionStorage.setItem('accessToken', newAccessToken);
 //     console.log('Token refreshed:', newAccessToken);
 //     return newAccessToken;
 //   } catch (error) {
@@ -119,7 +119,7 @@ export default api;
 // // Interceptor untuk menangani permintaan dan respons
 // api.interceptors.request.use(
 //   async config => {
-//     const accessToken = localStorage.getItem('accessToken');
+//     const accessToken = sessionStorage.getItem('accessToken');
 //     if (accessToken) {
 //       config.headers.Authorization = `Bearer ${accessToken}`;
 //     }
