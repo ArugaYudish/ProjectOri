@@ -1,55 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import Routes from './routes';
-import { refreshToken } from './utils/api';
+import React, { useEffect, useState, useRef } from "react"
+import Routes from "./routes"
+import { refreshToken } from "./utils/api"
 
 const App = () => {
-  const [lastActivityTime, setLastActivityTime] = useState(Date.now());
+	const [isAfk, setIsAfk] = useState(false)
+	const timeoutIdRef = useRef(null)
+	const intervalRef = useRef(null)
 
-  useEffect(() => {
-    const handleUserActivity = () => {
-      setLastActivityTime(Date.now());
-    };
+	useEffect(() => {
+		const resetTimeout = () => {
+			if (timeoutIdRef.current) {
+				clearTimeout(timeoutIdRef.current)
+			}
 
-    // Add event listeners to detect user activity
-    window.addEventListener('mousemove', handleUserActivity);
-    window.addEventListener('keydown', handleUserActivity);
-    window.addEventListener('scroll', handleUserActivity);
-    window.addEventListener('click', handleUserActivity);
+			timeoutIdRef.current = setTimeout(() => {
+				setIsAfk(true)
+			}, 600000)
+		}
 
-    const interval = setInterval(async () => {
-      try {
-        const currentTime = Date.now();
-        const timeSinceLastActivity = currentTime - lastActivityTime;
+		const checkActivityInterval = () => {
+			if (intervalRef.current) {
+				clearInterval(intervalRef.current)
+			}
+			intervalRef.current = setInterval(async () => {
+				if (!isAfk) {
+					await refreshToken()
+					console.log("User is active. Fetching refreshToken...")
+				} else {
+					console.log(
+						"User has been inactive for more than 10 minute. Logging out..."
+					)
+					sessionStorage.clear()
+				}
+			}, 600000)
+		}
 
-        if (timeSinceLastActivity < 2 * 60 * 1000) { // 10 minutes in milliseconds
-          await refreshToken();
-        } else {
-          sessionStorage.removeItem('userId')
-          sessionStorage.removeItem('role')
-          sessionStorage.removeItem('accessToken')
-          sessionStorage.removeItem('userName')
-          sessionStorage.removeItem('Ballance')
-        }
-      } catch (error) {
-        console.error('Failed to refresh token:', error);
-      }
-    }, 60 * 2 * 1000); // 10 minutes in milliseconds
+		const handleActivity = () => {
+			if (isAfk) {
+				setIsAfk(false)
+			}
 
-    // Cleanup on component unmount
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('mousemove', handleUserActivity);
-      window.removeEventListener('keydown', handleUserActivity);
-      window.removeEventListener('scroll', handleUserActivity);
-      window.removeEventListener('click', handleUserActivity);
-    };
-  }, [lastActivityTime]);
+			resetTimeout()
+		}
 
-  return (
-    <div className='App'>
-      <Routes />
-    </div>
-  );
-};
+		document.addEventListener("click", handleActivity)
+		document.addEventListener("mousemove", handleActivity)
+		document.addEventListener("keydown", handleActivity)
+		document.addEventListener("visibilitychange", handleActivity)
+		document.addEventListener("touchstart", handleActivity)
+		document.addEventListener("scroll", handleActivity)
 
-export default App;
+		const token = sessionStorage.getItem("accessToken")
+		if (token) {
+			checkActivityInterval()
+		}
+		resetTimeout()
+
+		return () => {
+			document.removeEventListener("click", handleActivity)
+			document.removeEventListener("mousemove", handleActivity)
+			document.removeEventListener("keydown", handleActivity)
+			document.removeEventListener("visibilitychange", handleActivity)
+			document.removeEventListener("touchstart", handleActivity)
+			document.removeEventListener("scroll", handleActivity)
+
+			if (timeoutIdRef.current) {
+				clearTimeout(timeoutIdRef.current)
+			}
+		}
+	}, [isAfk])
+
+	return (
+		<div className="App">
+			<Routes />
+		</div>
+	)
+}
+
+export default App
