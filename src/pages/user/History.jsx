@@ -21,8 +21,8 @@ const History = () => {
   const fetchTransactions = async table => {
     setLoading(true); // Set loading to true when fetching data
     try {
-      const userId = localStorage.getItem('userId');
-      const token = localStorage.getItem('accessToken');
+      const userId = sessionStorage.getItem('userId');
+      const token = sessionStorage.getItem('accessToken');
       const status = table === 'openOrder' ? 'Active' : 'Inactive';
 
       const response = await axios.post(

@@ -16,7 +16,7 @@ const AdminWithdraw = () => {
 
   // Fungsi untuk mengambil token akses dari localStorage
   const getToken = () => {
-    return localStorage.getItem('accessToken');
+    return sessionStorage.getItem('accessToken');
   };
 
   // Fungsi untuk mengambil data withdrawal dari API
@@ -37,13 +37,19 @@ const AdminWithdraw = () => {
           },
         },
       );
+      console.log(response)
       if (
         response.data &&
         response.data.data &&
         response.data.data.withdrawals
       ) {
-        setData(response.data.data.withdrawals); // Mengupdate state data dengan data dari API
-      }
+        const withdrawals = response.data.data.withdrawals;
+        
+        // Filter withdrawals based on specific condition, e.g., status 'Waiting Approval'
+        const filteredWithdrawals = withdrawals.filter(withdrawal => withdrawal.status === 'Waiting Approval');
+      
+        setData(filteredWithdrawals); // Update state data with the filtered withdrawals
+      }      
     } catch (error) {
       console.error('Gagal mengambil data withdrawal:', error);
       message.error('Gagal mengambil data withdrawal');

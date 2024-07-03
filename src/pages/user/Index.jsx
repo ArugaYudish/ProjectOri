@@ -19,7 +19,7 @@ const Wallets = () => {
       setLoading(true);
       try {
         const response = await api.post('/api/v1/withdrawal/get', {
-          user_id: localStorage.getItem('userId'),
+          user_id: sessionStorage.getItem('userId'),
           status: '',
           start_date: '2023-06-01 11:04:05+07',
           end_date: '2024-06-03 11:04:05+07',
@@ -39,7 +39,7 @@ const Wallets = () => {
     };
 
     const fetchBalance = () => {
-      const balanceFromStorage = localStorage.getItem('Ballance');
+      const balanceFromStorage = sessionStorage.getItem('Ballance');
       if (balanceFromStorage) {
         setBalance(parseFloat(balanceFromStorage));
       }

@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 
 const AdminRoleMiddleware = () => {
-	const role = localStorage.getItem('role')
+	const role = sessionStorage.getItem('role')
 
 	if (role === 'admin') {
 		return <Outlet />
