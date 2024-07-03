@@ -25,6 +25,7 @@ import ForgotVerification from './pages/forgot/ForgotVerification.jsx';
 import NotFound from './pages/notFound/NotFound.jsx';
 import PurchaseSuccess from './pages/purchase/Success.jsx';
 import PurchaseFailed from './pages/purchase/Failed.jsx';
+import InvoiceForm from './pages/invoice/form.jsx';
 
 const RoutesComponent = () => {
   return (
@@ -36,6 +37,7 @@ const RoutesComponent = () => {
         <Route path='/notfound' element={<NotFound />} />{' '}
         <Route path='/purchase-success' element={<PurchaseSuccess />} />{' '}
         <Route path='/purchase-failed' element={<PurchaseFailed />} />{' '}
+        <Route path='/invoice/:id' element={<InvoiceForm />} />{' '}
         <Route element={<GuestMiddleware />}>
           <Route path='/register' element={<RegisterForm />} />{' '}
           <Route path='/activation/:id' element={<Activation />} />{' '}

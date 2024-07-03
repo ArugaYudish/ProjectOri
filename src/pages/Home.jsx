@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Children } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/style.css';
 
@@ -22,20 +22,27 @@ import coinbase from '../assets/img/coinbase.svg';
 import kucoin from '../assets/img/kucoin.svg';
 import iconPaw from '../assets/img/icon-paw.svg';
 import bgKucing from '../assets/img/Rocket.svg';
+import RightArrow from "../assets/img/DirectRight-Linear-32px 1.png"
 import { Alert, Modal } from 'antd';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [display, setDisplay] = useState("none");
   const [currencies, setCurrencies] = useState([]);
-  const [currency, setCurrency] = useState('');
+  const [currency, setCurrency] = useState('Choose Currency');
   const [id, setId] = useState('');
-  const [refferalCode, setRefferalCode] = useState('');
+  const [referralCode, setReferralCode] = useState('');
+  const [isreferralOk, setIsReferralOk] = useState(false);
+  const [referralDisplay, setReferralDIsplay] = useState("none");
   const [pack, setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
   const [isError, setIsError] = useState(false);
+  const [payment, setPayment] = useState(0)
+  const [discount, setDiscount] = useState(0)
+  const [totalPayment, setTotalPayment] = useState(0)
+  const [percentageFee, setPercentageFee] = useState(0)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,7 +66,19 @@ const Home = () => {
     fetchPackages();
   }, []);
 
-  const handleStartNowClick = async id => {
+  const handleCloseModal = () => {
+    setDisplay("none")
+    setReferralDIsplay("none")
+    setCurrency("Choose Currency")
+    setReferralCode("")
+    setPayment(0)
+    setDiscount(0)
+    setTotalPayment(0)
+    setIsError(false)
+    setPercentageFee(0)
+  }
+
+  const handleStartNowClick = async (selectedPack) => {
     if (accessToken === null) {
       localStorage.removeItem("accessToken")
       localStorage.removeItem("role")
@@ -129,23 +148,70 @@ const Home = () => {
       });
 
       setCurrencies(currencies);
-      setCurrency(currencies[0].code);
 
-      console.log(data.meta.message, data);
+      const paymentStr = selectedPack.desc_2.replace("Billed as one payment of $", "")
+      const price = Number(paymentStr)
+
+      setPayment(price)
+      setTotalPayment(price)
     } catch (err) {
       throw new Error(err.message);
     }
 
-    setId(id);
-    setOpen(true);
+    setId(selectedPack.id);
+    setDisplay("flex")
   };
+
+  const checkReferral = async () => {
+    const response = await fetch(`${apiUrl}/api/v1/transactions/refferal`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const data = await response.json();
+    switch (data.meta.code) {
+      case 200:
+        const referral = data.data.refferal.referral_code
+        if (referral === referralCode) {
+          setIsReferralOk(true)
+          setReferralDIsplay("flex")
+          const percentage = data.data.refferal.refferal_user[0].persentage_fee
+          setPercentageFee(percentage)
+          setDiscount(payment - ((100 - 10) / 100 * payment))
+          setTotalPayment((100 - 10) / 100 * payment)
+        } else {
+          setIsReferralOk(false)
+          setReferralDIsplay("flex")
+          setDiscount(0)
+          setPercentageFee(0)
+          setTotalPayment(payment)
+        }
+        break;
+      default:
+        const errMessage = data.meta.message;
+        const errReason = data.meta.reason;
+        setError(`${errMessage}, ${errReason}`);
+        setIsError(true);
+        console.log(data);
+        break;
+    }
+  }
 
   const handleCreateTransaction = async event => {
     event.preventDefault();
     setIsError(false);
 
+    if (currency === "Choose Currency") {
+      setError("Choose your currency first.")
+      setIsError(true)
+      return
+    }
+
     try {
-      console.log(id, refferalCode, currency);
+      console.log(id, referralCode, currency);
       const response = await fetch(`${apiUrl}/api/v1/transactions/buy`, {
         method: 'POST',
         headers: {
@@ -154,7 +220,7 @@ const Home = () => {
         },
         body: JSON.stringify({
           id_package: id,
-          refferal_code: refferalCode,
+          refferal_code: referralCode,
           currency,
         }),
       });
@@ -162,8 +228,15 @@ const Home = () => {
       const data = await response.json();
       switch (data.meta.code) {
         case 200:
-          const link = data.data.transaction.detail_checkout.checkout_url;
-          window.location.href = link;
+          console.log("success", data)
+          const state = {
+            id: data.data.transaction.id,
+            currency: currency,
+            discount: data.data.transaction.persentage_fee,
+            link: data.data.transaction.detail_checkout.checkout_url,
+            invoiceNumber: data.data.transaction.detail_checkout.amount
+          }
+          navigate(`/invoice/${state.id}`, { state: state })
           break;
         default:
           const errMessage = data.meta.message;
@@ -184,77 +257,51 @@ const Home = () => {
 
   return (
     <>
-      <Modal
-        title={pack}
-        open={open}
-        onOk={() => {
-          setOpen(false);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-        cancelButtonProps={{
-          hidden: true,
-        }}
-        okButtonProps={{
-          hidden: true,
-        }}>
-        <form
-          className='flex flex-col max-w-sm mx-auto w-full'
-          onSubmit={handleCreateTransaction}>
-          <div className='pb-2'>
-            <label
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-              htmlFor='currency'>
-              Select your currency
-            </label>
-            <select
-              name='currency'
-              className='cursor-pointer border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              required
-              value={currency}
-              onChange={e => {
-                setCurrency(e.target.value);
-              }}>
-              {currencies.map((item, index) => (
-                <option
-                  className='cursor-pointer'
-                  key={index}
-                  value={item.code}>
-                  {item.name}
-                </option>
-              ))}
+      {/* Buy Popup */}
+      <div style={{ backgroundColor: "rgba(0, 0, 0, 0.2)", display: display }} className='fixed z-50 inset-0 flex justify-center items-center'>
+        <form onSubmit={e => { handleCreateTransaction(e) }} className='buy-modal m-2 flex flex-col text-lg rounded-sm' style={{ backgroundColor: "white" }}>
+          <div className='flex justify-between py-5 px-8'>
+            <p className='font-bold text-xl'>Choose Payment</p>
+            <button onClick={() => {
+              handleCloseModal()
+            }} type='button' style={{ fontSize: "2rem" }}>x</button>
+          </div>
+          <hr />
+          <div className='flex flex-col py-5 px-8 gap-3'>
+            <select onChange={(e) => { setCurrency(e.target.value) }} value={currency} style={{ backgroundColor: "#fdf5de", color: "#d2a41a", border: "2px solid #d2a41a", boxShadow: "none", cursor: "pointer" }} className='mt-3 rounded-sm py-3 font-bold text-lg'>
+              <option hidden>Choose Currency</option>
+              {
+                currencies.map((item, index) => (
+                  <option key={index} value={item.code}>{item.name}</option>
+                ))
+              }
             </select>
+            <div className='border-2 rounded-sm flex justify-between'>
+              <input value={referralCode} onChange={(e) => {
+                setReferralCode(e.target.value)
+              }} style={{ boxShadow: "none" }} className='border-0 p-3 w-full text-lg' type='text' />
+              <button onClick={() => {
+                setReferralDIsplay("none")
+                checkReferral()
+              }} type='button' style={{ borderLeftWidth: "2px", backgroundColor: "#fdf5de", color: "#FF8A65", padding: "12px 7% 12px 7%" }} className='font-bold flex gap-1 justify-center items-center'>Redeem<img src={RightArrow} alt='>' /></button>
+            </div>
+            {isreferralOk ? <Alert message="Referral code found." type="success" style={{ display: referralDisplay }} /> : <Alert message="Referral code not found." type="error" style={{ display: referralDisplay }} />}
+            <div className='flex flex-col items-end'>
+              <p>Billed as one payment of : <span className='font-bold'>${payment}</span></p>
+              <p>Referral Discount ({percentageFee}%) : <span className='font-bold'>${discount}</span></p>
+              <p>Amount Payment : <span className='font-bold'>${totalPayment}</span></p>
+            </div>
+            {isError ? <Alert message={error} type="error" /> : null}
           </div>
-          <div className='pb-2'>
-            <label
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-              htmlFor='referral'>
-              Input your referral code
-            </label>
-            <input
-              className='border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              onChange={e => {
-                setRefferalCode(e.target.value);
-              }}
-              type='text'
-              name='referral'
-            />
+          <hr />
+          <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
+            <button onClick={() => {
+              handleCloseModal()
+            }} type='button' className='border-2 py-2 px-5'>Cancel</button>
+            <button type='submit' className='py-2 px-5 rounded-sm' style={{ backgroundColor: "#d2a41a", color: "white" }}>Continue Payment</button>
           </div>
-          <Alert
-            className={isError ? '' : 'hidden'}
-            message={error}
-            type='error'
-            showIcon
-          />
-          <button
-            style={{ backgroundColor: '#d2a41a' }}
-            className='w-full my-4 text-center text-white font-medium rounded-lg px-5 py-3 mb-2'
-            type='submit'>
-            Checkout
-          </button>
         </form>
-      </Modal>
+      </div>
 
       <Layout>
         {/* Landing Page */}
@@ -526,8 +573,8 @@ const Home = () => {
                   <p className='subs-detail'>{pack.desc_1}</p>
                   <button
                     onClick={() => {
-                      handleStartNowClick(pack.id);
-                      setPack(pack.package_name);
+                      handleStartNowClick(pack);
+                      setPack(pack);
                     }}
                     type='button'
                     className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>

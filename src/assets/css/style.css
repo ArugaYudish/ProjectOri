@@ -184,3 +184,9 @@
   padding-top: 50px;
   padding-bottom: 70px;
 }
+
+@media (min-width: 700px) {
+  .buy-modal {
+    width: 700px;
+  }
+}
