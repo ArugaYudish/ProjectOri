@@ -13,7 +13,7 @@ const Refferal = () => {
   useEffect(() => {
     const fetchReferralData = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
+        const token = sessionStorage.getItem('accessToken');
 
         const response = await fetch(`${apiUrl}/api/v1/transactions/refferal`, {
           method: 'GET',

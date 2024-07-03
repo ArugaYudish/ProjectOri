@@ -36,7 +36,7 @@ const Home = () => {
   const [referralDisplay, setReferralDIsplay] = useState("none");
   const [pack, setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
   const [isError, setIsError] = useState(false);
   const [payment, setPayment] = useState(0)

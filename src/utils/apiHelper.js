@@ -5,7 +5,7 @@ import axios from 'axios';
 const apiBaseUrl = process.env.REACT_APP_API_URL;
 
 export const fetchUsers = async () => {
-  const token = localStorage.getItem('accessToken');
+  const token = sessionStorage.getItem('accessToken');
   try {
     const response = await axios.get(
       `${apiBaseUrl}/api/v1/transactions/refferal`,

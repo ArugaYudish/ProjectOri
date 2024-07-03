@@ -21,8 +21,8 @@ const Activation = () => {
             const data = await resRegister.json();
 
             console.log(data.meta.message, data);
-            const email = localStorage.getItem("email")
-            const password = localStorage.getItem("password")
+            const email = sessionStorage.getItem("email")
+            const password = sessionStorage.getItem("password")
             if (data.meta.code === 200 && email !== null && password !== null) {
                 const response = await axios.post(`${apiUrl}/api/v1/auth/login`, {
                     email,
@@ -42,22 +42,22 @@ const Activation = () => {
                     console.log(accessToken);
                     console.log(encryptedUserData);
 
-                    // Store access token in localStorage
-                    localStorage.setItem('accessToken', accessToken);
-                    console.log('Token stored:', localStorage.getItem('accessToken'));
+                    // Store access token in sessionStorage
+                    sessionStorage.setItem('accessToken', accessToken);
+                    console.log('Token stored:', sessionStorage.getItem('accessToken'));
 
                     // Decrypt user data
                     const decryptedUserData = await decryptUserData(encryptedUserData);
                     setUserData(decryptedUserData);
-                    localStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
-                    localStorage.setItem('role', decryptedUserData.role);
-                    localStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
+                    sessionStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
+                    sessionStorage.setItem('role', decryptedUserData.role);
+                    sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
 
                     // Set login status to success
                     setLoginStatus('success');
                     setErrorMessage('');
-                    localStorage.removeItem("email")
-                    localStorage.removeItem("password")
+                    sessionStorage.removeItem("email")
+                    sessionStorage.removeItem("password")
 
                     if (decryptedUserData.role === 'admin') {
                         navigate('/asdhakdls/dashboard');

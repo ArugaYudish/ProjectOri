@@ -57,17 +57,17 @@ const LoginForm = () => {
         console.log(accessToken);
         console.log(encryptedUserData);
 
-        // Store access token in localStorage
-        localStorage.setItem('accessToken', accessToken);
-        console.log('Token stored:', localStorage.getItem('accessToken'));
+        // Store access token in sessionStorage
+        sessionStorage.setItem('accessToken', accessToken);
+        console.log('Token stored:', sessionStorage.getItem('accessToken'));
 
         // Decrypt user data
         const decryptedUserData = await decryptUserData(encryptedUserData);
         setUserData(decryptedUserData);
-        localStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
-        localStorage.setItem('role', decryptedUserData.role);
-        localStorage.setItem('userName', decryptedUserData.name)
-        localStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
+        sessionStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
+        sessionStorage.setItem('role', decryptedUserData.role);
+        sessionStorage.setItem('userName', decryptedUserData.name)
+        sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
 
         // Set login status to success
         setLoginStatus('success');
