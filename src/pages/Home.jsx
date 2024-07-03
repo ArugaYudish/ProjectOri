@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children } from 'react';
+import React, { useState, useEffect, Children, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/style.css';
 
@@ -44,6 +44,7 @@ const Home = () => {
   const [totalPayment, setTotalPayment] = useState(0)
   const [percentageFee, setPercentageFee] = useState(0)
   const navigate = useNavigate();
+  const subscription = useRef(null)
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -64,6 +65,11 @@ const Home = () => {
     };
 
     fetchPackages();
+
+    const loc = window.location.href.split("/")
+    if (loc[3] === "#subscription") {
+      subscription.current.scrollIntoView()
+    }
   }, []);
 
   const handleCloseModal = () => {
@@ -545,7 +551,7 @@ const Home = () => {
         {/* Subscription */}
 
         <div
-          id='subscription'
+          id='subscription' ref={subscription}
           className='padding-general mx-auto py-6  sm:px-0'>
           <div className='text-center text-3xl font-bold py-6'>
             SUBSCRIPTION PLAN
