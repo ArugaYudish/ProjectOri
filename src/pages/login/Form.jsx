@@ -25,6 +25,8 @@ const LoginForm = () => {
       ? location.state.meta.message
       : null;
   const navigate = useNavigate();
+  const packDesc = localStorage.getItem("packDesc")
+  const packId = localStorage.getItem("packId")
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -76,6 +78,11 @@ const LoginForm = () => {
 
         localStorage.removeItem("email")
         localStorage.removeItem("password")
+
+        if (packDesc !== null && packId !== null) {
+          navigate("/")
+          return
+        }
 
         if (decryptedUserData.role === 'admin') {
           navigate('/asdhakdls/dashboard');

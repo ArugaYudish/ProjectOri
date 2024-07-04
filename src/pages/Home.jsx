@@ -44,6 +44,8 @@ const Home = () => {
   const [discount, setDiscount] = useState(0)
   const [totalPayment, setTotalPayment] = useState(0)
   const [percentageFee, setPercentageFee] = useState(0)
+  const packDesc = localStorage.getItem("packDesc")
+  const packId = localStorage.getItem("packId")
   const navigate = useNavigate();
   const subscription = useRef(null)
 
@@ -66,6 +68,15 @@ const Home = () => {
     };
 
     fetchPackages();
+    if (accessToken !== null) {
+      fetchCurrencies();
+      if (packDesc !== null && packId !== null) {
+        subscription.current.scrollIntoView()
+        handleStartNowClick({ desc_2: packDesc, id: packId })
+        localStorage.removeItem("packDesc")
+        localStorage.removeItem("packId")
+      }
+    }
 
     const loc = window.location.href.split("/")
     if (loc[3] === "#subscription") {
@@ -92,6 +103,29 @@ const Home = () => {
       sessionStorage.removeItem("userName")
       sessionStorage.removeItem("userId")
       sessionStorage.removeItem("Ballance")
+      sessionStorage.removeItem("email")
+      localStorage.setItem("packDesc", selectedPack.desc_2)
+      localStorage.setItem("packId", selectedPack.id)
+      navigate('/login');
+      return;
+    }
+
+    const paymentStr = selectedPack.desc_2.replace("Billed as one payment of $", "")
+    const price = Number(paymentStr)
+    setPayment(price)
+    setTotalPayment(price)
+    setId(selectedPack.id);
+    setDisplay("flex")
+  };
+
+  const fetchCurrencies = async () => {
+    if (accessToken === null) {
+      sessionStorage.removeItem("accessToken")
+      sessionStorage.removeItem("role")
+      sessionStorage.removeItem("userName")
+      sessionStorage.removeItem("userId")
+      sessionStorage.removeItem("Ballance")
+      sessionStorage.removeItem("email")
       navigate('/login');
       return;
     }
@@ -112,6 +146,7 @@ const Home = () => {
         sessionStorage.removeItem("userName")
         sessionStorage.removeItem("userId")
         sessionStorage.removeItem("Ballance")
+        sessionStorage.removeItem("email")
         navigate("/login")
         return
       }
@@ -153,19 +188,11 @@ const Home = () => {
       });
 
       setCurrencies(currencies);
-
-      const paymentStr = selectedPack.desc_2.replace("Billed as one payment of $", "")
-      const price = Number(paymentStr)
-
-      setPayment(price)
-      setTotalPayment(price)
+      console.log(data)
     } catch (err) {
       throw new Error(err.message);
     }
-
-    setId(selectedPack.id);
-    setDisplay("flex")
-  };
+  }
 
   const checkReferral = async () => {
     const response = await fetch(`${apiUrl}/api/v1/transactions/validate-refferal`, {
