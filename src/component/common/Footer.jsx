@@ -1,5 +1,11 @@
 import React from 'react';
 import logo from '../../assets/img/Neko_logo.svg';
+import IconYoutube from '../../assets/img/IconYoutube.svg';
+import IconInstagram from '../../assets/img/IconInstagram.svg';
+import IconTradingView from '../../assets/img/IconTradingView.svg';
+import IconTwitter from '../../assets/img/IconTwitter.svg';
+import IconTelegram from '../../assets/img/IconTelegram.svg';
+
 import { Facebook } from 'iconsax-react';
 import { Youtube } from 'iconsax-react';
 import { Instagram } from 'iconsax-react';
@@ -27,10 +33,22 @@ const Footer = () => {
               <div className='flex gap-2'>
                 <div className='text-gray-600'>Follow Us: </div>
                 <div className='flex gap-2'>
-                  <Facebook size='24' color='#0a142f' />
+                  <a href='https://instagram.com/orineko.io'>
+                    <img src={IconInstagram} alt='instagram' />
+                  </a>
+                  <a href='https://t.me/orineko'>
+                    <img src={IconTelegram} alt='instagram' />
+                  </a>
+                  <a href='https://twitter.com/orineko_io'>
+                    <img src={IconTwitter} alt='instagram' />
+                  </a>
+                  <a href='https://tradingview.com/u/orineko/'>
+                    <img src={IconTradingView} alt='instagram' />
+                  </a>
+                  {/* <Facebook size='24' color='#0a142f' />
                   <Youtube size='24' color='#0a142f' />
 
-                  <Instagram size='24' color='#0a142f' />
+                  <Instagram size='24' color='#0a142f' /> */}
                 </div>
               </div>
               <div className='py-4 '>
