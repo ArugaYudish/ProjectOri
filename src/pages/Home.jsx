@@ -86,11 +86,11 @@ const Home = () => {
 
   const handleStartNowClick = async (selectedPack) => {
     if (accessToken === null) {
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("role")
-      localStorage.removeItem("userName")
-      localStorage.removeItem("userId")
-      localStorage.removeItem("Ballance")
+      sessionStorage.removeItem("accessToken")
+      sessionStorage.removeItem("role")
+      sessionStorage.removeItem("userName")
+      sessionStorage.removeItem("userId")
+      sessionStorage.removeItem("Ballance")
       navigate('/login');
       return;
     }
@@ -106,15 +106,13 @@ const Home = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.meta.reason === "Invalid token") {
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("role")
-          localStorage.removeItem("userName")
-          localStorage.removeItem("userId")
-          localStorage.removeItem("Ballance")
-          navigate("/login")
-          return
-        }
+        sessionStorage.removeItem("accessToken")
+        sessionStorage.removeItem("role")
+        sessionStorage.removeItem("userName")
+        sessionStorage.removeItem("userId")
+        sessionStorage.removeItem("Ballance")
+        navigate("/login")
+        return
       }
 
       const currenciesData = data.data.currency;
@@ -196,6 +194,10 @@ const Home = () => {
           setTotalPayment(payment)
         }
         break;
+      case 401:
+        console.log(data)
+        navigate("/login")
+        break;
       default:
         const errMessage = data.meta.message;
         const errReason = data.meta.reason;
@@ -243,6 +245,10 @@ const Home = () => {
             invoiceNumber: data.data.transaction.detail_checkout.amount
           }
           navigate(`/invoice/${state.id}`, { state: state })
+          break;
+        case 401:
+          console.log(data)
+          navigate("/login")
           break;
         default:
           const errMessage = data.meta.message;

@@ -16,8 +16,8 @@ const RegisterForm = () => {
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    if (password.length <= 8) {
+      setError('Password  minimum 8 character!');
       return;
     }
 
@@ -40,8 +40,8 @@ const RegisterForm = () => {
 
       if (data.meta.code !== 200) {
         // throw new Error(data.message || 'Something went wrong');
-        setError(data.data[0].Message)
-        console.log(data.data[0].Message)
+        setError(data.data.Messsage)
+        console.log(data.data.Messsage)
       } else {
         // Handle successful registration, e.g., redirect to login page
         data.meta.message = "Success Verification Link Sent to Your Email"

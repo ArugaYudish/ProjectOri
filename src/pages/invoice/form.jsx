@@ -14,8 +14,8 @@ const InvoiceForm = () => {
     const discount = location.state && location.state.discount !== null ? location.state.discount : null;
     const link = location.state && location.state.link !== null ? location.state.link : null;
     const invoiceNumber = location.state && location.state.invoiceNumber !== null ? location.state.invoiceNumber : null;
-    const userId = localStorage.getItem("userId")
-    const token = localStorage.getItem('accessToken');
+    const userId = sessionStorage.getItem("userId")
+    const token = sessionStorage.getItem('accessToken');
     const [date, setDate] = useState("")
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -40,10 +40,8 @@ const InvoiceForm = () => {
             const response = await axios.post(
                 `${apiUrl}/api/v1/transactions/get`,
                 {
-                    user_id: userId,
-                    status: "Inactive",
                     start_date: moment().subtract(3, 'years').format('YYYY-MM-DD'),
-                    end_date: moment().add(3, 'years').format('YYYY-MM-DD')
+                    end_date: moment().add(5, 'years').format('YYYY-MM-DD')
                 },
                 {
                     headers: {
