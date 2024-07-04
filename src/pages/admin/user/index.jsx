@@ -1,32 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import SidebarAdmin from '../../../component/common/admin/Sidebar'
-import '../../../assets/css/user.css'
-import { Table, Button, Spin, message } from 'antd'
-import { AddCircle } from 'iconsax-react'
-import api from '../../../utils/api'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react"
+import SidebarAdmin from "../../../component/common/admin/Sidebar"
+import "../../../assets/css/user.css"
+import { Table, Button, Spin, message, Modal } from "antd"
+import { AddCircle } from "iconsax-react"
+import api from "../../../utils/api"
+import { Link, useNavigate } from "react-router-dom"
 
 const Users = () => {
 	const [data, setData] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
 	const navigate = useNavigate()
+	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [record, setRecord] = useState(null)
+
+	const showModal = (record) => {
+		setRecord(record) // store the record for use in handleOk
+		setIsModalOpen(true)
+	}
+
+	const handleOk = async () => {
+		await handleRemove(record)
+		// setRecord(null)
+		setIsModalOpen(false)
+	}
+
+	const handleCancel = () => {
+		setIsModalOpen(false)
+		setRecord(false)
+	}
 
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
-				const response = await api.get('/api/v1/users')
+				const response = await api.get("/api/v1/users")
 				if (response.data && response.data.data) {
 					setData(response.data.data.users) // Sesuaikan dengan struktur respons API
 				}
 				setLoading(false)
 			} catch (error) {
-				console.error('Failed to fetch users:', error)
-				message.error('Failed to fetch users')
+				console.error("Failed to fetch users:", error)
+				message.error("Failed to fetch users")
 				setLoading(false)
 			}
-		}
-
+		}		
 		fetchUsers()
 	}, [])
 
@@ -36,63 +53,61 @@ const Users = () => {
 
 	const handleRemove = async (record) => {
 		try {
-			const response = await api.post('/api/v1/users/change-status', {
+			const response = await api.post("/api/v1/users/change-status", {
 				userid: record.id,
 				status: 0
 			})
 
-			console.log('response3', response)
-
 			if (response.data && response.data.meta.code === 200) {
 				window.location.reload()
 			} else {
-				setError('Failed to update user')
+				setError("Failed to update user")
 			}
 		} catch (error) {
-			setError(error.response?.data?.message || 'Failed to update user')
+			setError(error.response?.data?.message || "Failed to update user")
 		}
 	}
 
 	const columns = [
 		{
-			title: 'Username',
-			dataIndex: 'name',
+			title: "Username",
+			dataIndex: "name",
 			width: 250
 		},
 		{
-			title: 'Email',
-			dataIndex: 'email',
+			title: "Email",
+			dataIndex: "email",
 			width: 200
 		},
 		{
-			title: 'Wallet',
-			dataIndex: 'balance',
+			title: "Wallet",
+			dataIndex: "balance",
 			width: 200
 		},
 		{
-			title: 'Role',
-			dataIndex: 'role',
+			title: "Role",
+			dataIndex: "role",
 			width: 150
 		},
 		{
-			title: 'Status',
-			dataIndex: 'status',
+			title: "Status",
+			dataIndex: "status",
 			width: 150,
 			filters: [
 				{
-					text: 'Active',
-					value: 'Active'
+					text: "Active",
+					value: "Active"
 				},
 				{
-					text: 'Inactive',
-					value: 'Inactive'
+					text: "Inactive",
+					value: "Inactive"
 				}
 			],
-			onFilter: (value, record) => record.status.indexOf(value) === 0,
+			onFilter: (value, record) => record.status.indexOf(value) === 0
 		},
 		{
-			title: 'Action',
-			dataIndex: 'action',
+			title: "Action",
+			dataIndex: "action",
 			render: (text, record) => (
 				<div className="flex gap-2">
 					<Button
@@ -103,7 +118,7 @@ const Users = () => {
 					</Button>
 					<Button
 						className="bg-orineko-danger text-white border justify-center flex gap-2 items-center rounded-lg text-sm"
-						onClick={() => handleRemove(record)}
+						onClick={() => showModal(record)}
 					>
 						Remove
 					</Button>
@@ -113,50 +128,58 @@ const Users = () => {
 	]
 
 	return (
-		<SidebarAdmin>
-			<div>
-				<div className="text-3xl py-2 border-b">User Management</div>
-				<div className="mt-5">
-					<div className="flex justify-between">
-						<div className="font-bold py-2">Users</div>
-						<div>
-							<Link
-								to={'/asdhakdls/users/add'}
-								className="text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-							>
-								<AddCircle
-									size="16"
-									color="#FFFFFF"
-								/>
-								Create New
-							</Link>
+		<>
+			<Modal
+				title="Notifications"
+				open={isModalOpen}
+				onOk={handleOk}
+				onCancel={handleCancel}
+				okButtonProps={{ style: { backgroundColor: "#ca9700" } }}
+			>
+				<p>Are you sure you want to remove?</p>
+			</Modal>
+			<SidebarAdmin>
+				<div>
+					<div className="text-3xl py-2 border-b">User Management</div>
+					<div className="mt-5">
+						<div className="flex justify-between">
+							<div className="font-bold py-2">Users</div>
+							<div>
+								<Link
+									to={"/asdhakdls/users/add"}
+									className="text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+								>
+									<AddCircle size="16" color="#FFFFFF" />
+									Create New
+								</Link>
+							</div>
 						</div>
-					</div>
-					<div className="pt-3">
-						<div className="card">
-							{loading ? (
-								<Spin tip="Loading..." />
-							) : (
-								<>
-									{error && <div className="text-red-500 pb-3">{error}</div>}
-									<div className="overflow-hidden overflow-x-auto">
-										<Table
-											className="table-ant"
-											columns={columns}
-											dataSource={data}
-											pagination={{
-												pageSize: 5
-											}}
-											rowKey={(record) => record.id} // Asumsikan setiap record memiliki id unik
-										/>
-									</div>
-								</>
-							)}
+						<div className="pt-3">
+							<div className="card">
+								{loading ? (
+									<Spin tip="Loading..." />
+								) : (
+									<>
+										{error && <div className="text-red-500 pb-3">{error}</div>}
+										<div className="overflow-hidden overflow-x-auto">
+											<Table
+												className="table-ant"
+												columns={columns}
+												dataSource={data}
+												pagination={{
+													pageSize: 5
+												}}
+												rowKey={(record) => record.id} // Asumsikan setiap record memiliki id unik
+											/>
+										</div>
+									</>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</SidebarAdmin>
+			</SidebarAdmin>
+		</>
 	)
 }
 
