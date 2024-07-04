@@ -17,7 +17,7 @@ const Users = () => {
 	const [status, setStatus] = useState("Active")
 
 	const showModal = (record) => {
-		setRecord(record) // store the record for use in handleOk
+		setRecord(record)
 		setIsModalOpen(true)
 	}
 
