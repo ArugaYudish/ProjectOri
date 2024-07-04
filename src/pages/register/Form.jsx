@@ -10,6 +10,7 @@ const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const [fieldError, setFieldError] = useState(null);
+  const [openModal, setOpenModal] = useState("none")
   const navigate = useNavigate();
 
   const handleSubmit = async event => {
@@ -52,11 +53,11 @@ const RegisterForm = () => {
         }
       } else {
         // Handle successful registration, e.g., redirect to login page
-        data.meta.message = "Success Verification Link Sent to Your Email"
+        data.meta.message = "Verification Link Sent to Your Email"
         console.log('Registration successful', data);
         localStorage.setItem("email", email)
         localStorage.setItem("password", password)
-        navigate('/login', { state: data }); // Redirect to login page
+        setOpenModal("flex")
       }
     } catch (error) {
       setError(error.message);
@@ -65,6 +66,19 @@ const RegisterForm = () => {
 
   return (
     <>
+      {/* pupup */}
+      <div style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", display: openModal }} className='fixed inset-0 flex justify-center items-center'>
+        <div style={{ backgroundColor: "white", padding: "40px" }} className='rounded-lg flex flex-col justify-center items-center'>
+          <svg style={{ width: "100px", height: "100px", padding: "20px", backgroundColor: "#d2a41a", borderRadius: "100%" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path fill='white' d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+          </svg>
+          <p style={{ color: "#d2a41a" }} className='text-center text-xl font-black mt-5'>Success!</p>
+          <p className='text-center font-semibold'>Verification Link Sent to Your Email</p>
+          <button onClick={() => { setOpenModal("none") }} style={{ backgroundColor: "#d2a41a", color: "white" }} className='w-full py-2 px-5 rounded-sm mt-5'>Ok</button>
+        </div>
+      </div>
+
+      {/* form */}
       <div className='authForm sm:grid grid-cols-2'>
         <div className='col-span-1 image-form flex items-center'>
           <img

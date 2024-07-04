@@ -24,6 +24,7 @@ import iconPaw from '../assets/img/icon-paw.svg';
 import bgKucing from '../assets/img/Rocket.svg';
 import RightArrow from "../assets/img/DirectRight-Linear-32px 1.png"
 import { Alert, Modal } from 'antd';
+import axios from 'axios';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
@@ -167,23 +168,25 @@ const Home = () => {
   };
 
   const checkReferral = async () => {
-    const response = await fetch(`${apiUrl}/api/v1/transactions/refferal`, {
+    const response = await fetch(`${apiUrl}api/v1/transactions/validate-refferal`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify({
+        refferal_code: referralCode
+      })
     });
 
     const data = await response.json();
     switch (data.meta.code) {
       case 200:
-        const referral = data.data.refferal.referral_code
+        const referral = data.data.refferal
         if (referral === referralCode) {
           setIsReferralOk(true)
           setReferralDIsplay("flex")
-          const percentage = data.data.refferal.refferal_user[0].persentage_fee
-          setPercentageFee(percentage)
+          setPercentageFee(10)
           setDiscount(payment - ((100 - 10) / 100 * payment))
           setTotalPayment((100 - 10) / 100 * payment)
         } else {
