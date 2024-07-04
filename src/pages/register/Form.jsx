@@ -9,6 +9,7 @@ const RegisterForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
+  const [fieldError, setFieldError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async event => {
@@ -16,10 +17,10 @@ const RegisterForm = () => {
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    if (password.length <= 8) {
-      setError('Password  minimum 8 character!');
-      return;
-    }
+    // if (password.length <= 8) {
+    //   setError('Password  minimum 8 character!');
+    //   return;
+    // }
 
     try {
       const response = await fetch(`${apiUrl}/api/v1/auth/register`, {
@@ -40,8 +41,15 @@ const RegisterForm = () => {
 
       if (data.meta.code !== 200) {
         // throw new Error(data.message || 'Something went wrong');
-        setError(data.data.Messsage)
-        console.log(data.data.Messsage)
+        if (!Array.isArray(data.data)) {
+          setError(data.data.Messsage)
+          setFieldError(data.data.Field)
+          console.log(data.data.Messsage)
+        } else {
+          setError(data.data[0].Message)
+          setFieldError(data.data[0].Field)
+          console.log(data.data[0].Message)
+        }
       } else {
         // Handle successful registration, e.g., redirect to login page
         data.meta.message = "Success Verification Link Sent to Your Email"
@@ -103,6 +111,7 @@ const RegisterForm = () => {
                 required
               />
             </div>
+            {error && fieldError === "Email" ? <div className='text-red-500 pb-3'>{error}</div> : null}
             <div className='pb-2'>
               <label
                 htmlFor='password'
@@ -118,6 +127,7 @@ const RegisterForm = () => {
                 required
               />
             </div>
+            {error !== "Password and Password Confirm is not same!" && fieldError === "Password" ? <div className='text-red-500 pb-3'>{error}</div> : null}
             <div className='pb-3'>
               <label
                 htmlFor='confirmPassword'
@@ -133,7 +143,7 @@ const RegisterForm = () => {
                 required
               />
             </div>
-            {error && <div className='text-red-500 pb-3'>{error}</div>}
+            {error === "Password and Password Confirm is not same!" && fieldError === "Password" ? <div className='text-red-500 pb-3'>{error}</div> : null}
             <button
               type='submit'
               className='text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>

@@ -181,7 +181,7 @@ const ForgotForm = () => {
 
               <div className='text-center pt-3'>
                 Remember your password?{' '}
-                <a href='/register' className='text-blue-600'>
+                <a href='/login' className='text-blue-600'>
                   Sign In
                 </a>{' '}
               </div>
@@ -222,7 +222,7 @@ const ForgotForm = () => {
 
               <div className='text-center pt-3'>
                 Remember your password?{' '}
-                <a href='/register' className='text-blue-600'>
+                <a href='/login' className='text-blue-600'>
                   Sign In
                 </a>{' '}
               </div>
