@@ -51,7 +51,9 @@ const Activation = () => {
                     setUserData(decryptedUserData);
                     sessionStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
                     sessionStorage.setItem('role', decryptedUserData.role);
+                    sessionStorage.setItem('userName', decryptedUserData.name)
                     sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
+                    sessionStorage.setItem('email', email);
 
                     // Set login status to success
                     setLoginStatus('success');

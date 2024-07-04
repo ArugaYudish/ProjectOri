@@ -168,8 +168,8 @@ const Home = () => {
   };
 
   const checkReferral = async () => {
-    const response = await fetch(`${apiUrl}api/v1/transactions/validate-refferal`, {
-      method: 'GET',
+    const response = await fetch(`${apiUrl}/api/v1/transactions/validate-refferal`, {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',

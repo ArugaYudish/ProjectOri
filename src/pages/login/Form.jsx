@@ -68,10 +68,14 @@ const LoginForm = () => {
         sessionStorage.setItem('role', decryptedUserData.role);
         sessionStorage.setItem('userName', decryptedUserData.name)
         sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
+        sessionStorage.setItem('email', email);
 
         // Set login status to success
         setLoginStatus('success');
         setErrorMessage('');
+
+        localStorage.removeItem("email")
+        localStorage.removeItem("password")
 
         if (decryptedUserData.role === 'admin') {
           navigate('/asdhakdls/dashboard');
