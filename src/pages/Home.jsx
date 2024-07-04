@@ -47,6 +47,10 @@ const Home = () => {
   const packDesc = localStorage.getItem("packDesc")
   const packId = localStorage.getItem("packId")
   const navigate = useNavigate();
+  const aboutUs = useRef(null)
+  const contactUs = useRef(null)
+  const keyFeatures = useRef(null)
+  const performance = useRef(null)
   const subscription = useRef(null)
 
   useEffect(() => {
@@ -79,8 +83,24 @@ const Home = () => {
     }
 
     const loc = window.location.href.split("/")
-    if (loc[3] === "#subscription") {
-      subscription.current.scrollIntoView()
+    switch (loc[3]) {
+      case "#about":
+        aboutUs.current.scrollIntoView()
+        break
+      case "#contact":
+        contactUs.current.scrollIntoView()
+        break
+      case "#key-features":
+        keyFeatures.current.scrollIntoView()
+        break
+      case "#performance":
+        performance.current.scrollIntoView()
+        break
+      case "#subscription":
+        subscription.current.scrollIntoView()
+        break
+      default:
+        break
     }
   }, []);
 
@@ -190,7 +210,7 @@ const Home = () => {
       setCurrencies(currencies);
       console.log(data)
     } catch (err) {
-      throw new Error(err.message);
+      console.log(err)
     }
   }
 
@@ -396,6 +416,7 @@ const Home = () => {
         {/* About */}
         <div
           id='about'
+          ref={aboutUs}
           className=' padding-general md:px-0  gap-8 text-about-us  text-justify mx-auto sm:grid grid-cols-5 about-padding'>
           <div className='col-span-2 flex items-center'>
             <img className='' style={{}} src={Paw} alt='' />
@@ -443,7 +464,7 @@ const Home = () => {
         </div>
 
         {/* Feedback */}
-        <div className='padding-general mx-auto set-feedback'>
+        <div id='performance' ref={performance} className='padding-general mx-auto set-feedback'>
           <div className='sm:grid grid-cols-2 gap-12  sm:px-0 '>
             <div className='col-span-1 mx-auto'>
               <img src={Feedback} alt='' />
@@ -463,7 +484,7 @@ const Home = () => {
         </div>
 
         {/* Why Neko*/}
-        <div id='contact' className='why-neko'>
+        <div id='contact' ref={contactUs} className='why-neko'>
           <div className='md:px-0 padding-general mx-auto text-justify'>
             <div className='title-features font-bold'>WHY NEKO?</div>
             <div className='sm:grid grid-cols-3 gap-16 pt-10'>
@@ -546,6 +567,7 @@ const Home = () => {
         {/* Key Feature */}
         <div
           id='key-features'
+          ref={keyFeatures}
           className='key-features px-16 sm:px-0 padding-general mx-auto'>
           <div className='text-2xl capt-key-features font-bold'>
             KEY FEATURES
