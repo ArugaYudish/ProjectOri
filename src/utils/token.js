@@ -17,7 +17,7 @@ const setupTokenRefresh = () => {
         originalRequest._retry = true;
         try {
           const refreshToken = sessionStorage.getItem('refreshToken');
-          console.log('Refresh token:', refreshToken);
+          // console.log('Refresh token:', refreshToken);
           if (!refreshToken) {
             console.error('No refresh token available');
             throw new Error('No refresh token available');
@@ -36,7 +36,7 @@ const setupTokenRefresh = () => {
             response.data.data.access_token
           ) {
             const newAccessToken = response.data.data.access_token;
-            console.log('New access token:', newAccessToken);
+            // console.log('New access token:', newAccessToken);
 
             // Simpan access token baru di sessionStorage
             sessionStorage.setItem('accessToken', newAccessToken);

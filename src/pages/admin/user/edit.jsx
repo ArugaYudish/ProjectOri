@@ -44,7 +44,7 @@ const EditUserForm = () => {
         role: role,
       });
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data && response.data.meta.code === 200) {
         navigate('/asdhakdls/users'); // Redirect to the users management page after success

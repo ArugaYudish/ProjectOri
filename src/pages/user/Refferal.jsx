@@ -58,7 +58,7 @@ const Refferal = () => {
       title: 'Date Time',
       dataIndex: 'date_time',
       width: 200,
-      render: date_time => new Date(date_time).toLocaleString(),
+      // render: date_time => new Date(date_time).toLocaleString(),
     },
     {
       title: 'Amount Payment',
@@ -117,14 +117,14 @@ const Refferal = () => {
                 <div className='text-2xl pt-5'>Your referrals</div>
               </div>
               <div className='card'>
-              <div className="overflow-hidden overflow-x-auto">
-                <Table
-                  className='table-ant'
-                  columns={columns}
-                  dataSource={referralData}
-                  pagination={{ pageSize: 5 }}
-                  rowKey='id'
-                />
+                <div className='overflow-hidden overflow-x-auto'>
+                  <Table
+                    className='table-ant'
+                    columns={columns}
+                    dataSource={referralData}
+                    pagination={{ pageSize: 5 }}
+                    rowKey='id'
+                  />
                 </div>
               </div>
             </div>

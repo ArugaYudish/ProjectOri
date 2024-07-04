@@ -22,36 +22,37 @@ import coinbase from '../assets/img/coinbase.svg';
 import kucoin from '../assets/img/kucoin.svg';
 import iconPaw from '../assets/img/icon-paw.svg';
 import bgKucing from '../assets/img/Rocket.svg';
-import RightArrow from "../assets/img/DirectRight-Linear-32px 1.png"
+import RightArrow from '../assets/img/DirectRight-Linear-32px 1.png';
+import PawsiteNew from '../assets/img/PawsiteNew.svg';
 import { Alert, Modal } from 'antd';
 import axios from 'axios';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
-  const [display, setDisplay] = useState("none");
+  const [display, setDisplay] = useState('none');
   const [currencies, setCurrencies] = useState([]);
   const [currency, setCurrency] = useState('Choose Currency');
   const [id, setId] = useState('');
   const [referralCode, setReferralCode] = useState('');
   const [isreferralOk, setIsReferralOk] = useState(false);
-  const [referralDisplay, setReferralDIsplay] = useState("none");
+  const [referralDisplay, setReferralDIsplay] = useState('none');
   const [pack, setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
   const [isError, setIsError] = useState(false);
-  const [payment, setPayment] = useState(0)
-  const [discount, setDiscount] = useState(0)
-  const [totalPayment, setTotalPayment] = useState(0)
-  const [percentageFee, setPercentageFee] = useState(0)
-  const packDesc = localStorage.getItem("packDesc")
-  const packId = localStorage.getItem("packId")
+  const [payment, setPayment] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [percentageFee, setPercentageFee] = useState(0);
+  const packDesc = localStorage.getItem('packDesc');
+  const packId = localStorage.getItem('packId');
   const navigate = useNavigate();
-  const aboutUs = useRef(null)
-  const contactUs = useRef(null)
-  const keyFeatures = useRef(null)
-  const performance = useRef(null)
-  const subscription = useRef(null)
+  const aboutUs = useRef(null);
+  const contactUs = useRef(null);
+  const keyFeatures = useRef(null);
+  const performance = useRef(null);
+  const subscription = useRef(null);
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -65,7 +66,7 @@ const Home = () => {
           return 0;
         });
         setPackages(sortedPackages);
-        console.log(data.data);
+        // console.log(data.data);
       } catch (error) {
         console.error('Error fetching packages:', error);
       }
@@ -75,77 +76,80 @@ const Home = () => {
     if (accessToken !== null) {
       fetchCurrencies();
       if (packDesc !== null && packId !== null) {
-        subscription.current.scrollIntoView()
-        handleStartNowClick({ desc_2: packDesc, id: packId })
-        localStorage.removeItem("packDesc")
-        localStorage.removeItem("packId")
+        subscription.current.scrollIntoView();
+        handleStartNowClick({ desc_2: packDesc, id: packId });
+        localStorage.removeItem('packDesc');
+        localStorage.removeItem('packId');
       }
     }
 
-    const loc = window.location.href.split("/")
+    const loc = window.location.href.split('/');
     switch (loc[3]) {
-      case "#about":
-        aboutUs.current.scrollIntoView()
-        break
-      case "#contact":
-        contactUs.current.scrollIntoView()
-        break
-      case "#key-features":
-        keyFeatures.current.scrollIntoView()
-        break
-      case "#performance":
-        performance.current.scrollIntoView()
-        break
-      case "#subscription":
-        subscription.current.scrollIntoView()
-        break
+      case '#about':
+        aboutUs.current.scrollIntoView();
+        break;
+      case '#contact':
+        contactUs.current.scrollIntoView();
+        break;
+      case '#key-features':
+        keyFeatures.current.scrollIntoView();
+        break;
+      case '#performance':
+        performance.current.scrollIntoView();
+        break;
+      case '#subscription':
+        subscription.current.scrollIntoView();
+        break;
       default:
-        break
+        break;
     }
   }, []);
 
   const handleCloseModal = () => {
-    setDisplay("none")
-    setReferralDIsplay("none")
-    setCurrency("Choose Currency")
-    setReferralCode("")
-    setPayment(0)
-    setDiscount(0)
-    setTotalPayment(0)
-    setIsError(false)
-    setPercentageFee(0)
-  }
+    setDisplay('none');
+    setReferralDIsplay('none');
+    setCurrency('Choose Currency');
+    setReferralCode('');
+    setPayment(0);
+    setDiscount(0);
+    setTotalPayment(0);
+    setIsError(false);
+    setPercentageFee(0);
+  };
 
-  const handleStartNowClick = async (selectedPack) => {
+  const handleStartNowClick = async selectedPack => {
     if (accessToken === null) {
-      sessionStorage.removeItem("accessToken")
-      sessionStorage.removeItem("role")
-      sessionStorage.removeItem("userName")
-      sessionStorage.removeItem("userId")
-      sessionStorage.removeItem("Ballance")
-      sessionStorage.removeItem("email")
-      localStorage.setItem("packDesc", selectedPack.desc_2)
-      localStorage.setItem("packId", selectedPack.id)
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('role');
+      sessionStorage.removeItem('userName');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('Ballance');
+      sessionStorage.removeItem('email');
+      localStorage.setItem('packDesc', selectedPack.desc_2);
+      localStorage.setItem('packId', selectedPack.id);
       navigate('/login');
       return;
     }
 
-    const paymentStr = selectedPack.desc_2.replace("Billed as one payment of $", "")
-    const price = Number(paymentStr)
-    setPayment(price)
-    setTotalPayment(price)
+    const paymentStr = selectedPack.desc_2.replace(
+      'Billed as one payment of $',
+      '',
+    );
+    const price = Number(paymentStr);
+    setPayment(price);
+    setTotalPayment(price);
     setId(selectedPack.id);
-    setDisplay("flex")
+    setDisplay('flex');
   };
 
   const fetchCurrencies = async () => {
     if (accessToken === null) {
-      sessionStorage.removeItem("accessToken")
-      sessionStorage.removeItem("role")
-      sessionStorage.removeItem("userName")
-      sessionStorage.removeItem("userId")
-      sessionStorage.removeItem("Ballance")
-      sessionStorage.removeItem("email")
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('role');
+      sessionStorage.removeItem('userName');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('Ballance');
+      sessionStorage.removeItem('email');
       navigate('/login');
       return;
     }
@@ -161,14 +165,14 @@ const Home = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        sessionStorage.removeItem("accessToken")
-        sessionStorage.removeItem("role")
-        sessionStorage.removeItem("userName")
-        sessionStorage.removeItem("userId")
-        sessionStorage.removeItem("Ballance")
-        sessionStorage.removeItem("email")
-        navigate("/login")
-        return
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('Ballance');
+        sessionStorage.removeItem('email');
+        navigate('/login');
+        return;
       }
 
       const currenciesData = data.data.currency;
@@ -208,68 +212,71 @@ const Home = () => {
       });
 
       setCurrencies(currencies);
-      console.log(data)
+      // console.log(data)
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
-  }
+  };
 
   const checkReferral = async () => {
-    const response = await fetch(`${apiUrl}/api/v1/transactions/validate-refferal`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${apiUrl}/api/v1/transactions/validate-refferal`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          refferal_code: referralCode,
+        }),
       },
-      body: JSON.stringify({
-        refferal_code: referralCode
-      })
-    });
+    );
 
     const data = await response.json();
     switch (data.meta.code) {
       case 200:
-        const referral = data.data.refferal
+        const referral = data.data.refferal;
         if (referral === referralCode) {
-          setIsReferralOk(true)
-          setReferralDIsplay("flex")
-          setPercentageFee(10)
-          setDiscount(payment - ((100 - 10) / 100 * payment))
-          setTotalPayment((100 - 10) / 100 * payment)
+          setIsReferralOk(true);
+          setReferralDIsplay('flex');
+          setPercentageFee(10);
+          setDiscount(payment - ((100 - 10) / 100) * payment);
+          setTotalPayment(((100 - 10) / 100) * payment);
         } else {
-          setIsReferralOk(false)
-          setReferralDIsplay("flex")
-          setDiscount(0)
-          setPercentageFee(0)
-          setTotalPayment(payment)
+          setIsReferralOk(false);
+          setReferralDIsplay('flex');
+          setDiscount(0);
+          setPercentageFee(0);
+          setTotalPayment(payment);
         }
         break;
       case 401:
-        console.log(data)
-        navigate("/login")
+        // console.log(data)
+        navigate('/login');
         break;
       default:
         const errMessage = data.meta.message;
         const errReason = data.meta.reason;
         setError(`${errMessage}, ${errReason}`);
         setIsError(true);
-        console.log(data);
+        // console.log(data);
         break;
     }
-  }
+  };
 
   const handleCreateTransaction = async event => {
     event.preventDefault();
     setIsError(false);
 
-    if (currency === "Choose Currency") {
-      setError("Choose your currency first.")
-      setIsError(true)
-      return
+    if (currency === 'Choose Currency') {
+      setError('Choose your currency first.');
+      setIsError(true);
+      return;
     }
 
     try {
-      console.log(id, referralCode, currency);
+      // console.log(id, referralCode, currency);
       const response = await fetch(`${apiUrl}/api/v1/transactions/buy`, {
         method: 'POST',
         headers: {
@@ -286,26 +293,26 @@ const Home = () => {
       const data = await response.json();
       switch (data.meta.code) {
         case 200:
-          console.log("success", data)
+          // console.log("success", data)
           const state = {
             id: data.data.transaction.id,
             currency: currency,
             discount: data.data.transaction.persentage_fee,
             link: data.data.transaction.detail_checkout.checkout_url,
-            invoiceNumber: data.data.transaction.detail_checkout.amount
-          }
-          navigate(`/invoice/${state.id}`, { state: state })
+            invoiceNumber: data.data.transaction.detail_checkout.amount,
+          };
+          navigate(`/invoice/${state.id}`, { state: state });
           break;
         case 401:
-          console.log(data)
-          navigate("/login")
+          // console.log(data)
+          navigate('/login');
           break;
         default:
           const errMessage = data.meta.message;
           const errReason = data.meta.reason;
           setError(`${errMessage}, ${errReason}`);
           setIsError(true);
-          console.log(data);
+          // console.log(data);
           break;
       }
     } catch (error) {
@@ -315,53 +322,126 @@ const Home = () => {
 
   function buyPackage() {
     navigate('/#subscription');
-    subscription.current.scrollIntoView()
+    subscription.current.scrollIntoView();
   }
 
   return (
     <>
       {/* Buy Popup */}
-      <div style={{ backgroundColor: "rgba(0, 0, 0, 0.2)", display: display }} className='fixed z-50 inset-0 flex justify-center items-center'>
-        <form onSubmit={e => { handleCreateTransaction(e) }} className='buy-modal m-2 flex flex-col text-lg rounded-sm' style={{ backgroundColor: "white" }}>
+      <div
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', display: display }}
+        className='fixed z-50 inset-0 flex justify-center items-center'>
+        <form
+          onSubmit={e => {
+            handleCreateTransaction(e);
+          }}
+          className='buy-modal m-2 flex flex-col text-lg rounded-sm'
+          style={{ backgroundColor: 'white' }}>
           <div className='flex justify-between py-5 px-8'>
             <p className='font-bold text-xl'>Choose Payment</p>
-            <button onClick={() => {
-              handleCloseModal()
-            }} type='button' style={{ fontSize: "2rem" }}>x</button>
+            <button
+              onClick={() => {
+                handleCloseModal();
+              }}
+              type='button'
+              style={{ fontSize: '2rem' }}>
+              x
+            </button>
           </div>
           <hr />
           <div className='flex flex-col py-5 px-8 gap-3'>
-            <select onChange={(e) => { setCurrency(e.target.value) }} value={currency} style={{ backgroundColor: "#fdf5de", color: "#d2a41a", border: "2px solid #d2a41a", boxShadow: "none", cursor: "pointer" }} className='mt-3 rounded-sm py-3 font-bold text-lg'>
+            <select
+              onChange={e => {
+                setCurrency(e.target.value);
+              }}
+              value={currency}
+              style={{
+                backgroundColor: '#fdf5de',
+                color: '#d2a41a',
+                border: '2px solid #d2a41a',
+                boxShadow: 'none',
+                cursor: 'pointer',
+              }}
+              className='mt-3 rounded-sm py-3 font-bold text-lg'>
               <option hidden>Choose Currency</option>
-              {
-                currencies.map((item, index) => (
-                  <option key={index} value={item.code}>{item.name}</option>
-                ))
-              }
+              {currencies.map((item, index) => (
+                <option key={index} value={item.code}>
+                  {item.name}
+                </option>
+              ))}
             </select>
             <div className='border-2 rounded-sm flex justify-between'>
-              <input value={referralCode} onChange={(e) => {
-                setReferralCode(e.target.value)
-              }} style={{ boxShadow: "none" }} className='border-0 p-3 w-full text-lg' type='text' />
-              <button onClick={() => {
-                setReferralDIsplay("none")
-                checkReferral()
-              }} type='button' style={{ borderLeftWidth: "2px", backgroundColor: "#fdf5de", color: "#FF8A65", padding: "12px 7% 12px 7%" }} className='font-bold flex gap-1 justify-center items-center'>Redeem<img src={RightArrow} alt='>' /></button>
+              <input
+                value={referralCode}
+                onChange={e => {
+                  setReferralCode(e.target.value);
+                }}
+                style={{ boxShadow: 'none' }}
+                className='border-0 p-3 w-full text-lg'
+                type='text'
+              />
+              <button
+                onClick={() => {
+                  setReferralDIsplay('none');
+                  checkReferral();
+                }}
+                type='button'
+                style={{
+                  borderLeftWidth: '2px',
+                  backgroundColor: '#fdf5de',
+                  color: '#FF8A65',
+                  padding: '12px 7% 12px 7%',
+                }}
+                className='font-bold flex gap-1 justify-center items-center'>
+                Redeem
+                <img src={RightArrow} alt='>' />
+              </button>
             </div>
-            {isreferralOk ? <Alert message="Referral code found." type="success" style={{ display: referralDisplay }} /> : <Alert message="Referral code not found." type="error" style={{ display: referralDisplay }} />}
+            {isreferralOk ? (
+              <Alert
+                message='Referral code found.'
+                type='success'
+                style={{ display: referralDisplay }}
+              />
+            ) : (
+              <Alert
+                message='Referral code not found.'
+                type='error'
+                style={{ display: referralDisplay }}
+              />
+            )}
             <div className='flex flex-col items-end'>
-              <p>Billed as one payment of : <span className='font-bold'>${payment}</span></p>
-              <p>Referral Discount ({percentageFee}%) : <span className='font-bold'>${discount}</span></p>
-              <p>Amount Payment : <span className='font-bold'>${totalPayment}</span></p>
+              <p>
+                Billed as one payment of :{' '}
+                <span className='font-bold'>${payment}</span>
+              </p>
+              <p>
+                Referral Discount ({percentageFee}%) :{' '}
+                <span className='font-bold'>${discount}</span>
+              </p>
+              <p>
+                Amount Payment :{' '}
+                <span className='font-bold'>${totalPayment}</span>
+              </p>
             </div>
-            {isError ? <Alert message={error} type="error" /> : null}
+            {isError ? <Alert message={error} type='error' /> : null}
           </div>
           <hr />
           <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
-            <button onClick={() => {
-              handleCloseModal()
-            }} type='button' className='border-2 py-2 px-5'>Cancel</button>
-            <button type='submit' className='py-2 px-5 rounded-sm' style={{ backgroundColor: "#d2a41a", color: "white" }}>Continue Payment</button>
+            <button
+              onClick={() => {
+                handleCloseModal();
+              }}
+              type='button'
+              className='border-2 py-2 px-5'>
+              Cancel
+            </button>
+            <button
+              type='submit'
+              className='py-2 px-5 rounded-sm'
+              style={{ backgroundColor: '#d2a41a', color: 'white' }}>
+              Continue Payment
+            </button>
           </div>
         </form>
       </div>
@@ -382,9 +462,7 @@ const Home = () => {
           <div className='sm:flex '>
             <div className='flex items-center justify-between container '>
               <div className=''>
-                <div
-                  className='text-5xl font-extrabold title-landing '
-                >
+                <div className='text-5xl font-extrabold title-landing '>
                   Join Neko
                 </div>
 
@@ -464,10 +542,13 @@ const Home = () => {
         </div>
 
         {/* Feedback */}
-        <div id='performance' ref={performance} className='padding-general mx-auto set-feedback'>
+        <div
+          id='performance'
+          ref={performance}
+          className='padding-general mx-auto set-feedback'>
           <div className='sm:grid grid-cols-2 gap-12  sm:px-0 '>
             <div className='col-span-1 mx-auto'>
-              <img src={Feedback} alt='' />
+              <img src={PawsiteNew} alt='' />
             </div>
             <div className='col-span-1 flex items-center'>
               <div className=''>
@@ -611,7 +692,8 @@ const Home = () => {
         {/* Subscription */}
 
         <div
-          id='subscription' ref={subscription}
+          id='subscription'
+          ref={subscription}
           className='padding-general mx-auto py-6  sm:px-0'>
           <div className='text-center text-3xl font-bold py-6'>
             SUBSCRIPTION PLAN

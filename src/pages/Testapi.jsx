@@ -14,7 +14,7 @@ const TestApi = () => {
   const fetchUsers = async () => {
     try {
       const response = await api.get('/api/v1/transactions/refferal');
-      console.log('Users fetched:', response.data);
+      // console.log('Users fetched:', response.data);
 
       if (response.data && response.data.data && response.data.data.refferal) {
         const { referral_code, total_amount, total_refferal, refferal_user } =
