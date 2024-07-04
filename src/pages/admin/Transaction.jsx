@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import SidebarAdmin from "../../component/common/admin/Sidebar"
 import "../../assets/css/user.css"
-import { Table, Spin, message, DatePicker, Button, Modal } from "antd"
+import { Table, Spin, message, DatePicker, Button, Modal, Select } from "antd"
 import moment from "moment"
 import api from "../../utils/api"
 import * as XLSX from "xlsx" // Import xlsx for Excel export
@@ -12,6 +12,7 @@ const Transaction = () => {
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [status, setStatus] = useState("Active")
 
 	const showModal = () => {
 		setIsModalOpen(true)
@@ -28,18 +29,15 @@ const Transaction = () => {
 
 	useEffect(() => {
 		fetchTransactions(startDate, endDate)
-	}, [startDate, endDate])
+	}, [startDate, endDate, status])
 
 	const fetchTransactions = async (startDate, endDate) => {
 		setLoading(true)
 		try {
 			const payload = {
-				start_date: startDate
-					? startDate.format("YYYY-MM-DD")
-					: moment().subtract(3, "years").format("YYYY-MM-DD"),
-				end_date: endDate
-					? endDate.format("YYYY-MM-DD")
-					: moment().format("YYYY-MM-DD")
+				status: status === 'both' ? null : status,
+				start_date: startDate ? startDate.format('YYYY-MM-DD') : moment().subtract(3, 'years').format('YYYY-MM-DD'),
+				end_date: endDate ? endDate.format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
 			}
 			const response = await api.post("/api/v1/transactions/get", payload)
 			if (
@@ -117,6 +115,21 @@ const Transaction = () => {
 		}
 	]
 
+	const statusFilter = [
+		{
+			value: "Active",
+			label: "Active"
+		},
+		{
+			value: "Inactive",
+			label: "Inactive"
+		},
+		{
+			value: "Both",
+			label: "Both"
+		}
+	]
+
 	return (
 		<>
 			<Modal
@@ -135,6 +148,10 @@ const Transaction = () => {
 						<div className="flex justify-between">
 							<div className="font-bold py-2">Transaction</div>
 							<div>
+							<Select onChange={value => {
+								setStatus(value)
+							}} value={status} options={statusFilter} />
+
 								<DatePicker.RangePicker
 									value={[startDate, endDate]}
 									onChange={(dates) => {
