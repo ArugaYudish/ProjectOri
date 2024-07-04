@@ -11,7 +11,6 @@ const Users = () => {
 	const [showData, setShowData] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
-	const [status, setStatus] = useState("Active")
 	const navigate = useNavigate()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [record, setRecord] = useState(null)
@@ -73,21 +72,6 @@ const Users = () => {
 		} catch (error) {
 			setError(error.response?.data?.message || "Failed to update user")
 		}
-	}
-
-	const handleStatusFilter = (e) => {
-		setStatus(e)
-
-		let filtered
-		switch (e) {
-			case 'Both':
-				filtered = data
-				break;
-			default:
-				filtered = data.filter(item => item.status === e)
-		}
-
-		setShowData(filtered)
 	}
 
 	const handleStatusFilter = (e) => {

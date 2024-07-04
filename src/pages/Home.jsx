@@ -295,6 +295,7 @@ const Home = () => {
 
   function buyPackage() {
     navigate('/#subscription');
+    subscription.current.scrollIntoView()
   }
 
   return (
@@ -363,7 +364,7 @@ const Home = () => {
               <div className=''>
                 <div
                   className='text-5xl font-extrabold title-landing '
-                  onClick={buyPackage}>
+                >
                   Join Neko
                 </div>
 
@@ -375,6 +376,7 @@ const Home = () => {
                 </div>
                 <div className='py-5'>
                   <button
+                    onClick={buyPackage}
                     type='button'
                     class='flex gap-4 items-center focus:outline-none  bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900'>
                     <div>Join Neko!</div>
