@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import logo from '../../assets/img/OriNeko-Logo.png'
-import '../../assets/css/navbar.css'
-import { Dropdown, Space } from 'antd'
+import React, { useState, useEffect } from "react"
+import logo from "../../assets/img/OriNeko-Logo.png"
+import "../../assets/css/navbar.css"
+import { Dropdown, Space } from "antd"
 
 const Navbar = () => {
 	const [scrollBackground, setScrollBackground] = useState(false)
-	const name = sessionStorage.getItem('userName')
-	const role = sessionStorage.getItem('role')
+	const name = sessionStorage.getItem("userName")
+	const role = sessionStorage.getItem("role")
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -16,95 +16,79 @@ const Navbar = () => {
 			}
 		}
 
-		window.addEventListener('scroll', handleScroll)
+		window.addEventListener("scroll", handleScroll)
 
 		return () => {
-			window.removeEventListener('scroll', handleScroll)
+			window.removeEventListener("scroll", handleScroll)
 		}
 	}, [scrollBackground])
 
 	const items = [
 		{
-			key: '1',
+			key: "1",
 			label: (
-				<a
-					href="/wallet"
-					className="p-1 flex justify-center"
-				>
+				<a href="/wallet" className="p-1 flex justify-center">
 					Dashboard
 				</a>
 			)
 		},
 		{
-			key: '2',
+			key: "2",
 			label: (
-				<a
-					href="#about"
-					className="p-1 flex justify-center"
-				>
+				<a href="#about" className="p-1 flex justify-center">
 					About Us
 				</a>
 			)
 		},
 		{
-			key: '3',
+			key: "3",
 			label: (
-				<a
-					href="#contact"
-					className="p-1 flex justify-center"
-				>
+				<a href="#contact" className="p-1 flex justify-center">
 					Contact Us
 				</a>
 			)
 		},
 		{
-			key: '4',
+			key: "4",
 			label: (
-				<a
-					href="#key-features"
-					className="p-1 flex justify-center"
-				>
+				<a href="#key-features" className="p-1 flex justify-center">
 					Key Features
 				</a>
 			)
 		},
 		{
-			key: '5',
+			key: "5",
 			label: (
-				<a
-					href="#performance"
-					className="p-1 flex justify-center"
-				>
+				<a href="#performance" className="p-1 flex justify-center">
 					Performance
 				</a>
 			)
 		},
 		{
-			key: '6',
+			key: "6",
 			label: (
-				<a
-					href="#subscription"
-					className="p-1 flex justify-center"
-				>
+				<a href="#subscription" className="p-1 flex justify-center">
 					Subscription Plan
 				</a>
 			)
 		},
 		{
-			key: '7',
+			key: "7",
 			label: (
-				<a
-					href="/register"
-					className="register-button flex justify-center m-1"
-				>
+				<>
 					{name && role ? (
-						<>
+						<span className="register-button flex justify-center m-1">
 							{name} - {role}
-						</>
+						</span>
 					) : (
-						'Register'
+						<a
+							href={"/register"}
+							className="register-button flex justify-center m-1"
+						>
+							Register
+						</a>
 					)}
-				</a>
+				</>
 			)
 		}
 	]
@@ -113,7 +97,7 @@ const Navbar = () => {
 		<>
 			<nav
 				className={` navbar-color fixed w-full z-20 top-0 start-0 ${
-					scrollBackground ? 'navbar-gradient-bg' : 'navbar-default-bg'
+					scrollBackground ? "navbar-gradient-bg" : "navbar-default-bg"
 				}`}
 			>
 				<div class="sticky padding-general  mx-auto flex flex-wrap items-center justify-between mx-auto p-4">
@@ -121,15 +105,11 @@ const Navbar = () => {
 						href="https://flowbite.com/"
 						class="flex items-center space-x-3 rtl:space-x-reverse"
 					>
-						<img
-							src={logo}
-							class="h-8"
-							alt="Flowbite Logo"
-						/>
+						<img src={logo} class="h-8" alt="Flowbite Logo" />
 					</a>
 					<Dropdown
 						menu={{ items }}
-						trigger={['click']}
+						trigger={["click"]}
 						className="block sm:hidden items-center inline-flex"
 						overlayClassName="w-64"
 					>
@@ -149,14 +129,11 @@ const Navbar = () => {
 							</Space>
 						</button>
 					</Dropdown>
-					<div
-						class="hidden w-full md:block md:w-auto"
-						id="navbar-default"
-					>
+					<div class="hidden w-full md:block md:w-auto" id="navbar-default">
 						<ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 ">
 							<li>
 								<a
-									href="/wallet"
+									href="/history"
 									class="navbar-text-color block py-2 px-3  rounded   md:border-0  md:p-0 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
 								>
 									Dashboard
@@ -203,18 +180,15 @@ const Navbar = () => {
 								</a>
 							</li>
 							<li>
-								<a
-									href="/register"
-									class="register-button"
-								>
-									{name && role ? (
-										<>
-											{name} - {role}
-										</>
-									) : (
-										'Register'
-									)}
-								</a>
+								{name && role ? (
+									<span className="register-button">
+										{name} - {role}
+									</span>
+								) : (
+									<a href={"/register"} className="register-button">
+										Register
+									</a>
+								)}
 							</li>
 						</ul>
 					</div>
