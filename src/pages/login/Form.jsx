@@ -25,6 +25,8 @@ const LoginForm = () => {
       ? location.state.meta.message
       : null;
   const navigate = useNavigate();
+  const packDesc = localStorage.getItem("packDesc")
+  const packId = localStorage.getItem("packId")
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -68,11 +70,20 @@ const LoginForm = () => {
         sessionStorage.setItem('role', decryptedUserData.role);
         sessionStorage.setItem('userName', decryptedUserData.name)
         sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
+        sessionStorage.setItem('email', email);
         sessionStorage.setItem('isTransaction', decryptedUserData.is_transaction);
 
         // Set login status to success
         setLoginStatus('success');
         setErrorMessage('');
+
+        localStorage.removeItem("email")
+        localStorage.removeItem("password")
+
+        if (packDesc !== null && packId !== null) {
+          navigate("/")
+          return
+        }
 
         if (decryptedUserData.role === 'admin') {
           navigate('/asdhakdls/dashboard');

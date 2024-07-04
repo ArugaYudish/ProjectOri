@@ -14,11 +14,11 @@ const InvoiceForm = () => {
     const discount = location.state && location.state.discount !== null ? location.state.discount : null;
     const link = location.state && location.state.link !== null ? location.state.link : null;
     const invoiceNumber = location.state && location.state.invoiceNumber !== null ? location.state.invoiceNumber : null;
-    const userId = localStorage.getItem("userId")
-    const token = localStorage.getItem('accessToken');
+    const userId = sessionStorage.getItem("userId")
+    const token = sessionStorage.getItem('accessToken');
     const [date, setDate] = useState("")
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
+    const name = sessionStorage.getItem("userName")
+    const email = sessionStorage.getItem("email")
     const [pack, setPack] = useState("")
     const [payment, setPayment] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
@@ -40,10 +40,10 @@ const InvoiceForm = () => {
             const response = await axios.post(
                 `${apiUrl}/api/v1/transactions/get`,
                 {
-                    user_id: userId,
+                    userId: userId,
                     status: "Inactive",
                     start_date: moment().subtract(3, 'years').format('YYYY-MM-DD'),
-                    end_date: moment().add(3, 'years').format('YYYY-MM-DD')
+                    end_date: moment().add(5, 'years').format('YYYY-MM-DD')
                 },
                 {
                     headers: {
@@ -63,8 +63,6 @@ const InvoiceForm = () => {
                             isDataExist = true
                             const dateOnly = item.date_time.split("WIB ")[1]
                             setDate(dateOnly)
-                            setName(item.name)
-                            setEmail(item.email)
                             setPack(item.package_name)
                             setPayment(item.total_payment)
                         }
@@ -102,18 +100,18 @@ const InvoiceForm = () => {
                             }}
                             className='flex flex-col gap-6 justify-center items-center padding-general'>
                             <p style={{ fontSize: "32px", marginTop: "100px" }} className='font-black'>Invoice🧾</p>
-                            <div style={{ width: "1160px", backgroundColor: "white", border: "1px solid #F5CE5B" }} className='flex flex-col gap-6 p-5 font-semibold rounded-md'>
+                            <div style={{ backgroundColor: "white", border: "1px solid #F5CE5B" }} className='invoice flex flex-col gap-6 p-5 font-semibold rounded-md'>
                                 <img style={{ width: "158px" }} src={Logo} alt='logo' />
                                 <div className='flex flex-col'>
-                                    <div className='flex justify-between'>
+                                    <div className='invoice-detail flex justify-between'>
                                         <p>Orineko Crypto Trading Signals</p>
                                         <p>Customer Details</p>
                                     </div>
-                                    <div className='flex justify-between'>
+                                    <div className='invoice-detail flex justify-between'>
                                         <p>Invoice Payment Date: <span className='font-black'>{date}</span></p>
                                         <p>Name: <span className='font-black'>{name}</span></p>
                                     </div>
-                                    <div className='flex justify-between'>
+                                    <div className='invoice-detail flex justify-between'>
                                         <p>Invoice Number: <span className='font-black'>{invoiceNumber}</span></p>
                                         <p>Email: <span className='font-black'>{email}</span></p>
                                     </div>
@@ -124,7 +122,7 @@ const InvoiceForm = () => {
                                             <thead style={{ color: "white" }}>
                                                 <tr>
                                                     <th className='py-4'>Package</th>
-                                                    <th className='py-4'>Discount(Referral)</th>
+                                                    <th className='py-4'>Discount (Referral)</th>
                                                     <th className='py-4'>Total Price</th>
                                                 </tr>
                                             </thead>
@@ -144,9 +142,9 @@ const InvoiceForm = () => {
                                     <p>Status: <span className='font-black'>Awaiting Payment</span></p>
                                 </div>
                             </div>
-                            <div style={{ width: "1160px" }} className='flex justify-between gap-5'>
-                                <a href="/" style={{ backgroundColor: "white", border: "1px solid #CA9700", color: "#CA9700" }} className='py-3 w-full rounded-md text-center'>Cancel</a>
-                                <a href={link} style={{ backgroundColor: "#CA9700", color: "white" }} className='py-3 w-full rounded-md text-center'>Continue to Payment</a>
+                            <div className='invoice-btn flex justify-between gap-5'>
+                                <a href="/" style={{ backgroundColor: "white", border: "1px solid #CA9700", color: "#CA9700" }} className='py-3 w-full text-center rounded-md flex items-center justify-center'>Cancel</a>
+                                <a href={link} style={{ backgroundColor: "#CA9700", color: "white" }} className='py-3 w-full text-center rounded-md flex items-center justify-center'>Continue to Payment</a>
                             </div>
                         </div>
                 }

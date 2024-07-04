@@ -24,6 +24,7 @@ import iconPaw from '../assets/img/icon-paw.svg';
 import bgKucing from '../assets/img/Rocket.svg';
 import RightArrow from "../assets/img/DirectRight-Linear-32px 1.png"
 import { Alert, Modal } from 'antd';
+import axios from 'axios';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
@@ -43,7 +44,13 @@ const Home = () => {
   const [discount, setDiscount] = useState(0)
   const [totalPayment, setTotalPayment] = useState(0)
   const [percentageFee, setPercentageFee] = useState(0)
+  const packDesc = localStorage.getItem("packDesc")
+  const packId = localStorage.getItem("packId")
   const navigate = useNavigate();
+  const aboutUs = useRef(null)
+  const contactUs = useRef(null)
+  const keyFeatures = useRef(null)
+  const performance = useRef(null)
   const subscription = useRef(null)
 
   useEffect(() => {
@@ -65,10 +72,35 @@ const Home = () => {
     };
 
     fetchPackages();
+    if (accessToken !== null) {
+      fetchCurrencies();
+      if (packDesc !== null && packId !== null) {
+        subscription.current.scrollIntoView()
+        handleStartNowClick({ desc_2: packDesc, id: packId })
+        localStorage.removeItem("packDesc")
+        localStorage.removeItem("packId")
+      }
+    }
 
     const loc = window.location.href.split("/")
-    if (loc[3] === "#subscription") {
-      subscription.current.scrollIntoView()
+    switch (loc[3]) {
+      case "#about":
+        aboutUs.current.scrollIntoView()
+        break
+      case "#contact":
+        contactUs.current.scrollIntoView()
+        break
+      case "#key-features":
+        keyFeatures.current.scrollIntoView()
+        break
+      case "#performance":
+        performance.current.scrollIntoView()
+        break
+      case "#subscription":
+        subscription.current.scrollIntoView()
+        break
+      default:
+        break
     }
   }, []);
 
@@ -86,11 +118,34 @@ const Home = () => {
 
   const handleStartNowClick = async (selectedPack) => {
     if (accessToken === null) {
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("role")
-      localStorage.removeItem("userName")
-      localStorage.removeItem("userId")
-      localStorage.removeItem("Ballance")
+      sessionStorage.removeItem("accessToken")
+      sessionStorage.removeItem("role")
+      sessionStorage.removeItem("userName")
+      sessionStorage.removeItem("userId")
+      sessionStorage.removeItem("Ballance")
+      sessionStorage.removeItem("email")
+      localStorage.setItem("packDesc", selectedPack.desc_2)
+      localStorage.setItem("packId", selectedPack.id)
+      navigate('/login');
+      return;
+    }
+
+    const paymentStr = selectedPack.desc_2.replace("Billed as one payment of $", "")
+    const price = Number(paymentStr)
+    setPayment(price)
+    setTotalPayment(price)
+    setId(selectedPack.id);
+    setDisplay("flex")
+  };
+
+  const fetchCurrencies = async () => {
+    if (accessToken === null) {
+      sessionStorage.removeItem("accessToken")
+      sessionStorage.removeItem("role")
+      sessionStorage.removeItem("userName")
+      sessionStorage.removeItem("userId")
+      sessionStorage.removeItem("Ballance")
+      sessionStorage.removeItem("email")
       navigate('/login');
       return;
     }
@@ -106,15 +161,14 @@ const Home = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.meta.reason === "Invalid token") {
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("role")
-          localStorage.removeItem("userName")
-          localStorage.removeItem("userId")
-          localStorage.removeItem("Ballance")
-          navigate("/login")
-          return
-        }
+        sessionStorage.removeItem("accessToken")
+        sessionStorage.removeItem("role")
+        sessionStorage.removeItem("userName")
+        sessionStorage.removeItem("userId")
+        sessionStorage.removeItem("Ballance")
+        sessionStorage.removeItem("email")
+        navigate("/login")
+        return
       }
 
       const currenciesData = data.data.currency;
@@ -154,38 +208,32 @@ const Home = () => {
       });
 
       setCurrencies(currencies);
-
-      const paymentStr = selectedPack.desc_2.replace("Billed as one payment of $", "")
-      const price = Number(paymentStr)
-
-      setPayment(price)
-      setTotalPayment(price)
+      console.log(data)
     } catch (err) {
-      throw new Error(err.message);
+      console.log(err)
     }
-
-    setId(selectedPack.id);
-    setDisplay("flex")
-  };
+  }
 
   const checkReferral = async () => {
-    const response = await fetch(`${apiUrl}/api/v1/transactions/refferal`, {
-      method: 'GET',
+    const response = await fetch(`${apiUrl}/api/v1/transactions/validate-refferal`, {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify({
+        refferal_code: referralCode
+      })
     });
 
     const data = await response.json();
     switch (data.meta.code) {
       case 200:
-        const referral = data.data.refferal.referral_code
+        const referral = data.data.refferal
         if (referral === referralCode) {
           setIsReferralOk(true)
           setReferralDIsplay("flex")
-          const percentage = data.data.refferal.refferal_user[0].persentage_fee
-          setPercentageFee(percentage)
+          setPercentageFee(10)
           setDiscount(payment - ((100 - 10) / 100 * payment))
           setTotalPayment((100 - 10) / 100 * payment)
         } else {
@@ -195,6 +243,10 @@ const Home = () => {
           setPercentageFee(0)
           setTotalPayment(payment)
         }
+        break;
+      case 401:
+        console.log(data)
+        navigate("/login")
         break;
       default:
         const errMessage = data.meta.message;
@@ -244,6 +296,10 @@ const Home = () => {
           }
           navigate(`/invoice/${state.id}`, { state: state })
           break;
+        case 401:
+          console.log(data)
+          navigate("/login")
+          break;
         default:
           const errMessage = data.meta.message;
           const errReason = data.meta.reason;
@@ -259,6 +315,7 @@ const Home = () => {
 
   function buyPackage() {
     navigate('/#subscription');
+    subscription.current.scrollIntoView()
   }
 
   return (
@@ -327,7 +384,7 @@ const Home = () => {
               <div className=''>
                 <div
                   className='text-5xl font-extrabold title-landing '
-                  onClick={buyPackage}>
+                >
                   Join Neko
                 </div>
 
@@ -339,6 +396,7 @@ const Home = () => {
                 </div>
                 <div className='py-5'>
                   <button
+                    onClick={buyPackage}
                     type='button'
                     class='flex gap-4 items-center focus:outline-none  bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900'>
                     <div>Join Neko!</div>
@@ -358,6 +416,7 @@ const Home = () => {
         {/* About */}
         <div
           id='about'
+          ref={aboutUs}
           className=' padding-general md:px-0  gap-8 text-about-us  text-justify mx-auto sm:grid grid-cols-5 about-padding'>
           <div className='col-span-2 flex items-center'>
             <img className='' style={{}} src={Paw} alt='' />
@@ -405,7 +464,7 @@ const Home = () => {
         </div>
 
         {/* Feedback */}
-        <div className='padding-general mx-auto set-feedback'>
+        <div id='performance' ref={performance} className='padding-general mx-auto set-feedback'>
           <div className='sm:grid grid-cols-2 gap-12  sm:px-0 '>
             <div className='col-span-1 mx-auto'>
               <img src={Feedback} alt='' />
@@ -425,7 +484,7 @@ const Home = () => {
         </div>
 
         {/* Why Neko*/}
-        <div id='contact' className='why-neko'>
+        <div id='contact' ref={contactUs} className='why-neko'>
           <div className='md:px-0 padding-general mx-auto text-justify'>
             <div className='title-features font-bold'>WHY NEKO?</div>
             <div className='sm:grid grid-cols-3 gap-16 pt-10'>
@@ -508,6 +567,7 @@ const Home = () => {
         {/* Key Feature */}
         <div
           id='key-features'
+          ref={keyFeatures}
           className='key-features px-16 sm:px-0 padding-general mx-auto'>
           <div className='text-2xl capt-key-features font-bold'>
             KEY FEATURES

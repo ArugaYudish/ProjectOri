@@ -21,8 +21,8 @@ const Activation = () => {
             const data = await resRegister.json();
 
             console.log(data.meta.message, data);
-            const email = sessionStorage.getItem("email")
-            const password = sessionStorage.getItem("password")
+            const email = localStorage.getItem("email")
+            const password = localStorage.getItem("password")
             if (data.meta.code === 200 && email !== null && password !== null) {
                 const response = await axios.post(`${apiUrl}/api/v1/auth/login`, {
                     email,
@@ -51,13 +51,15 @@ const Activation = () => {
                     setUserData(decryptedUserData);
                     sessionStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
                     sessionStorage.setItem('role', decryptedUserData.role);
+                    sessionStorage.setItem('userName', decryptedUserData.name)
                     sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
+                    sessionStorage.setItem('email', email);
 
                     // Set login status to success
                     setLoginStatus('success');
                     setErrorMessage('');
-                    sessionStorage.removeItem("email")
-                    sessionStorage.removeItem("password")
+                    localStorage.removeItem("email")
+                    localStorage.removeItem("password")
 
                     if (decryptedUserData.role === 'admin') {
                         navigate('/asdhakdls/dashboard');
