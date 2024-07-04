@@ -11,6 +11,7 @@ const Users = () => {
 	const [showData, setShowData] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
+	const [status, setStatus] = useState("Active")
 	const navigate = useNavigate()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [record, setRecord] = useState(null)
@@ -37,7 +38,11 @@ const Users = () => {
 			try {
 				const response = await api.get("/api/v1/users")
 				if (response.data && response.data.data) {
-					setData(response.data.data.users) // Sesuaikan dengan struktur respons API
+					const users = response.data.data.users
+
+					const filtered = users.filter(item => item.status === status)
+					setData(users) // Sesuaikan dengan struktur respons API
+					setShowData(filtered)
 				}
 				setLoading(false)
 			} catch (error) {
@@ -68,6 +73,21 @@ const Users = () => {
 		} catch (error) {
 			setError(error.response?.data?.message || "Failed to update user")
 		}
+	}
+
+	const handleStatusFilter = (e) => {
+		setStatus(e)
+
+		let filtered
+		switch (e) {
+			case 'Both':
+				filtered = data
+				break;
+			default:
+				filtered = data.filter(item => item.status === e)
+		}
+
+		setShowData(filtered)
 	}
 
 	const handleStatusFilter = (e) => {
@@ -183,6 +203,7 @@ const Users = () => {
 									}}
 									value={status}
 									options={statusFilter}
+
 								/>
 								<Link
 									to={"/asdhakdls/users/add"}

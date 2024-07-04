@@ -36,20 +36,20 @@ const RegisterForm = () => {
       });
 
       let data = await response.json();
+      console.log(data)
 
-      if (!response.ok) {
+      if (data.meta.code !== 200) {
         // throw new Error(data.message || 'Something went wrong');
-        setError(data.data.Messsage)
-        console.log(data.data.Messsage)
-        throw new Error(data.data.Messsage)
+        setError(data.data[0].Message)
+        console.log(data.data[0].Message)
+      } else {
+        // Handle successful registration, e.g., redirect to login page
+        data.meta.message = "Success Verification Link Sent to Your Email"
+        console.log('Registration successful', data);
+        localStorage.setItem("email", email)
+        localStorage.setItem("password", password)
+        navigate('/login', { state: data }); // Redirect to login page
       }
-
-      // Handle successful registration, e.g., redirect to login page
-      data.meta.message = "Success Verification Link Sent to Your Email"
-      console.log('Registration successful', data);
-      sessionStorage.setItem("email", email)
-      sessionStorage.setItem("password", password)
-      navigate('/login', { state: data }); // Redirect to login page
     } catch (error) {
       setError(error.message);
     }
