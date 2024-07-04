@@ -15,11 +15,7 @@ const SidebarAdmin = ({ children }) => {
 		try {
 			const response = await api.get('/api/v1/auth/logout')
 			if (response.status === 200) {
-				sessionStorage.removeItem('userId')
-				sessionStorage.removeItem('role')
-				sessionStorage.removeItem('accessToken')
-				sessionStorage.removeItem('userName')
-				sessionStorage.removeItem('Ballance')
+				sessionStorage.clear()
 				navigate('/')
 			} else {
 				message.error('Logout failed')

@@ -9,7 +9,7 @@ const GuestMiddleware = () => {
 	} else if (role === 'admin') {
 		return <Navigate to="/asdhakdls/dashboard" />
 	} else if (role === 'user') {
-		return <Navigate to="/wallet" />
+		return <Navigate to="/history" />
 	}
 }
 
