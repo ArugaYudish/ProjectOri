@@ -83,13 +83,14 @@ const LoginForm = () => {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
 
-        if (packDesc !== null && packId !== null) {
+        if (packDesc !== null && packId !== null && decryptedUserData.role !== 'admin') {
           navigate('/');
           return;
         }
 
         if (decryptedUserData.role === 'admin') {
           navigate('/asdhakdls/dashboard');
+          localStorage.clear()
         } else {
           navigate('/history');
         }
