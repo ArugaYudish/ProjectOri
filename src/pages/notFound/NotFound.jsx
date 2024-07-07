@@ -1,5 +1,5 @@
 import Layout from '../../component/common/Layout';
-import Kucing from '../../assets/img/Kucingutama.svg';
+import Kucing from '../../assets/img/NotFoundNeko.png';
 
 const NotFound = () => {
   return (
@@ -9,9 +9,10 @@ const NotFound = () => {
           style={{
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            height: '100vh',
+            marginTop: "70px",
+            minHeight: '90vh',
             background:
-              'radial-gradient(231% 135.8% at 0.9% 2.98%, rgba(245, 206, 91, 0.40) 0%, rgba(245, 206, 91, 0.00) 100%)',
+              '#FEFAEF',
             backdropFilter: 'blur(21px)',
           }}
           className='flex justify-center items-center padding-general'>
@@ -45,7 +46,7 @@ const NotFound = () => {
             </div>
           </div>
           <div>
-            <img src={Kucing} alt='kucing' />
+            <img style={{ width: "336px" }} src={Kucing} alt='kucing' />
           </div>
         </div>
       </Layout>

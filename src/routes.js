@@ -23,8 +23,7 @@ import EditUserForm from './pages/admin/user/edit.jsx';
 import Activation from './pages/register/Activation.jsx';
 import ForgotVerification from './pages/forgot/ForgotVerification.jsx';
 import NotFound from './pages/notFound/NotFound.jsx';
-import PurchaseSuccess from './pages/purchase/Success.jsx';
-import PurchaseFailed from './pages/purchase/Failed.jsx';
+import Purchase from './pages/purchase/Purchase.jsx';
 import InvoiceForm from './pages/invoice/form.jsx';
 
 const RoutesComponent = () => {
@@ -34,9 +33,8 @@ const RoutesComponent = () => {
         <Route path='/' element={<Home />} />{' '}
         <Route path='/testapi' element={<TestApi />} />{' '}
         <Route path='/package' element={<Subs />} />{' '}
-        <Route path='/notfound' element={<NotFound />} />{' '}
-        <Route path='/purchase-success' element={<PurchaseSuccess />} />{' '}
-        <Route path='/purchase-failed' element={<PurchaseFailed />} />{' '}
+        <Route path='*' element={<NotFound />} />{' '}
+        <Route path='/purchase/:id' element={<Purchase />} />{' '}
         <Route path='/invoice/:id' element={<InvoiceForm />} />{' '}
         <Route element={<GuestMiddleware />}>
           <Route path='/register' element={<RegisterForm />} />{' '}
