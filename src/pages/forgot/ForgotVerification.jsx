@@ -19,7 +19,7 @@ const ForgotVerification = () => {
       const data = await response.json();
       data.id = id;
 
-      console.log(data.meta.message, data);
+      // console.log(data.meta.message, data);
       switch (data.meta.code) {
         case 200:
           navigate('/forgot', { state: data });
@@ -29,7 +29,7 @@ const ForgotVerification = () => {
           break;
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       const data = {
         meta: {
           code: 500,

@@ -25,8 +25,8 @@ const LoginForm = () => {
       ? location.state.meta.message
       : null;
   const navigate = useNavigate();
-  const packDesc = localStorage.getItem("packDesc")
-  const packId = localStorage.getItem("packId")
+  const packDesc = localStorage.getItem('packDesc');
+  const packId = localStorage.getItem('packId');
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -56,40 +56,50 @@ const LoginForm = () => {
         const accessToken = response.data.data.access_token;
         const encryptedUserData = response.data.data.user_data;
 
-        console.log(accessToken);
-        console.log(encryptedUserData);
+        // console.log(accessToken);
+        // console.log(encryptedUserData);
 
         // Store access token in sessionStorage
         sessionStorage.setItem('accessToken', accessToken);
-        console.log('Token stored:', sessionStorage.getItem('accessToken'));
+        // console.log('Token stored:', sessionStorage.getItem('accessToken'));
 
         // Decrypt user data
         const decryptedUserData = await decryptUserData(encryptedUserData);
         setUserData(decryptedUserData);
         sessionStorage.setItem('userId', decryptedUserData.id); // Assuming decryptedUserData contains id field
         sessionStorage.setItem('role', decryptedUserData.role);
-        sessionStorage.setItem('userName', decryptedUserData.name)
+        sessionStorage.setItem('userName', decryptedUserData.name);
         sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
         sessionStorage.setItem('email', email);
-        sessionStorage.setItem('isTransaction', decryptedUserData.is_transaction);
+        sessionStorage.setItem(
+          'isTransaction',
+          decryptedUserData.is_transaction,
+        );
 
         // Set login status to success
         setLoginStatus('success');
         setErrorMessage('');
 
-        localStorage.removeItem("email")
-        localStorage.removeItem("password")
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
 
+<<<<<<< HEAD
         if (packDesc !== null && packId !== null && sessionStorage.getItem("role") === "user") {
           navigate("/")
           return
         } else {
           localStorage.removeItem("packId")
           localStorage.removeItem("packDesc")
+=======
+        if (packDesc !== null && packId !== null && decryptedUserData.role !== 'admin') {
+          navigate('/');
+          return;
+>>>>>>> c2aa0b3d6747f104f70cf2d715385ee9e4780bb0
         }
 
         if (decryptedUserData.role === 'admin') {
           navigate('/asdhakdls/dashboard');
+          localStorage.clear()
         } else {
           navigate('/history');
         }
@@ -122,7 +132,7 @@ const LoginForm = () => {
         <div className='col-span-1 image-form flex items-center'>
           <img
             className='set-image-form w-full'
-            style={{ width: '400px' }}
+            style={{ width: '500px' }}
             src={OrinekoCat}
             alt=''
           />
@@ -139,6 +149,9 @@ const LoginForm = () => {
             </div>
             {loginStatus === 'success' && (
               <div className='pb-2 text-green-600'>Login successful!</div>
+            )}
+            {loginStatus === 'error' && (
+              <div className='pb-2 text-red-600'>{errorMessage}</div>
             )}
             <div className='pb-2'>
               <label
@@ -178,9 +191,7 @@ const LoginForm = () => {
                 Forgot Password?
               </a>
             </div>
-            {loginStatus === 'error' && (
-              <div className='pb-2 text-red-600'>{errorMessage}</div>
-            )}
+
             <button
               type='submit'
               className='text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>

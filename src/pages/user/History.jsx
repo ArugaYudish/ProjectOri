@@ -6,16 +6,19 @@ import { SearchOutlined } from '@ant-design/icons';
 import TelegramIcon from '../../assets/img/Telegram.svg';
 import '../../assets/css/user.css';
 import moment from 'moment';
+import api from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const History = () => {
   const [transactions, setTransactions] = useState([]); // Initialize transactions with an empty array
   const [activeTable, setActiveTable] = useState('openOrder');
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false); // State to handle loading
   const searchInput = useRef(null);
+  const navigate = useNavigate()
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchTransactions = async table => {
@@ -25,13 +28,17 @@ const History = () => {
       const token = sessionStorage.getItem('accessToken');
       const status = table === 'openOrder' ? 'Active' : 'Inactive';
 
-      const response = await axios.post(
+      const response = await api.post(
         `${apiUrl}/api/v1/transactions/get`,
         {
           user_id: userId,
           status: status,
-          start_date: startDate ? startDate.format('YYYY-MM-DD') : moment().subtract(3, 'years').format('YYYY-MM-DD'),
-          end_date: endDate ? endDate.format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
+          start_date: startDate
+            ? startDate.format('YYYY-MM-DD')
+            : moment().subtract(3, 'years').format('YYYY-MM-DD'),
+          end_date: endDate
+            ? endDate.format('YYYY-MM-DD')
+            : moment().format('YYYY-MM-DD'),
         },
         {
           headers: {
@@ -40,18 +47,15 @@ const History = () => {
         },
       );
 
-      if (
-        response.data.meta.code === 200
-      ) {
-        console.log("success", response.data)
+      if (response.data.meta.code === 200) {
+        // console.log("success", response.data)
         setTransactions(response.data.data.transaction);
       } else {
-        console.error(
-          'Failed to fetch transactions:',
-          response.data,
-        );
+        navigate('/')
+        console.error('Failed to fetch transactions:', response.data);
       }
     } catch (error) {
+      navigate('/')
       console.error('Error fetching transactions:', error);
     } finally {
       setLoading(false); // Set loading to false after fetching data
@@ -189,10 +193,11 @@ const History = () => {
           <div className='w-1/2'>
             <button
               type='button'
-              className={`text-gray-900 border bg-color-orineko-ternary border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${activeTable === 'openOrder'
-                ? 'bg-color-orineko text-white'
-                : 'bg-white'
-                }`}
+              className={`text-gray-900 border bg-color-orineko-ternary border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${
+                activeTable === 'openOrder'
+                  ? 'bg-color-orineko text-white'
+                  : 'bg-white'
+              }`}
               onClick={() => {
                 setActiveTable('openOrder');
                 fetchTransactions('openOrder');
@@ -202,10 +207,11 @@ const History = () => {
 
             <button
               type='button'
-              className={`py-2.5 px-5 me-2 mb-2 text-sm bg-color-orineko-ternary font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 ${activeTable === 'historyOrder'
-                ? 'bg-color-orineko text-white'
-                : 'bg-white'
-                }`}
+              className={`py-2.5 px-5 me-2 mb-2 text-sm bg-color-orineko-ternary font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 ${
+                activeTable === 'historyOrder'
+                  ? 'bg-color-orineko text-white'
+                  : 'bg-white'
+              }`}
               onClick={() => {
                 setActiveTable('historyOrder');
                 fetchTransactions('historyOrder');
@@ -216,13 +222,13 @@ const History = () => {
           <DatePicker.RangePicker
             className='ml-2'
             value={[startDate, endDate]}
-            onChange={(dates) => {
+            onChange={dates => {
               if (dates && dates.length === 2) {
-                setStartDate(dates[0])
-                setEndDate(dates[1])
+                setStartDate(dates[0]);
+                setEndDate(dates[1]);
               } else {
-                setStartDate(null)
-                setEndDate(null)
+                setStartDate(null);
+                setEndDate(null);
               }
             }}
           />

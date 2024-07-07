@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarAdmin from '../../../component/common/admin/Sidebar';
-import api from '../../../utils/api';
+import axios from 'axios'
 import '../../../assets/css/auth.css';
 
 const AddUserForm = () => {
@@ -14,14 +14,15 @@ const AddUserForm = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     try {
-      const response = await api.post('/api/v1/auth/register', {
-        name,
-        email,
-        password,
+      const response = await axios.post(`${apiUrl}/api/v1/auth/register`, {
+        name: name,
+        email: email,
+        password: password,
         password_confirm: password, // Set confirmPassword same as password
-        role, // Add role to the request
+        role: role, // Add role to the request
         status: 1, // Set status to 1 by default
       });
 

@@ -20,7 +20,7 @@ const ForgotForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
 
   const handleForgotPassword = async event => {
     event.preventDefault();
@@ -40,22 +40,22 @@ const ForgotForm = () => {
 
       const data = await response.json();
 
-      console.log(data.meta.message, data);
+      // console.log(data.meta.message, data);
       switch (data.meta.code) {
         case 200:
           navigate('/login', { state: data });
           break;
         default:
-          if (data.meta.message === "record not found") {
-            setError(data.meta.reason)
+          if (data.meta.message === 'record not found') {
+            setError(data.meta.reason);
           } else {
-            setError(data.data[0].Message)
+            setError(data.data[0].Message);
           }
           break;
       }
     } catch (error) {
-      console.log(error.message);
-      setError(error.message)
+      // console.log(error.message);
+      setError(error.message);
     }
   };
 
@@ -81,17 +81,17 @@ const ForgotForm = () => {
 
       const data = await response.json();
 
-      console.log(data.meta.message, data);
+      // console.log(data.meta.message, data);
       switch (data.meta.code) {
         case 200:
           navigate('/login', { state: data });
           break;
         default:
-          setError(data.data[0].Message)
+          setError(data.data[0].Message);
           break;
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       const data = {
         meta: {
           code: 500,
@@ -119,7 +119,7 @@ const ForgotForm = () => {
         <div className='col-span-1 image-form  flex items-center'>
           <img
             className='set-image-form pt-10'
-            style={{ width: '400px' }}
+            style={{ width: '500px' }}
             src={OrinekoCat}
             alt=''
           />
@@ -172,7 +172,11 @@ const ForgotForm = () => {
                   required
                 />
               </div>
-              {error !== '' ? <div className='pb-2 text-red-600'>{error}</div> : ''}
+              {error !== '' ? (
+                <div className='pb-2 text-red-600'>{error}</div>
+              ) : (
+                ''
+              )}
               <button
                 type='submit'
                 className=' text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
@@ -213,7 +217,11 @@ const ForgotForm = () => {
                   required
                 />
               </div>
-              {error !== '' ? <div className='pb-2 text-red-600'>{error}</div> : ''}
+              {error !== '' ? (
+                <div className='pb-2 text-red-600'>{error}</div>
+              ) : (
+                ''
+              )}
               <button
                 type='submit'
                 className=' text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
