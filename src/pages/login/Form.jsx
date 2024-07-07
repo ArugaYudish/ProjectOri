@@ -27,6 +27,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const packDesc = localStorage.getItem("packDesc")
   const packId = localStorage.getItem("packId")
+  const role = sessionStorage.getItem("role")
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -80,7 +81,7 @@ const LoginForm = () => {
         localStorage.removeItem("email")
         localStorage.removeItem("password")
 
-        if (packDesc !== null && packId !== null) {
+        if (packDesc !== null && packId !== null && role === "user") {
           navigate("/")
           return
         }
