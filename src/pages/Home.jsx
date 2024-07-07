@@ -26,6 +26,8 @@ import RightArrow from '../assets/img/DirectRight-Linear-32px 1.png';
 import PawsiteNew from '../assets/img/PawsiteNew.svg';
 import { Alert, Modal } from 'antd';
 import axios from 'axios';
+import { Weight } from 'iconsax-react';
+import RightIcon from "../assets/img/RightIcon.png"
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
@@ -54,6 +56,8 @@ const Home = () => {
   const performance = useRef(null)
   const subscription = useRef(null)
   const role = sessionStorage.getItem("role")
+  const [reminder, setReminder] = useState([])
+  const [viewModal, setViewModal] = useState("buy")
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -76,6 +80,7 @@ const Home = () => {
     fetchPackages();
     if (accessToken !== null) {
       fetchCurrencies();
+      fetchReminder()
       if (packDesc !== null && packId !== null && role === "user") {
         subscription.current.scrollIntoView()
         handleStartNowClick({ desc_2: packDesc, id: packId })
@@ -119,6 +124,11 @@ const Home = () => {
     setTotalPayment(0);
     setIsError(false);
     setPercentageFee(0);
+    if (reminder.length === 0) {
+      setViewModal("buy")
+    } else {
+      setViewModal("reminder")
+    }
   };
 
   const handleStartNowClick = async selectedPack => {
@@ -141,6 +151,40 @@ const Home = () => {
     setDisplay('flex');
   };
 
+  const fetchReminder = async () => {
+    if (accessToken === null) {
+      sessionStorage.clear()
+      navigate('/login');
+      return;
+    }
+
+    const response = await fetch(`${apiUrl}/api/v1/transactions/reminder`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "content-type": "application/json"
+      }
+    })
+
+    if (!response.ok) {
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('role');
+      sessionStorage.removeItem('userName');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('Ballance');
+      sessionStorage.removeItem('email');
+      navigate('/login');
+      return;
+    }
+
+    const data = await response.json()
+
+    if (data.data.transaction !== null) {
+      setReminder(data.data.transaction)
+      setViewModal("reminder")
+    }
+  }
+
   const fetchCurrencies = async () => {
     if (accessToken === null) {
       sessionStorage.clear()
@@ -153,6 +197,7 @@ const Home = () => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "content-type": "application/json"
         },
       });
 
@@ -325,120 +370,150 @@ const Home = () => {
       <div
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', display: display }}
         className='fixed z-50 inset-0 flex justify-center items-center'>
-        <form
-          onSubmit={e => {
-            handleCreateTransaction(e);
-          }}
-          className='buy-modal m-2 flex flex-col text-lg rounded-sm'
-          style={{ backgroundColor: 'white' }}>
-          <div className='flex justify-between py-5 px-8'>
-            <p className='font-bold text-xl'>Choose Payment</p>
-            <button
-              onClick={() => {
-                handleCloseModal();
+        {
+          viewModal === "buy" ?
+            <form
+              onSubmit={e => {
+                handleCreateTransaction(e);
               }}
-              type='button'
-              style={{ fontSize: '2rem' }}>
-              x
-            </button>
-          </div>
-          <hr />
-          <div className='flex flex-col py-5 px-8 gap-3'>
-            <select
-              onChange={e => {
-                setCurrency(e.target.value);
-              }}
-              value={currency}
-              style={{
-                backgroundColor: '#fdf5de',
-                color: '#d2a41a',
-                border: '2px solid #d2a41a',
-                boxShadow: 'none',
-                cursor: 'pointer',
-              }}
-              className='mt-3 rounded-sm py-3 font-bold text-lg'>
-              <option hidden>Choose Currency</option>
-              {currencies.map((item, index) => (
-                <option key={index} value={item.code}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-            <div className='border-2 rounded-sm flex justify-between'>
-              <input
-                value={referralCode}
-                onChange={e => {
-                  setReferralCode(e.target.value);
-                }}
-                style={{ boxShadow: 'none' }}
-                className='border-0 p-3 w-full text-lg'
-                type='text'
-              />
-              <button
-                onClick={() => {
-                  setReferralDIsplay('none');
-                  checkReferral();
-                }}
-                type='button'
-                style={{
-                  borderLeftWidth: '2px',
-                  backgroundColor: '#fdf5de',
-                  color: '#FF8A65',
-                  padding: '12px 7% 12px 7%',
-                }}
-                className='font-bold flex gap-1 justify-center items-center'>
-                Redeem
-                <img src={RightArrow} alt='>' />
-              </button>
+              className='buy-modal m-2 flex flex-col text-lg rounded-sm'
+              style={{ backgroundColor: 'white' }}>
+              <div className='flex justify-between py-5 px-8'>
+                <p className='font-bold text-xl'>Choose Payment</p>
+                <button
+                  onClick={() => {
+                    handleCloseModal();
+                  }}
+                  type='button'
+                  style={{ fontSize: '2rem' }}>
+                  x
+                </button>
+              </div>
+              <hr />
+              <div className='flex flex-col py-5 px-8 gap-3'>
+                <select
+                  onChange={e => {
+                    setCurrency(e.target.value);
+                  }}
+                  value={currency}
+                  style={{
+                    backgroundColor: '#fdf5de',
+                    color: '#d2a41a',
+                    border: '2px solid #d2a41a',
+                    boxShadow: 'none',
+                    cursor: 'pointer',
+                  }}
+                  className='mt-3 rounded-sm py-3 font-bold text-lg'>
+                  <option hidden>Choose Currency</option>
+                  {currencies.map((item, index) => (
+                    <option key={index} value={item.code}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+                <div className='border-2 rounded-sm flex justify-between'>
+                  <input
+                    value={referralCode}
+                    onChange={e => {
+                      setReferralCode(e.target.value);
+                    }}
+                    style={{ boxShadow: 'none' }}
+                    className='border-0 p-3 w-full text-lg'
+                    type='text'
+                  />
+                  <button
+                    onClick={() => {
+                      setReferralDIsplay('none');
+                      checkReferral();
+                    }}
+                    type='button'
+                    style={{
+                      borderLeftWidth: '2px',
+                      backgroundColor: '#fdf5de',
+                      color: '#FF8A65',
+                      padding: '12px 7% 12px 7%',
+                    }}
+                    className='font-bold flex gap-1 justify-center items-center'>
+                    Redeem
+                    <img src={RightArrow} alt='>' />
+                  </button>
+                </div>
+                {isreferralOk ? (
+                  <Alert
+                    message='Referral code found.'
+                    type='success'
+                    style={{ display: referralDisplay }}
+                  />
+                ) : (
+                  <Alert
+                    message='Referral code not found.'
+                    type='error'
+                    style={{ display: referralDisplay }}
+                  />
+                )}
+                <div className='flex flex-col items-end'>
+                  <p>
+                    Billed as one payment of :{' '}
+                    <span className='font-bold'>${payment}</span>
+                  </p>
+                  <p>
+                    Referral Discount ({percentageFee}%) :{' '}
+                    <span className='font-bold'>${discount}</span>
+                  </p>
+                  <p>
+                    Amount Payment :{' '}
+                    <span className='font-bold'>${totalPayment}</span>
+                  </p>
+                </div>
+                {isError ? <Alert message={error} type='error' /> : null}
+              </div>
+              <hr />
+              <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
+                <button
+                  onClick={() => {
+                    handleCloseModal();
+                  }}
+                  type='button'
+                  className='border-2 py-2 px-5'>
+                  Cancel
+                </button>
+                <button
+                  type='submit'
+                  className='py-2 px-5 rounded-sm'
+                  style={{ backgroundColor: '#d2a41a', color: 'white' }}>
+                  Continue Payment
+                </button>
+              </div>
+            </form>
+            :
+            <div className='buy-modal m-2 flex flex-col text-lg rounded-sm' style={{ backgroundColor: 'white' }}>
+              <div className='flex justify-between px-8 py-5'>
+                <p className='font-bold'>You Have a Panding Payment</p>
+                <button onClick={() => { handleCloseModal() }}>X</button>
+              </div>
+              <hr />
+              <div className='p-8'>
+                <p>It looks like you have a remaining payment for your previous purchase.</p>
+                <p className='font-semibold'>Remaining Payment Details:</p>
+                <div style={{ maxHeight: "200px", overflow: "auto" }}>
+                  {
+                    reminder.map((item, key) => (
+                      <div style={{ border: "1px solid #E5E5E5" }} key={key} className='flex justify-between items-center my-2 py-2 px-5'>
+                        <p>Amount Due: <span className='font-semibold'>${item.total_payment} ({item.package_name})</span></p>
+                        <a className='flex justify-between items-center gap-1' style={{ color: "red" }} href={item.checkout_url}>Continue Payment <img style={{ width: "14px", height: "10px" }} src={RightIcon} alt='->' /></a>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+              <hr />
+              <div className='flex justify-end py-3 px-5 gap-3'>
+                <button onClick={() => { handleCloseModal() }} style={{ border: "1px solid #D9D9D9", borderRadius: "2px" }} className='px-5 py-1'>Cancel</button>
+                <button onClick={() => { setViewModal("buy") }} style={{ backgroundColor: "#CEA017", color: "white", borderRadius: "2px" }} className='px-5 py-1'>Create New Payment</button>
+              </div>
             </div>
-            {isreferralOk ? (
-              <Alert
-                message='Referral code found.'
-                type='success'
-                style={{ display: referralDisplay }}
-              />
-            ) : (
-              <Alert
-                message='Referral code not found.'
-                type='error'
-                style={{ display: referralDisplay }}
-              />
-            )}
-            <div className='flex flex-col items-end'>
-              <p>
-                Billed as one payment of :{' '}
-                <span className='font-bold'>${payment}</span>
-              </p>
-              <p>
-                Referral Discount ({percentageFee}%) :{' '}
-                <span className='font-bold'>${discount}</span>
-              </p>
-              <p>
-                Amount Payment :{' '}
-                <span className='font-bold'>${totalPayment}</span>
-              </p>
-            </div>
-            {isError ? <Alert message={error} type='error' /> : null}
-          </div>
-          <hr />
-          <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
-            <button
-              onClick={() => {
-                handleCloseModal();
-              }}
-              type='button'
-              className='border-2 py-2 px-5'>
-              Cancel
-            </button>
-            <button
-              type='submit'
-              className='py-2 px-5 rounded-sm'
-              style={{ backgroundColor: '#d2a41a', color: 'white' }}>
-              Continue Payment
-            </button>
-          </div>
-        </form>
-      </div>
+        }
+      </div >
 
       <Layout>
         {/* Landing Page */}
@@ -470,7 +545,7 @@ const Home = () => {
                   <button
                     onClick={buyPackage}
                     type='button'
-                    class='flex gap-4 items-center focus:outline-none  bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900'>
+                    className='flex gap-4 items-center focus:outline-none  bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900'>
                     <div>Join Neko!</div>
                     <div>
                       <img src={iconPaw} alt='' />
@@ -563,7 +638,7 @@ const Home = () => {
           <div className='md:px-0 padding-general mx-auto text-justify'>
             <div className='title-features font-bold'>WHY NEKO?</div>
             <div className='sm:grid grid-cols-3 gap-16 pt-10'>
-              <div class='col-span-1 py-5 sm:p-0'>
+              <div className='col-span-1 py-5 sm:p-0'>
                 <div className='mx-auto justify-center '>
                   <div className='flex justify-center pb-4'>
                     <img src={Efficient} alt='' />
@@ -575,7 +650,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div class='col-span-1 py-5 sm:p-0'>
+              <div className='col-span-1 py-5 sm:p-0'>
                 <div className='mx-auto justify-center '>
                   <div className='flex justify-center pb-4'>
                     <img src={Transparent} alt='' />
@@ -587,7 +662,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div class='col-span-1 py-5 sm:p-0'>
+              <div className='col-span-1 py-5 sm:p-0'>
                 <div className='mx-auto justify-center '>
                   <div className='flex justify-center pb-4'>
                     <img src={Optimized} alt='' />
@@ -599,7 +674,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div class='col-span-1 py-5 sm:p-0'>
+              <div className='col-span-1 py-5 sm:p-0'>
                 <div className='mx-auto justify-center '>
                   <div className='flex justify-center pb-4'>
                     <img src={Precision} alt='' />
@@ -611,7 +686,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div class='col-span-1 py-5 sm:p-0'>
+              <div className='col-span-1 py-5 sm:p-0'>
                 <div className='mx-auto justify-center '>
                   <div className='flex justify-center pb-4'>
                     <img src={Proven} alt='' />
@@ -623,7 +698,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div class='col-span-1 py-5 sm:p-0'>
+              <div className='col-span-1 py-5 sm:p-0'>
                 <div className='mx-auto justify-center '>
                   <div className='flex justify-center pb-4'>
                     <img src={Expertise} alt='' />
@@ -651,8 +726,8 @@ const Home = () => {
             What does Neko VIP include?{' '}
           </div>
 
-          <div class='sm:grid grid-cols-3 gap-12 pb-10'>
-            <div class='col-span-1 mt-6 border card-features p-5'>
+          <div className='sm:grid grid-cols-3 gap-12 pb-10'>
+            <div className='col-span-1 mt-6 border card-features p-5'>
               <div className='title-card-features font-bold pb-2'>
                 Exclusive Signals by Neko
               </div>
@@ -662,7 +737,7 @@ const Home = () => {
                 gems information. Available for Auto-Trading
               </div>
             </div>
-            <div class='col-span-1 mt-6 border card-features p-5'>
+            <div className='col-span-1 mt-6 border card-features p-5'>
               <div className='title-card-features font-bold pb-2'>
                 Market Outlook Analysis & Updates{' '}
               </div>
@@ -671,7 +746,7 @@ const Home = () => {
                 trends to maximize trading potential.
               </div>
             </div>
-            <div class='col-span-1 mt-6 border card-features p-5'>
+            <div className='col-span-1 mt-6 border card-features p-5'>
               <div className='title-card-features font-bold pb-2'>
                 24/7 Support & Portfolio Consultation{' '}
               </div>
