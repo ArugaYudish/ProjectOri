@@ -48,11 +48,12 @@ const Home = () => {
   const packDesc = localStorage.getItem('packDesc');
   const packId = localStorage.getItem('packId');
   const navigate = useNavigate();
-  const aboutUs = useRef(null);
-  const contactUs = useRef(null);
-  const keyFeatures = useRef(null);
-  const performance = useRef(null);
-  const subscription = useRef(null);
+  const aboutUs = useRef(null)
+  const contactUs = useRef(null)
+  const keyFeatures = useRef(null)
+  const performance = useRef(null)
+  const subscription = useRef(null)
+  const role = sessionStorage.getItem("role")
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -75,15 +76,18 @@ const Home = () => {
     fetchPackages();
     if (accessToken !== null) {
       fetchCurrencies();
-      if (packDesc !== null && packId !== null) {
-        subscription.current.scrollIntoView();
-        handleStartNowClick({ desc_2: packDesc, id: packId });
-        localStorage.removeItem('packDesc');
-        localStorage.removeItem('packId');
+      if (packDesc !== null && packId !== null && role === "user") {
+        subscription.current.scrollIntoView()
+        handleStartNowClick({ desc_2: packDesc, id: packId })
+        localStorage.removeItem("packDesc")
+        localStorage.removeItem("packId")
       }
     }
 
-    const loc = window.location.href.split('/');
+    localStorage.removeItem("packDesc")
+    localStorage.removeItem("packId")
+
+    const loc = window.location.href.split("/")
     switch (loc[3]) {
       case '#about':
         aboutUs.current.scrollIntoView();
