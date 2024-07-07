@@ -83,18 +83,12 @@ const LoginForm = () => {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
 
-<<<<<<< HEAD
         if (packDesc !== null && packId !== null && sessionStorage.getItem("role") === "user") {
           navigate("/")
           return
         } else {
           localStorage.removeItem("packId")
           localStorage.removeItem("packDesc")
-=======
-        if (packDesc !== null && packId !== null && decryptedUserData.role !== 'admin') {
-          navigate('/');
-          return;
->>>>>>> c2aa0b3d6747f104f70cf2d715385ee9e4780bb0
         }
 
         if (decryptedUserData.role === 'admin') {
