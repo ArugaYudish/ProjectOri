@@ -32,7 +32,7 @@ const App = () => {
           // )
           sessionStorage.clear();
         }
-      }, 600000);
+      }, 3600000);
     };
 
     const handleActivity = () => {
