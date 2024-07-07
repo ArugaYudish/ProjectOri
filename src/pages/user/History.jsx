@@ -6,6 +6,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import TelegramIcon from '../../assets/img/Telegram.svg';
 import '../../assets/css/user.css';
 import moment from 'moment';
+import api from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const History = () => {
   const [transactions, setTransactions] = useState([]); // Initialize transactions with an empty array
@@ -16,6 +18,7 @@ const History = () => {
   const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false); // State to handle loading
   const searchInput = useRef(null);
+  const navigate = useNavigate()
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchTransactions = async table => {
@@ -25,7 +28,7 @@ const History = () => {
       const token = sessionStorage.getItem('accessToken');
       const status = table === 'openOrder' ? 'Active' : 'Inactive';
 
-      const response = await axios.post(
+      const response = await api.post(
         `${apiUrl}/api/v1/transactions/get`,
         {
           user_id: userId,
@@ -48,9 +51,11 @@ const History = () => {
         // console.log("success", response.data)
         setTransactions(response.data.data.transaction);
       } else {
+        navigate('/')
         console.error('Failed to fetch transactions:', response.data);
       }
     } catch (error) {
+      navigate('/')
       console.error('Error fetching transactions:', error);
     } finally {
       setLoading(false); // Set loading to false after fetching data

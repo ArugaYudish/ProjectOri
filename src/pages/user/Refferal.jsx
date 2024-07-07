@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../../component/common/Sidebar';
 import '../../assets/css/user.css';
 import { Card, Table, message } from 'antd';
+import api from '../../utils/api';
 
 const Refferal = () => {
   const [referralData, setReferralData] = useState([]);
@@ -13,26 +14,16 @@ const Refferal = () => {
   useEffect(() => {
     const fetchReferralData = async () => {
       try {
-        const token = sessionStorage.getItem('accessToken');
-
-        const response = await fetch(`${apiUrl}/api/v1/transactions/refferal`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const result = await response.json();
-        if (result.meta.code === 200) {
+        const response = await api.get('/api/v1/transactions/refferal');
+        if (response.data.meta.code === 200) {
           const { referral_code, total_amount, total_refferal, refferal_user } =
-            result.data.refferal;
+            response.data.data.refferal;
           setReferralCode(referral_code);
           setTotalAmount(total_amount);
           setTotalReferral(total_refferal);
           setReferralData(refferal_user);
         } else {
-          console.error('Error fetching referral data:', result.meta.message);
+          console.error('Error fetching referral data:', response.meta.message);
         }
       } catch (error) {
         console.error('Error fetching referral data:', error);

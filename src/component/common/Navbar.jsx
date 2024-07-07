@@ -96,14 +96,12 @@ const Navbar = () => {
 	return (
 		<>
 			<nav
-				className={` navbar-color fixed w-full z-20 top-0 start-0 ${scrollBackground ? "navbar-gradient-bg" : "navbar-default-bg"
-					}`}
+				className={` navbar-color fixed w-full z-20 top-0 start-0 ${
+					scrollBackground ? "navbar-gradient-bg" : "navbar-default-bg"
+				}`}
 			>
 				<div class="sticky padding-general  mx-auto flex flex-wrap items-center justify-between mx-auto p-4">
-					<a
-						href="/"
-						class="flex items-center space-x-3 rtl:space-x-reverse"
-					>
+					<a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
 						<img src={logo} class="h-8" alt="Flowbite Logo" />
 					</a>
 					<Dropdown
@@ -132,10 +130,10 @@ const Navbar = () => {
 						<ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 ">
 							<li>
 								<a
-									href="/history"
-									class="navbar-text-color block py-2 px-3  rounded   md:border-0  md:p-0 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+									href={name && role ? "/history" : "/"}
+									className="navbar-text-color block py-2 px-3  rounded   md:border-0  md:p-0 dark:text-white  dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
 								>
-									Dashboard
+									{name && role ? "Dashboard" : "Home"}
 								</a>
 							</li>
 							<li>

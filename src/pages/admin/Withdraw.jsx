@@ -5,6 +5,7 @@ import { Table, Button, message, DatePicker, Spin, Modal } from 'antd';
 import moment from 'moment';
 import * as XLSX from 'xlsx'; // Import xlsx for Excel export
 import axios from 'axios'; // Menggunakan axios untuk permintaan API
+import api from '../../utils/api';
 
 const AdminWithdraw = () => {
   const [data, setData] = useState([]); // State untuk menyimpan data withdrawal
@@ -64,7 +65,7 @@ const AdminWithdraw = () => {
         start_date: startDate ? startDate.format('YYYY-MM-DD') : null,
         end_date: endDate ? endDate.format('YYYY-MM-DD') : null,
       };
-      const response = await axios.post(
+      const response = await api.post(
         `${apiUrl}/api/v1/withdrawal/get`,
         payload,
         {
@@ -131,7 +132,7 @@ const AdminWithdraw = () => {
   const handleButtonClick = async (record, status) => {
     setLoading(true); // Set loading menjadi true saat melakukan aksi
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `${apiUrl}/api/v1/withdrawal/change-status`,
         {
           id: record.id,

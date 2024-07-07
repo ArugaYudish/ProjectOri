@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
 import Logo from '../../assets/img/OriNeko-Logo.png';
+import api from '../../utils/api';
 
 const InvoiceForm = () => {
   const location = useLocation();
@@ -48,7 +49,7 @@ const InvoiceForm = () => {
 
   const getTransaction = async () => {
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `${apiUrl}/api/v1/transactions/get`,
         {
           userId: userId,

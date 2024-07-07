@@ -4,6 +4,7 @@ import '../../assets/css/user.css';
 import { Card, Input, Spin, message, Modal } from 'antd';
 import { Bitcoin, Wallet } from 'iconsax-react';
 import axios from 'axios';
+import api from '../../utils/api';
 
 const Wallets = ({ children }) => {
   const [activeButton, setActiveButton] = useState('BTC');
@@ -31,18 +32,8 @@ const Wallets = ({ children }) => {
 
   useEffect(() => {
     const fetchRates = async () => {
-      const token = sessionStorage.getItem('accessToken'); // Ambil token dari sessionStorage
-
       try {
-        const response = await axios.post(
-          `${apiUrl}/api/v1/transactions/rates`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Tambahkan header Authorization
-            },
-          },
-        );
+        const response = await api.post(`/api/v1/transactions/rates`);
         const rateData = response.data.data.currency;
         setRates({
           BTC: rateData['BTC'],
@@ -71,22 +62,15 @@ const Wallets = ({ children }) => {
   };
 
   const handleWithdraw = async () => {
-    const token = sessionStorage.getItem('accessToken'); // Ambil token dari sessionStorage
-
     if (amount >= 10) {
       try {
-        const response = await axios.post(
-          `${apiUrl}/api/v1/withdrawal/create`,
+        const response = await api.post(
+          `/api/v1/withdrawal/create`,
           {
             currency: activeButton,
             address: walletAddress,
             amount: amount,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Tambahkan header Authorization
-            },
-          },
+          }
         );
 
         if (response.data.meta.status === 'success') {
@@ -103,6 +87,7 @@ const Wallets = ({ children }) => {
         }
       } catch (error) {
         if (error.response && error.response.data && error.response.data.meta) {
+          console.log(error)
           message.error(error.response.data.meta.reason);
         } else {
           message.error('Failed to submit withdrawal request');

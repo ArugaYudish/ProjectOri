@@ -119,12 +119,7 @@ const Home = () => {
 
   const handleStartNowClick = async selectedPack => {
     if (accessToken === null) {
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('role');
-      sessionStorage.removeItem('userName');
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('Ballance');
-      sessionStorage.removeItem('email');
+      sessionStorage.clear()
       localStorage.setItem('packDesc', selectedPack.desc_2);
       localStorage.setItem('packId', selectedPack.id);
       navigate('/login');
@@ -144,12 +139,7 @@ const Home = () => {
 
   const fetchCurrencies = async () => {
     if (accessToken === null) {
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('role');
-      sessionStorage.removeItem('userName');
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('Ballance');
-      sessionStorage.removeItem('email');
+      sessionStorage.clear()
       navigate('/login');
       return;
     }
