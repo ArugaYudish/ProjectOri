@@ -40,7 +40,7 @@ const Purchase = () => {
             }
 
             const data = await response.json()
-            console.log(data)
+            // console.log(data)
 
             setLink(data.data.purchase.telegram_url)
             setPaymentStatus(data.data.purchase.payment_status)
@@ -59,10 +59,7 @@ const Purchase = () => {
                     <div className="flex flex-col justify-center items-center">
                         <div className='flex flex-col'>
                             <div className='flex items-end'>
-                                <div style={{ fontSize: '40px', fontWeight: 600 }}>500</div>
-                                <div style={{ fontSize: '20px', color: '#A67B5B' }}>
-                                    . Error occured,
-                                </div>
+                                <div style={{ fontSize: '30px', fontWeight: 600 }}>Failed Purchase</div>
                             </div>
                             <div style={{ fontSize: '20px' }}>
                                 Woops, Looks like
@@ -75,15 +72,7 @@ const Purchase = () => {
                                 className='flex'
                                 style={{ fontSize: '20px', color: '#A67B5B' }}>
                                 let's
-                                <a
-                                    href='/#subscription'
-                                    style={{
-                                        paddingLeft: '5px',
-                                        color: '#EE4E4E',
-                                        textDecoration: 'underline',
-                                    }}>
-                                    join again
-                                </a>
+                                <a className="px-4 py-1 flex gap-2 text-sm ml-2" style={{ border: "1px solid #34AADF", borderRadius: "4px", color: "#34AADF", backgroundColor: "#F0FAFF" }} href="/#subscription">Join Again</a>
                             </div>
                         </div>
                     </div>
