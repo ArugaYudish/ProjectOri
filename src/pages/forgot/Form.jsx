@@ -161,7 +161,7 @@ const ForgotForm = () => {
                   Confirmation New Password
                 </label>
                 <input
-                  type='confirmationPassword'
+                  type='password'
                   placeholder='at least 8 caracters'
                   value={passwordConfirm}
                   onChange={e => {
