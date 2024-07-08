@@ -338,7 +338,7 @@ const Home = () => {
             currency: currency,
             discount: data.data.transaction.persentage_fee,
             link: data.data.transaction.detail_checkout.checkout_url,
-            invoiceNumber: data.data.transaction.detail_checkout.amount,
+            invoiceNumber: data.data.transaction.detail_checkout.txn_id,
           };
           navigate(`/invoice/${state.id}`, { state: state });
           break;
