@@ -5,6 +5,7 @@ import { Card, Input, Spin, message, Modal } from 'antd';
 import { Bitcoin, Wallet } from 'iconsax-react';
 import axios from 'axios';
 import api from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const Wallets = ({ children }) => {
   const [activeButton, setActiveButton] = useState('BTC');
@@ -16,6 +17,14 @@ const Wallets = ({ children }) => {
   const [amount, setAmount] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const isTransaction = sessionStorage.getItem("isTransaction")
+      if (isTransaction === 'false') {
+        navigate('*')
+    }
+  }, [navigate])
 
   const showModal = () => {
     setIsModalOpen(true);

@@ -10,26 +10,41 @@ const AddUserForm = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user'); // Default role is 'user'
   const [error, setError] = useState(null);
+  const [fieldError, setFieldError] = useState(null);
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('accessToken')
 
   const handleSubmit = async event => {
     event.preventDefault();
     const apiUrl = process.env.REACT_APP_API_URL;
 
     try {
-      const response = await axios.post(`${apiUrl}/api/v1/auth/register`, {
-        name: name,
-        email: email,
-        password: password,
-        password_confirm: password, // Set confirmPassword same as password
-        role: role, // Add role to the request
-        status: 1, // Set status to 1 by default
+      const response = await fetch(`${apiUrl}/api/v1/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+          password_confirm: password,
+          role: role
+        }),
       });
 
-      if (response.data && response.data.data) {
-        navigate('/asdhakdls/users'); // Redirect to the users management page after success
+      let data = await response.json();
+      if (data.meta.code !== 200) {
+        if (!Array.isArray(data.data)) {
+          setError(data.data.Messsage);
+          setFieldError(data.data.Field);
+        } else {
+          setError(data.data[0].Message);
+          setFieldError(data.data[0].Field);
+        }
       } else {
-        setError('Failed to create user');
+        navigate('/asdhakdls/users')
       }
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to create user');
@@ -40,7 +55,7 @@ const AddUserForm = () => {
     <SidebarAdmin>
       <div className='container mx-auto p-8'>
         <div className='text-2xl font-bold pb-3'>Add New User</div>
-        {error && <div className='text-red-500 pb-3'>{error}</div>}
+        {error && fieldError === null && <div className='text-red-500 pb-3'>{error}</div>}
         <form onSubmit={handleSubmit} className='w-full'>
           <div className='pb-2'>
             <label
@@ -74,6 +89,9 @@ const AddUserForm = () => {
               required
             />
           </div>
+          {error && fieldError === 'Email' ? (
+              <div className='text-red-500 pb-3'>{error}</div>
+            ) : null}
           <div className='pb-2'>
             <label
               htmlFor='password'
@@ -90,6 +108,10 @@ const AddUserForm = () => {
               required
             />
           </div>
+          {error !== 'Password and Password Confirm is not same!' &&
+            fieldError === 'Password' ? (
+              <div className='text-red-500 pb-3'>{error}</div>
+            ) : null}
           <div className='pb-3'>
             <label
               htmlFor='role'

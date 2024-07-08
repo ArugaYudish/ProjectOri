@@ -17,6 +17,7 @@ const Content = () => {
 
   const handleOk = async () => {
     await handleSubmit();
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {

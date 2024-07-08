@@ -59,6 +59,14 @@ api.interceptors.response.use(
 		) {
 			return Promise.reject(error)
 		}
+
+		if (
+			error.response &&
+			error.response.data.meta.reason === "Key: 'UpdatePackageInput.Price' Error:Field validation for 'Price' failed on the 'numeric' tag" &&
+			!originalRequest._retry
+		) {
+			return Promise.reject(error)
+		}
     
 		sessionStorage.clear()
 		console.log(error)
