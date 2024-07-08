@@ -64,7 +64,7 @@ const Activation = () => {
           if (decryptedUserData.role === 'admin') {
             navigate('/asdhakdls/dashboard');
           } else {
-            navigate('/wallet');
+            navigate('/history');
           }
           // Redirect user or handle successful login here
         } else {
