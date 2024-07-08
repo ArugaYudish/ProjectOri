@@ -117,7 +117,7 @@ const RegisterForm = () => {
           <form
             className='max-w-sm w-full mx-auto pt-8'
             onSubmit={handleSubmit}>
-            <div className='text-2xl font-bold pb-3'>Create an Account 🌤️</div>
+            <div className='text-2xl font-bold pb-3'>Create an Account </div>
             <div className='pb-2'>
               <label
                 htmlFor='name'

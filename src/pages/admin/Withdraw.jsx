@@ -90,8 +90,8 @@ const AdminWithdraw = () => {
         setData(filteredWithdrawals); // Update state data with the filtered withdrawals
       }
     } catch (error) {
-      console.error('Gagal mengambil data withdrawal:', error);
-      message.error('Gagal mengambil data withdrawal');
+      // console.error('Gagal mengambil data withdrawal:', error);
+      message.error('Failed to retrieve withdrawal data');
     } finally {
       setLoading(false); // Set loading menjadi false setelah selesai fetching data
     }
@@ -155,11 +155,11 @@ const AdminWithdraw = () => {
       }
     } catch (error) {
       console.error(
-        `Gagal ${status === 1 ? 'menyetujui' : 'menolak'} withdrawal:`,
+        `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal:`,
         error,
       );
       message.error(
-        `Gagal ${status === 1 ? 'menyetujui' : 'menolak'} withdrawal`,
+        `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal`,
       );
     } finally {
       setLoading(false); // Set loading menjadi false setelah selesai aksi
@@ -205,7 +205,7 @@ const AdminWithdraw = () => {
           </Button>
           <Button
             className='bg-orineko-danger text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
-            onClick={() => showModal(record, 0)}>
+            onClick={() => showModal(record, 2)}>
             Decline
           </Button>
         </div>

@@ -18,7 +18,7 @@ const History = () => {
   const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false); // State to handle loading
   const searchInput = useRef(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchTransactions = async table => {
@@ -33,12 +33,8 @@ const History = () => {
         {
           user_id: userId,
           status: status,
-          start_date: startDate
-            ? startDate.format('YYYY-MM-DD')
-            : moment().subtract(3, 'years').format('YYYY-MM-DD'),
-          end_date: endDate
-            ? endDate.format('YYYY-MM-DD')
-            : moment().format('YYYY-MM-DD'),
+          start_date: startDate ? startDate.format('YYYY-MM-DD') : null,
+          end_date: endDate ? endDate.format('YYYY-MM-DD') : null,
         },
         {
           headers: {
@@ -51,11 +47,11 @@ const History = () => {
         // console.log("success", response.data)
         setTransactions(response.data.data.transaction);
       } else {
-        navigate('/')
+        navigate('/');
         console.error('Failed to fetch transactions:', response.data);
       }
     } catch (error) {
-      navigate('/')
+      navigate('/');
       console.error('Error fetching transactions:', error);
     } finally {
       setLoading(false); // Set loading to false after fetching data

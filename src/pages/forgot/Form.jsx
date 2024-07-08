@@ -47,9 +47,9 @@ const ForgotForm = () => {
           break;
         default:
           if (data.meta.reason === 'record not found') {
-            setError(data.meta.reason);
+            setError('email not found');
           } else {
-            setError(data.data[0].Message);
+            setError('email not found');
           }
           break;
       }
@@ -130,7 +130,7 @@ const ForgotForm = () => {
               onSubmit={handleResetPassword}
               className='max-w-sm mx-auto w-full'>
               <div className='text-2xl font-bold pb-3  '>
-                <div className='pt-6'> Create New Password 🔐</div>
+                <div className='pt-6'> Create New Password </div>
               </div>
               <div className='pb-5 text-gray-600'>
                 Input yfour new password to access your account!
@@ -195,13 +195,17 @@ const ForgotForm = () => {
               onSubmit={handleForgotPassword}
               className='max-w-sm mx-auto w-full'>
               <div className='text-2xl font-bold pb-3  '>
-                <div className='pt-6'> Create New Password 🔐</div>
+                <div className='pt-6'> Create New Password </div>
               </div>
               <div className='pb-5 text-gray-600'>
                 Input your Email to access your account!
               </div>
-
-              <div className='pb-2'>
+              {error !== '' ? (
+                <div className='pb-2 text-red-600'>{error}</div>
+              ) : (
+                ''
+              )}
+              <div className='pb-5'>
                 <label
                   htmlFor='email'
                   className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
@@ -217,14 +221,10 @@ const ForgotForm = () => {
                   required
                 />
               </div>
-              {error !== '' ? (
-                <div className='pb-2 text-red-600'>{error}</div>
-              ) : (
-                ''
-              )}
+
               <button
                 type='submit'
-                className=' text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
+                className='mt-3 text-white bg-button-form hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>
                 Confirmation
               </button>
 

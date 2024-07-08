@@ -83,17 +83,21 @@ const LoginForm = () => {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
 
-        if (packDesc !== null && packId !== null && sessionStorage.getItem("role") === "user") {
-          navigate("/")
-          return
+        if (
+          packDesc !== null &&
+          packId !== null &&
+          sessionStorage.getItem('role') === 'user'
+        ) {
+          navigate('/');
+          return;
         } else {
-          localStorage.removeItem("packId")
-          localStorage.removeItem("packDesc")
+          localStorage.removeItem('packId');
+          localStorage.removeItem('packDesc');
         }
 
         if (decryptedUserData.role === 'admin') {
           navigate('/asdhakdls/dashboard');
-          localStorage.clear()
+          localStorage.clear();
         } else {
           navigate('/history');
         }
@@ -135,7 +139,7 @@ const LoginForm = () => {
           <form className='max-w-sm w-full mx-auto ' onSubmit={handleSubmit}>
             <div className='text-2xl font-bold pb-3'>
               <img src={OriNekoLogo} className='set-logo-login' alt='' />
-              <div className='pt-3'> Welcome Back 👋</div>
+              <div className='pt-3'> Welcome Back </div>
             </div>
             <div className='pb-2 text-gray-600'>
               Today is a new day. It's your day. You shape it. Sign in to start
