@@ -3,6 +3,7 @@ import Sidebar from '../../component/common/Sidebar';
 import '../../assets/css/user.css';
 import { Card, Table, message } from 'antd';
 import api from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const Refferal = () => {
   const [referralData, setReferralData] = useState([]);
@@ -10,6 +11,14 @@ const Refferal = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalReferral, setTotalReferral] = useState(0);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const isTransaction = sessionStorage.getItem("isTransaction")
+      if (isTransaction === 'false') {
+        navigate('*')
+    }
+  }, [navigate])
 
   useEffect(() => {
     const fetchReferralData = async () => {

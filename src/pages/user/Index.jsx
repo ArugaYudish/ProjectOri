@@ -5,6 +5,7 @@ import { Table, Card, Spin, Input, Button, Space } from 'antd';
 import { Wallet } from 'iconsax-react';
 import { SearchOutlined } from '@ant-design/icons';
 import api from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const Wallets = () => {
   const [withdrawals, setWithdrawals] = useState([]);
@@ -13,6 +14,14 @@ const Wallets = () => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const isTransaction = sessionStorage.getItem("isTransaction")
+      if (isTransaction === 'false') {
+        navigate('*')
+    }
+  }, [navigate])
 
   useEffect(() => {
     const fetchWithdrawals = async () => {
