@@ -46,7 +46,7 @@ const ForgotForm = () => {
           navigate('/login', { state: data });
           break;
         default:
-          if (data.meta.message === 'record not found') {
+          if (data.meta.reason === 'record not found') {
             setError(data.meta.reason);
           } else {
             setError(data.data[0].Message);
@@ -161,7 +161,7 @@ const ForgotForm = () => {
                   Confirmation New Password
                 </label>
                 <input
-                  type='confirmationPassword'
+                  type='password'
                   placeholder='at least 8 caracters'
                   value={passwordConfirm}
                   onChange={e => {

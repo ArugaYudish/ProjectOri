@@ -54,6 +54,10 @@ const Activation = () => {
           sessionStorage.setItem('userName', decryptedUserData.name);
           sessionStorage.setItem('Ballance', decryptedUserData.balance); // Assuming decryptedUserData contains id field
           sessionStorage.setItem('email', email);
+          sessionStorage.setItem(
+            'isTransaction',
+            decryptedUserData.is_transaction,
+          );
 
           // Set login status to success
           setLoginStatus('success');
@@ -64,7 +68,7 @@ const Activation = () => {
           if (decryptedUserData.role === 'admin') {
             navigate('/asdhakdls/dashboard');
           } else {
-            navigate('/wallet');
+            navigate('/history');
           }
           // Redirect user or handle successful login here
         } else {

@@ -58,6 +58,7 @@ const Home = () => {
   const role = sessionStorage.getItem("role")
   const [reminder, setReminder] = useState([])
   const [viewModal, setViewModal] = useState("buy")
+  const userId = sessionStorage.getItem("userId")
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -185,6 +186,27 @@ const Home = () => {
     }
   }
 
+  const getUserById = async () => {
+    const response = await fetch(`${apiUrl}/api/v1/users/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "content-type": "application/json"
+      }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      console.log(response)
+      return data.meta.reason
+    }
+
+    // console.log(data.data.users[0].is_transaction)
+    sessionStorage.setItem("isTransaction", data.data.users[0].is_transaction)
+    return "success"
+  }
+
   const fetchCurrencies = async () => {
     if (accessToken === null) {
       sessionStorage.clear()
@@ -308,6 +330,13 @@ const Home = () => {
     event.preventDefault();
     setIsError(false);
 
+    const res = await getUserById()
+    if (res !== "success") {
+      const err = res;
+      setError(err);
+      setIsError(true);
+    }
+
     if (currency === 'Choose Currency') {
       setError('Choose your currency first.');
       setIsError(true);
@@ -338,7 +367,7 @@ const Home = () => {
             currency: currency,
             discount: data.data.transaction.persentage_fee,
             link: data.data.transaction.detail_checkout.checkout_url,
-            invoiceNumber: data.data.transaction.detail_checkout.amount,
+            invoiceNumber: data.data.transaction.detail_checkout.txn_id,
           };
           navigate(`/invoice/${state.id}`, { state: state });
           break;
