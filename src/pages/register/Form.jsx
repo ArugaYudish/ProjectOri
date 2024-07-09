@@ -65,7 +65,7 @@ const RegisterForm = () => {
     <>
       {/* Popup */}
       <div
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', display: openModal }}
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', display: openModal, zIndex: "20" }}
         className='fixed inset-0 flex justify-center items-center'>
         <div
           style={{ backgroundColor: 'white', padding: '40px' }}
