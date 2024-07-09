@@ -521,7 +521,7 @@ const Home = () => {
                 <button onClick={() => { handleCloseModal() }}>X</button>
               </div>
               <hr />
-              <div className='p-8'>
+              <div className='p-8 modal-body'>
                 <p>It looks like you have a remaining payment for your previous purchase.</p>
                 <p className='font-semibold'>Remaining Payment Details:</p>
                 <div style={{ maxHeight: "200px", overflow: "auto" }}>

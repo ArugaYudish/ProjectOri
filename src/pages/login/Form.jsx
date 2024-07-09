@@ -117,7 +117,7 @@ const LoginForm = () => {
   return (
     <>
       {verificationStatus !== null ? (
-        <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
+        <div className='absolute top-0 right-0 left-0 p-4 flex justify-center'>
           <Alert
             message={verificationMessage}
             type={verificationStatus === 200 ? 'success' : 'error'}

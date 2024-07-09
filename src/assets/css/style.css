@@ -210,6 +210,10 @@
 }
 
 @media (max-width: 699px) {
+  .buy-modal {
+    font-size: 16px;
+  }
+
   .invoice-detail {
     flex-direction: column;
   }
@@ -220,5 +224,11 @@
 
   .invoice-btn {
     width: 315px;
+  }
+}
+
+@media (max-width: 490px) {
+  .modal-body {
+    padding: 15px;
   }
 }
