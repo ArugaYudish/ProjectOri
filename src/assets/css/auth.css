@@ -37,6 +37,36 @@
     border-top-left-radius: 36px;
     border-top-right-radius: 36px;
     border-bottom-left-radius: 0px;
-    padding: 3em;
+    /* padding: 3em; */
+  }
+}
+
+@media (max-width: 639px) {
+  .set-form {
+    padding: 20px;
+  }
+
+  .auth-img {
+    height: 30vh;
+  }
+
+  .auth-body {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    min-height: 70vh;
+  }
+
+  .auth-img-forgot {
+    height: 40vh;
+  }
+
+  .auth-body-forgot {
+    height: 60vh;
+  }
+
+  .set-image-form {
+    width: 55%;
   }
 }

@@ -54,6 +54,7 @@ const RegisterForm = () => {
         localStorage.setItem('email', email);
         localStorage.setItem('password', password);
         setOpenModal('flex');
+        setError(null)
       }
     } catch (error) {
       setError(error.message);
@@ -105,17 +106,17 @@ const RegisterForm = () => {
 
       {/* Form */}
       <div className='authForm sm:grid grid-cols-2'>
-        <div className='col-span-1 image-form flex items-center'>
+        <div className='col-span-1 image-form flex items-center auth-img'>
           <img
             className='set-image-form w-full'
-            style={{ width: '500px' }}
+            // style={{ width: '500px' }}
             src={OrinekoCat}
             alt=''
           />
         </div>
-        <div className='col-span-1 bg-white set-form flex items-center'>
+        <div className='col-span-1 bg-white set-form flex items-center auth-body'>
           <form
-            className='max-w-sm w-full mx-auto pt-8'
+            className='max-w-sm w-full mx-auto pt-5'
             onSubmit={handleSubmit}>
             <div className='text-2xl font-bold pb-3'>Create an Account </div>
             <div className='pb-2'>
@@ -169,7 +170,7 @@ const RegisterForm = () => {
               />
             </div>
             {error !== 'Password and Password Confirm is not same!' &&
-            fieldError === 'Password' ? (
+              fieldError === 'Password' ? (
               <div className='text-red-500 pb-3'>{error}</div>
             ) : null}
             <div className='pb-3'>
@@ -188,7 +189,7 @@ const RegisterForm = () => {
               />
             </div>
             {error === 'Password and Password Confirm is not same!' &&
-            fieldError === 'Password' ? (
+              fieldError === 'Password' ? (
               <div className='text-red-500 pb-3'>{error}</div>
             ) : null}
             <button

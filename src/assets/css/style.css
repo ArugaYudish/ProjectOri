@@ -214,6 +214,10 @@
     font-size: 16px;
   }
 
+  .payment-item {
+    font-size: 12px;
+  }
+
   .invoice-detail {
     flex-direction: column;
   }
