@@ -7,7 +7,7 @@ const AdminRoleMiddleware = () => {
 	if (role === 'admin') {
 		return <Outlet />
 	} else if (role === 'user') {
-    return <Navigate to="/wallet" />
+    return <Navigate to="/history" />
   } else {
 		return <Navigate to="/login" />
 	}

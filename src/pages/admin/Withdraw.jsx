@@ -117,7 +117,12 @@ const AdminWithdraw = () => {
   const handleExport = () => {
     try {
       // Mengonversi data menjadi format Excel
-      const worksheet = XLSX.utils.json_to_sheet(data);
+      let filteredData = data.map(item => {
+        let { id, created_at, updated_at, ...rest } = item;
+        return rest;
+      });
+      
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Withdraw Data');
       // Mengexport file Excel

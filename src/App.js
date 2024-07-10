@@ -15,7 +15,7 @@ const App = () => {
 
       timeoutIdRef.current = setTimeout(() => {
         setIsAfk(true);
-      }, 600000);
+      }, 3600000);
     };
 
     const checkActivityInterval = () => {
