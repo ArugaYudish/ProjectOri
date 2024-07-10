@@ -116,15 +116,15 @@ const ForgotForm = () => {
         </div>
       ) : null}
       <div className='authForm sm:grid grid-cols-2'>
-        <div className='col-span-1 image-form  flex items-center'>
+        <div className='col-span-1 image-form  flex items-center auth-img-forgot'>
           <img
             className='set-image-form pt-10'
-            style={{ width: '500px' }}
+            // style={{ width: '500px' }}
             src={OrinekoCat}
             alt=''
           />
         </div>
-        <div className='col-span-1 bg-white set-form flex items-center'>
+        <div className='col-span-1 bg-white set-form flex items-center auth-body-forgot'>
           {id !== null ? (
             <form
               onSubmit={handleResetPassword}

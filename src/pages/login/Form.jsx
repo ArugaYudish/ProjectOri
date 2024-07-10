@@ -116,8 +116,9 @@ const LoginForm = () => {
 
   return (
     <>
+      {/* alert */}
       {verificationStatus !== null ? (
-        <div className='absolute top-0 right-0 left-0 pt-4 flex justify-center'>
+        <div className='absolute top-0 right-0 left-0 p-4 flex justify-center'>
           <Alert
             message={verificationMessage}
             type={verificationStatus === 200 ? 'success' : 'error'}
@@ -126,16 +127,18 @@ const LoginForm = () => {
           />
         </div>
       ) : null}
+
+      {/* login */}
       <div className='authForm sm:grid grid-cols-2'>
-        <div className='col-span-1 image-form flex items-center'>
+        <div className='col-span-1 image-form flex items-center auth-img'>
           <img
             className='set-image-form w-full'
-            style={{ width: '500px' }}
+            // style={{ width: '500px' }}
             src={OrinekoCat}
             alt=''
           />
         </div>
-        <div className='col-span-1 bg-white set-form flex items-center'>
+        <div className='col-span-1 bg-white set-form flex items-center auth-body'>
           <form className='max-w-sm w-full mx-auto ' onSubmit={handleSubmit}>
             <div className='text-2xl font-bold pb-3'>
               <img src={OriNekoLogo} className='set-logo-login' alt='' />
