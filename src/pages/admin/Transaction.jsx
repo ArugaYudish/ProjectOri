@@ -66,7 +66,12 @@ const Transaction = () => {
 
   const handleExport = () => {
     try {
-      const worksheet = XLSX.utils.json_to_sheet(data);
+      let filteredData = data.map(item => {
+        let { id, user_id, expired_time, telegram_url, checkout_url, ...rest } = item;
+        return rest;
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(filteredData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Transactions');
       XLSX.writeFile(workbook, 'transactions.xlsx');

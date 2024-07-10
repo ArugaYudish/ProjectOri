@@ -61,6 +61,13 @@ const Home = () => {
   const userId = sessionStorage.getItem("userId")
 
   useEffect(() => {
+    const admin = sessionStorage.getItem("role")
+      if (admin === 'admin') {
+        navigate('/asdhakdls/dashboard')
+    }
+  }, [navigate])
+
+  useEffect(() => {
     const fetchPackages = async () => {
       try {
         const response = await fetch(`${apiUrl}/api/v1/packages`);
