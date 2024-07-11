@@ -26,13 +26,15 @@ const History = () => {
     try {
       const userId = sessionStorage.getItem('userId');
       const token = sessionStorage.getItem('accessToken');
-      const status = table === 'openOrder' ? 'Active' : 'Inactive';
+      const status = table === 'openOrder' ? 'Active' : '';
+      const paymentStatus = table === 'openOrder' ? 'Complete' : '';
 
       const response = await api.post(
         `${apiUrl}/api/v1/transactions/get`,
         {
           user_id: userId,
           status: status,
+          payment_status: paymentStatus,
           start_date: startDate ? startDate.format('YYYY-MM-DD') : null,
           end_date: endDate ? endDate.format('YYYY-MM-DD') : null,
         },
@@ -160,20 +162,26 @@ const History = () => {
       ...getColumnSearchProps('total_payment'),
     },
     {
+      title: 'Payment Status',
+      dataIndex: 'payment_status',
+      key: 'payment_status',
+      ...getColumnSearchProps('payment_status'),
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (text, record) =>
-        activeTable === 'openOrder' ? (
+        record.payment_status === 'Complete' ? (
           <Button
             onClick={() => handleButtonClick(record)}
-            className='mx-auto bg-color-orineko-telegram border justify-center flex gap-2 items-center rounded-lg text-sm'>
+            className='mx-auto  bg-color-orineko-telegram border justify-center flex gap-2 items-center rounded-lg text-sm'>
             <img src={TelegramIcon} alt='' />
             Telegram
           </Button>
         ) : (
           <Button
             onClick={() => handleButtonClick(record)}
-            className='mx-auto bg-color-orineko border justify-center flex gap-2 items-center rounded-lg text-sm'>
+            className='mx-auto button-join-again  bg-color-orineko border justify-center flex gap-2 items-center rounded-lg text-sm'>
             Join Again!
           </Button>
         ),

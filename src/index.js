@@ -7,6 +7,24 @@ import 'primereact/resources/themes/saga-blue/theme.css'; // Sesuaikan dengan te
 import 'primereact/resources/primereact.min.css';
 import './assets/css/user.css'; // Impor gaya CSS kustom Anda
 
+// Override console.warn to suppress WebSocket warnings
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('WebSocket')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
+// Override console.error to suppress WebSocket errors
+const originalError = console.error;
+console.error = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('WebSocket')) {
+    return;
+  }
+  originalError(...args);
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
