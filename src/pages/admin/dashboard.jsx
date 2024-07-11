@@ -193,7 +193,7 @@ const Dashboard = () => {
 	return (
 		<>
 			<SidebarAdmin>
-				<div className="">
+				<div className="mt-4">
 					<div className="text-3xl border-b ">Dashboard</div>
 
 					<div>
