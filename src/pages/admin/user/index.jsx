@@ -15,6 +15,7 @@ const Users = () => {
 	const navigate = useNavigate();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [record, setRecord] = useState(null);
+	const [column, setColumn] = useState([])
 	// const [status, setStatus] = useState("Active")
 
 	const showModal = record => {
@@ -52,6 +53,7 @@ const Users = () => {
 			}
 		};
 		fetchUsers();
+		setColumn(columns)
 	}, []);
 
 	const handleEdit = record => {
@@ -92,6 +94,16 @@ const Users = () => {
 
 	const handleStatusFilter = e => {
 		setStatus(e);
+
+		if (e === "Inactive") {
+			setColumn(prev => {
+				const newCol = [...prev]
+				newCol.pop()
+				return newCol
+			})
+		} else {
+			setColumn(columns)
+		}
 
 		let filtered;
 		switch (e) {
@@ -146,20 +158,26 @@ const Users = () => {
 			title: 'Action',
 			dataIndex: 'action',
 			render: (text, record) => (
-				<div className='flex gap-2'>
-					<Button
-						className='bg-orineko-primary text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
-						onClick={() => handleEdit(record)}>
-						Edit
-					</Button>
-					<Button
-						className='bg-orineko-danger text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
-						onClick={() => showModal(record)}>
-						Remove
-					</Button>
-				</div>
+				<>
+					{
+						record.status !== "Inactive" ?
+							<div className='flex gap-2'>
+								<Button
+									className='bg-orineko-primary text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
+									onClick={() => handleEdit(record)}>
+									Edit
+								</Button>
+								<Button
+									className='bg-orineko-danger text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
+									onClick={() => showModal(record)}>
+									Remove
+								</Button>
+							</div> :
+							<div>-</div>
+					}
+				</>
 			),
-		},
+		}
 	];
 
 	const statusFilter = [
@@ -219,7 +237,7 @@ const Users = () => {
 										<div className='overflow-hidden overflow-x-auto'>
 											<Table
 												className='table-ant'
-												columns={columns}
+												columns={column}
 												dataSource={showData}
 												pagination={{
 													pageSize: 5,
