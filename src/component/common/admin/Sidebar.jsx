@@ -21,7 +21,7 @@ const SidebarAdmin = ({ children }) => {
 				message.error('Logout failed')
 			}
 		} catch (error) {
-			console.error('Logout failed', error)
+			// console.error('Logout failed', error)
 		}
 	}
 
@@ -65,13 +65,12 @@ const SidebarAdmin = ({ children }) => {
 		label: (
 			<Link
 				to={item.href}
-				className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${
-					location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
-				}`}
+				className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
+					}`}
 			>
 				<item.icon
 					className={`${location.pathname === item.href ? 'icon-Wallet ' : ' '}`}
-					variant={location.pathname === item.href ? 'Bold' : 'Regular'}
+					variant={location.pathname === item.href ? 'Bold' : 'Linear'}
 				/>
 				<span className={`ms-3 ${location.pathname === item.href ? 'sidebar-color font-bold' : 'text-sidebar '}`}>
 					{item.label}
@@ -87,7 +86,7 @@ const SidebarAdmin = ({ children }) => {
 				onClick={showModal}
 				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full text-black"
 			>
-				<LogoutCurve variant="Regular" />
+				<LogoutCurve variant="Linear" />
 				<span className="ms-3 text-sidebar">Logout</span>
 			</button>
 		),
@@ -100,13 +99,12 @@ const SidebarAdmin = ({ children }) => {
 			label: (
 				<Link
 					to="/"
-					className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${
-						location.pathname === '/' ? 'bg-sidebar' : 'bg-sidebar-sec'
-					}`}
+					className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${location.pathname === '/' ? 'bg-sidebar' : 'bg-sidebar-sec'
+						}`}
 				>
 					<Home
 						className={`${location.pathname === '/' ? 'icon-Wallet' : ''}`}
-						variant={location.pathname === '/' ? 'Bold' : 'Regular'}
+						variant={location.pathname === '/' ? 'Bold' : 'Linear'}
 					/>
 					<span className={`ms-3 ${location.pathname === '/' ? 'sidebar-color font-bold' : 'text-sidebar'}`}>Home</span>
 				</Link>
@@ -138,14 +136,13 @@ const SidebarAdmin = ({ children }) => {
 							<li key={item.href}>
 								<Link
 									to={item.href}
-									className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${
-										location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
-									}`}
+									className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
+										}`}
 								>
 									<item.icon
 										size="20"
 										className={`  ${location.pathname === item.href ? 'icon-Wallet ' : ' '}`}
-										variant={location.pathname === item.href ? 'Bold' : 'Regular'}
+										variant={location.pathname === item.href ? 'Bold' : 'Linear'}
 									/>
 									<span
 										className={`ms-3 ${location.pathname === item.href ? 'sidebar-color font-bold' : 'text-sidebar '}`}
@@ -162,7 +159,7 @@ const SidebarAdmin = ({ children }) => {
 							>
 								<LogoutCurve
 									size="20"
-									variant="Regular"
+									variant="Linear"
 								/>
 								<span className="ms-3 text-sidebar">Logout</span>
 							</button>

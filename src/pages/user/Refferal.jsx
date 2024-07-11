@@ -15,8 +15,8 @@ const Refferal = () => {
 
   useEffect(() => {
     const isTransaction = sessionStorage.getItem("isTransaction")
-      if (isTransaction === 'false') {
-        navigate('*')
+    if (isTransaction === 'false') {
+      navigate('*')
     }
   }, [navigate])
 
@@ -32,10 +32,10 @@ const Refferal = () => {
           setTotalReferral(total_refferal);
           setReferralData(refferal_user);
         } else {
-          console.error('Error fetching referral data:', response.meta.message);
+          // console.error('Error fetching referral data:', response.meta.message);
         }
       } catch (error) {
-        console.error('Error fetching referral data:', error);
+        // console.error('Error fetching referral data:', error);
       }
     };
 
@@ -72,11 +72,11 @@ const Refferal = () => {
     navigator.clipboard
       .writeText(referralCode)
       .then(() => {
-        message.success('Referral code copied to clipboard');
+        // message.success('Referral code copied to clipboard');
       })
       .catch(error => {
-        message.error('Failed to copy referral code');
-        console.error('Error copying to clipboard:', error);
+        // message.error('Failed to copy referral code');
+        // console.error('Error copying to clipboard:', error);
       });
   };
 

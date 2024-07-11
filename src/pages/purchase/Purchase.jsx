@@ -47,7 +47,7 @@ const Purchase = () => {
 
             return data.data.purchase.payment_status
         } catch (error) {
-            console.log(error.message)
+            // console.log(error.message)
             navigate("/")
         }
     }

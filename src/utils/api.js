@@ -46,7 +46,7 @@ api.interceptors.response.use(
 					return api(originalRequest)
 				}
 			} catch (refreshError) {
-				console.error("Failed to refresh token:", refreshError)
+				// console.error("Failed to refresh token:", refreshError)
 				sessionStorage.clear()
 				return Promise.reject(refreshError)
 			}
@@ -67,9 +67,9 @@ api.interceptors.response.use(
 		) {
 			return Promise.reject(error)
 		}
-    
+
 		sessionStorage.clear()
-		console.log(error)
+		// console.log(error)
 		return Promise.reject(error)
 	}
 )
@@ -96,8 +96,8 @@ export const refreshToken = async () => {
 			return newAccessToken
 		}
 	} catch (error) {
-		console.error("Failed to refresh token:", error)
-		throw error
+		// console.error("Failed to refresh token:", error)
+		// throw error
 	}
 }
 
@@ -106,8 +106,8 @@ export const decryptUserData = async (userData) => {
 		const response = await api.post("/api/v1/decrypt", { data: userData })
 		return response.data.data
 	} catch (error) {
-		console.error("Failed to decrypt user data:", error)
-		throw error
+		// console.error("Failed to decrypt user data:", error)
+		// throw error
 	}
 }
 

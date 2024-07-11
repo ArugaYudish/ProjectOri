@@ -47,8 +47,8 @@ const Users = () => {
 				}
 				setLoading(false);
 			} catch (error) {
-				console.error('Failed to fetch users:', error);
-				message.error('Failed to fetch users');
+				// console.error('Failed to fetch users:', error);
+				// message.error('Failed to fetch users');
 				setLoading(false);
 			}
 		};
@@ -230,7 +230,7 @@ const Users = () => {
 						<div className='pt-3'>
 							<div className='card'>
 								{loading ? (
-									<Spin tip='Loading...' />
+									<Spin size='large' />
 								) : (
 									<>
 										{error && <div className='text-red-500 pb-3'>{error}</div>}

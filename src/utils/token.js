@@ -19,8 +19,8 @@ const setupTokenRefresh = () => {
           const refreshToken = sessionStorage.getItem('refreshToken');
           // console.log('Refresh token:', refreshToken);
           if (!refreshToken) {
-            console.error('No refresh token available');
-            throw new Error('No refresh token available');
+            // console.error('No refresh token available');
+            // throw new Error('No refresh token available');
           }
 
           const response = await axios.post(
@@ -47,16 +47,16 @@ const setupTokenRefresh = () => {
             // Kirim ulang request asli dengan token baru
             return axios(originalRequest);
           } else {
-            console.error('Invalid refresh token response:', response.data);
-            throw new Error('Invalid refresh token response');
+            // console.error('Invalid refresh token response:', response.data);
+            // throw new Error('Invalid refresh token response');
           }
         } catch (refreshError) {
-          console.error('Failed to refresh token:', refreshError);
+          // console.error('Failed to refresh token:', refreshError);
           // Handle refresh token failure, logout user or show error message
           // For example:
           // logoutUser();
           // showMessage('Session expired, please login again');
-          throw refreshError; // Propagate the error so that the original request fails
+          // throw refreshError; // Propagate the error so that the original request fails
         }
       }
       return Promise.reject(error);

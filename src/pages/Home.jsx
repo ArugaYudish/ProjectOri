@@ -81,7 +81,7 @@ const Home = () => {
         setPackages(sortedPackages);
         // console.log(data.data);
       } catch (error) {
-        console.error('Error fetching packages:', error);
+        // console.error('Error fetching packages:', error);
       }
     };
 
@@ -205,14 +205,14 @@ const Home = () => {
     const data = await response.json()
 
     if (!response.ok) {
-      console.log(response)
+      // console.log(response)
       return data.meta.reason
     }
 
     // console.log(data.data.users[0].is_transaction)
     sessionStorage.setItem("isTransaction", data.data.users[0].is_transaction)
-    console.log("get user", data)
-    console.log(data.data.users[0].is_transaction)
+    // console.log("get user", data)
+    // console.log(data.data.users[0].is_transaction)
     return "success"
   }
 
@@ -392,7 +392,7 @@ const Home = () => {
           break;
       }
     } catch (error) {
-      throw new Error(error.message);
+      // throw new Error(error.message);
     }
   };
 

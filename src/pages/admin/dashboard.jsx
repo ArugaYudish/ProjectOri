@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import SidebarAdmin from "../../component/common/admin/Sidebar"
 import "../../assets/css/user.css"
 import { Table, DatePicker, Button, Space } from "antd"
-import { CalendarSearch } from "iconsax-react"
+import { CalendarSearch, Key } from "iconsax-react"
 import Highcharts from "highcharts"
 import HighchartsReact from "highcharts-react-official"
 import moment from "moment"
@@ -34,7 +34,7 @@ const Dashboard = () => {
 			setHalfYearlySales(half_yearly_sales || [])
 			setAnnuallySales(annually_sales || [])
 		} catch (error) {
-			console.error("Error fetching sales data:", error)
+			// console.error("Error fetching sales data:", error)
 		}
 	}
 
@@ -52,9 +52,12 @@ const Dashboard = () => {
 				(a, b) => new Date(b.date_time) - new Date(a.date_time)
 			)
 
-			setTransactions(sortedTransactions)
+			setTransactions(sortedTransactions.map((item, index) => ({
+				...item,
+				key: index
+			})))
 		} catch (error) {
-			console.error("Error fetching transactions:", error)
+			// console.error("Error fetching transactions:", error)
 		}
 	}
 
