@@ -206,7 +206,7 @@ const Users = () => {
 				<p>Are you sure you want to remove?</p>
 			</Modal>
 			<SidebarAdmin>
-				<div>
+				<div className='mt-4'>
 					<div className='text-3xl py-2 border-b'>User Management</div>
 					<div className='mt-5'>
 						<div className='flex justify-between'>

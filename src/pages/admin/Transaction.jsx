@@ -151,7 +151,7 @@ const Transaction = () => {
         <p>Are you sure you want to export?</p>
       </Modal>
       <SidebarAdmin>
-        <div>
+        <div className='mt-5'>
           <div className='text-3xl py-2 border-b'>Transaction</div>
           <div className='mt-5'>
             <div className='block md:flex justify-between'>

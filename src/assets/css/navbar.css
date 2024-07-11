@@ -80,3 +80,9 @@
 .set-img-footer {
   width: 200px;
 }
+
+@media (max-width: 767px) {
+  .admin-nav {
+    display: none;
+  }
+}

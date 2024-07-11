@@ -105,7 +105,7 @@ const Content = () => {
       </Modal>
 
       <SidebarAdmin>
-        <div>
+        <div className='mt-4'>
           <div className='text-3xl py-2 border-b '>Manajemen Konten</div>
 
           <div>

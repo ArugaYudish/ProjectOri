@@ -10,6 +10,8 @@ const SidebarAdmin = ({ children }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const location = useLocation()
 	const navigate = useNavigate()
+	const name = sessionStorage.getItem('userName');
+	const role = sessionStorage.getItem('role');
 
 	const handleLogout = async () => {
 		try {
@@ -115,9 +117,27 @@ const SidebarAdmin = ({ children }) => {
 
 	return (
 		<div>
+			<nav className='admin-nav fixed top-0 z-40 w-full flex justify-end bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+				<div className='sticky flex flex-wrap items-center justify-between p-4'>
+					<div className='hidden w-full md:block md:w-auto' id='navbar-default'>
+						<ul className='font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 '>
+							<li>
+								<div href='#' className='register-button '>
+									{name && role && (
+										<>
+											{name} - {role}
+										</>
+									)}
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
 			<aside
 				id="logo-sidebar"
-				className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full  border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+				className="fixed top-0 bg-white left-0 z-50 w-64 h-screen transition-transform -translate-x-full  border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
 				aria-label="Sidebar"
 			>
 				<a
