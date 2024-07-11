@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import Layout from "../../component/common/Layout"
 import { ReactComponent as Telegeram } from "../../assets/img/Telegram.svg"
 import { useEffect, useState } from "react"
-import Kucing from "../../assets/img/NotFoundNeko.png"
+import { Spin } from "antd"
 
 const Purchase = () => {
     const { id } = useParams()
@@ -11,15 +11,20 @@ const Purchase = () => {
     const [paymentStatus, setPaymentStatus] = useState("")
     const apiUrl = process.env.REACT_APP_API_URL;
     const accessToken = sessionStorage.getItem("accessToken")
-    const [time, setTime] = useState(15000)
+    const [time, setTime] = useState(`15000`)
+    const [packages, setPackages] = useState([]);
+    const [isfetchingPack, setIsFetchingPack] = useState(true)
 
     useEffect(() => {
-        fetchData().then((status) => {
+        setPaymentStatus("")
+        fetchData().then(status => {
             if (status === "Process") {
                 setTimeout(() => {
                     // console.log(time)
                     setTime(val => val * 2)
                 }, time)
+            } else if (status === "Failed") {
+                fetchPackages()
             }
         })
     }, [time])
@@ -52,33 +57,85 @@ const Purchase = () => {
         }
     }
 
+    const fetchPackages = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/api/v1/packages`);
+            const data = await response.json();
+            // Urutkan paket-paket berdasarkan package_name di sini
+            const sortedPackages = data.data.packages.sort((a, b) => {
+                if (a.package_name < b.package_name) return -1;
+                if (a.package_name > b.package_name) return 1;
+                return 0;
+            });
+            setPackages(sortedPackages);
+            setIsFetchingPack(false)
+            // console.log(data.data);
+        } catch (error) {
+            // console.error('Error fetching packages:', error);
+        }
+    }
+
     const renderComponent = () => {
         switch (paymentStatus) {
             case "Failed":
-                return <div style={{ minHeight: "90vh" }} className="flex justify-center items-center padding-general">
-                    <div className="flex flex-col justify-center items-center">
-                        <div className='flex flex-col'>
-                            <div className='flex items-end'>
-                                <div style={{ fontSize: '30px', fontWeight: 600 }}>Failed Purchase</div>
-                            </div>
-                            <div style={{ fontSize: '20px' }}>
-                                Woops, Looks like
-                                <br />
-                                your purchase
-                                <br />
-                                was failed.
-                            </div>
+                return <div style={{ minHeight: "90vh" }} className="flex flex-col pt-8 md:pt-0 gap-6 justify-center items-center padding-general">
+                    <div className="text-2xl font-bold text-center">Payment Failed!😿</div>
+                    <div className="text-center">Oops! Something went wrong with your payment. But don’t worry, you can try again and get access to our premium trading<br />signals. Choose your subscription package below to complete your purchase.</div>
+                    {/* subscription */}
+                    {
+                        isfetchingPack ?
+                            <Spin size="large" />
+                            :
                             <div
-                                className='flex'
-                                style={{ fontSize: '20px', color: '#A67B5B' }}>
-                                let's
-                                <a className="px-4 py-1 flex gap-2 text-sm ml-2" style={{ border: "1px solid #34AADF", borderRadius: "4px", color: "#34AADF", backgroundColor: "#F0FAFF" }} href="/#subscription">Join Again</a>
+                                className='mx-auto py-6 px-0'>
+                                <div className='flex flex-wrap gap-4 md:gap-12 pb-10'>
+                                    {packages.map((pack, index) => (
+                                        <div
+                                            key={pack.id}
+                                            className='col-span-1 mt-5 border card-subs p-6'>
+                                            <div className='title-card-subs font-bold pb-2'>
+                                                {pack.package_name}
+                                            </div>
+                                            <div className='w-full'>
+                                                <p className='py-2'>
+                                                    <span className='font-bold'>$</span>
+                                                    <span className='text-3xl font-bold'>{pack.price}</span>
+                                                    <span className=''>month </span>
+                                                </p>
+                                                <p className='subs-detail'>{pack.desc_1}</p>
+                                                <button
+                                                    onClick={() => {
+                                                        localStorage.setItem("packDesc", pack.desc_2)
+                                                        localStorage.setItem('packId', pack.id);
+                                                        navigate('/');
+                                                    }}
+                                                    type='button'
+                                                    className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>
+                                                    <span className='flex justify-between'>
+                                                        Start Now
+                                                        <svg
+                                                            className='w-4 h-6 text-blue dark:text-white'
+                                                            aria-hidden='true'
+                                                            xmlns='http://www.w3.org/2000/svg'
+                                                            fill='none'
+                                                            viewBox='0 0 14 10'>
+                                                            <path
+                                                                stroke='currentColor'
+                                                                strokeLinecap='round'
+                                                                strokeLinejoin='round'
+                                                                strokeWidth='2'
+                                                                d='M1 5h12m0 0L9 1m4 4L9 9'
+                                                            />
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                                <p className='subs-detail pb-4'>{pack.desc_2}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <img style={{ width: "336px" }} src={Kucing} alt="kucing" />
-                    </div>
+                    }
                 </div>
             case "Process":
                 return <div style={{ minHeight: "90vh" }} className="flex flex-col justify-center padding-general">
@@ -108,7 +165,9 @@ const Purchase = () => {
                     <a className="px-4 py-2 font-semibold flex gap-2" style={{ border: "1px solid #34AADF", borderRadius: "4px", color: "#34AADF", backgroundColor: "#F0FAFF" }} href={link}><Telegeram /> Join Telegram Group</a>
                 </div>
             default:
-                break
+                return <div style={{ minHeight: "90vh" }} className="w-full flex justify-center items-center">
+                    <Spin size="large" />
+                </div>
         }
     }
 
