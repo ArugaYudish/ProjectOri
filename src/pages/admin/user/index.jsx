@@ -15,6 +15,7 @@ const Users = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [record, setRecord] = useState(null);
+  const [column, setColumn] = useState([]);
   // const [status, setStatus] = useState("Active")
 
   const showModal = record => {
@@ -46,12 +47,13 @@ const Users = () => {
         }
         setLoading(false);
       } catch (error) {
-        console.error('Failed to fetch users:', error);
-        message.error('Failed to fetch users');
+        // console.error('Failed to fetch users:', error);
+        // message.error('Failed to fetch users');
         setLoading(false);
       }
     };
     fetchUsers();
+    setColumn(columns);
   }, []);
 
   const handleEdit = record => {
@@ -92,6 +94,16 @@ const Users = () => {
 
   const handleStatusFilter = e => {
     setStatus(e);
+
+    if (e === 'Inactive') {
+      setColumn(prev => {
+        const newCol = [...prev];
+        newCol.pop();
+        return newCol;
+      });
+    } else {
+      setColumn(columns);
+    }
 
     let filtered;
     switch (e) {
@@ -145,21 +157,26 @@ const Users = () => {
     {
       title: 'Action',
       dataIndex: 'action',
-      render: (text, record) =>
-        record.status === 'Active' ? (
-          <div className='flex gap-2'>
-            <Button
-              className='bg-orineko-primary text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
-              onClick={() => handleEdit(record)}>
-              Edit
-            </Button>
-            <Button
-              className='bg-orineko-danger text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
-              onClick={() => showModal(record)}>
-              Remove
-            </Button>
-          </div>
-        ) : null,
+      render: (text, record) => (
+        <>
+          {record.status !== 'Inactive' ? (
+            <div className='flex gap-2'>
+              <Button
+                className='bg-orineko-primary text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
+                onClick={() => handleEdit(record)}>
+                Edit
+              </Button>
+              <Button
+                className='bg-orineko-danger text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
+                onClick={() => showModal(record)}>
+                Remove
+              </Button>
+            </div>
+          ) : (
+            <div>-</div>
+          )}
+        </>
+      ),
     },
   ];
 
@@ -189,23 +206,22 @@ const Users = () => {
         <p>Are you sure you want to remove?</p>
       </Modal>
       <SidebarAdmin>
-        <div>
+        <div className='mt-4'>
           <div className='text-3xl py-2 border-b'>User Management</div>
           <div className='mt-5'>
             <div className='flex justify-between'>
               <div className='font-bold py-2'>Users</div>
-              <div className='flex gap-2 justify-between items-center'>
+              <div className='flex justify-between items-center'>
                 <Select
                   onChange={e => {
                     handleStatusFilter(e);
                   }}
-                  className=''
                   value={status}
                   options={statusFilter}
                 />
                 <Link
                   to={'/asdhakdls/users/add'}
-                  className='ml-2 text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>
+                  className='text-white flex gap-2 items-center bg-color-orineko focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>
                   <AddCircle size='16' color='#FFFFFF' />
                   Create New
                 </Link>
@@ -214,14 +230,14 @@ const Users = () => {
             <div className='pt-3'>
               <div className='card'>
                 {loading ? (
-                  <Spin tip='Loading...' />
+                  <Spin size='large' />
                 ) : (
                   <>
                     {error && <div className='text-red-500 pb-3'>{error}</div>}
                     <div className='overflow-hidden overflow-x-auto'>
                       <Table
                         className='table-ant'
-                        columns={columns}
+                        columns={column}
                         dataSource={showData}
                         pagination={{
                           pageSize: 5,

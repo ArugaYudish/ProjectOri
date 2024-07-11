@@ -10,6 +10,8 @@ const SidebarAdmin = ({ children }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const location = useLocation()
 	const navigate = useNavigate()
+	const name = sessionStorage.getItem('userName');
+	const role = sessionStorage.getItem('role');
 
 	const handleLogout = async () => {
 		try {
@@ -21,7 +23,7 @@ const SidebarAdmin = ({ children }) => {
 				message.error('Logout failed')
 			}
 		} catch (error) {
-			console.error('Logout failed', error)
+			// console.error('Logout failed', error)
 		}
 	}
 
@@ -65,13 +67,12 @@ const SidebarAdmin = ({ children }) => {
 		label: (
 			<Link
 				to={item.href}
-				className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${
-					location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
-				}`}
+				className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
+					}`}
 			>
 				<item.icon
 					className={`${location.pathname === item.href ? 'icon-Wallet ' : ' '}`}
-					variant={location.pathname === item.href ? 'Bold' : 'Regular'}
+					variant={location.pathname === item.href ? 'Bold' : 'Linear'}
 				/>
 				<span className={`ms-3 ${location.pathname === item.href ? 'sidebar-color font-bold' : 'text-sidebar '}`}>
 					{item.label}
@@ -87,7 +88,7 @@ const SidebarAdmin = ({ children }) => {
 				onClick={showModal}
 				className="flex items-center p-2 rounded-lg bg-sidebar-sec w-full text-black"
 			>
-				<LogoutCurve variant="Regular" />
+				<LogoutCurve variant="Linear" />
 				<span className="ms-3 text-sidebar">Logout</span>
 			</button>
 		),
@@ -100,13 +101,12 @@ const SidebarAdmin = ({ children }) => {
 			label: (
 				<Link
 					to="/"
-					className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${
-						location.pathname === '/' ? 'bg-sidebar' : 'bg-sidebar-sec'
-					}`}
+					className={`flex items-center p-2 rounded-lg bg-sidebar-sec ${location.pathname === '/' ? 'bg-sidebar' : 'bg-sidebar-sec'
+						}`}
 				>
 					<Home
 						className={`${location.pathname === '/' ? 'icon-Wallet' : ''}`}
-						variant={location.pathname === '/' ? 'Bold' : 'Regular'}
+						variant={location.pathname === '/' ? 'Bold' : 'Linear'}
 					/>
 					<span className={`ms-3 ${location.pathname === '/' ? 'sidebar-color font-bold' : 'text-sidebar'}`}>Home</span>
 				</Link>
@@ -117,9 +117,27 @@ const SidebarAdmin = ({ children }) => {
 
 	return (
 		<div>
+			<nav className='admin-nav fixed top-0 z-40 w-full flex justify-end bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+				<div className='sticky flex flex-wrap items-center justify-between p-4'>
+					<div className='hidden w-full md:block md:w-auto' id='navbar-default'>
+						<ul className='font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 '>
+							<li>
+								<div href='#' className='register-button '>
+									{name && role && (
+										<>
+											{name} - {role}
+										</>
+									)}
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
 			<aside
 				id="logo-sidebar"
-				className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full  border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+				className="fixed top-0 bg-white left-0 z-50 w-64 h-screen transition-transform -translate-x-full  border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
 				aria-label="Sidebar"
 			>
 				<a
@@ -138,14 +156,13 @@ const SidebarAdmin = ({ children }) => {
 							<li key={item.href}>
 								<Link
 									to={item.href}
-									className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${
-										location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
-									}`}
+									className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
+										}`}
 								>
 									<item.icon
 										size="20"
 										className={`  ${location.pathname === item.href ? 'icon-Wallet ' : ' '}`}
-										variant={location.pathname === item.href ? 'Bold' : 'Regular'}
+										variant={location.pathname === item.href ? 'Bold' : 'Linear'}
 									/>
 									<span
 										className={`ms-3 ${location.pathname === item.href ? 'sidebar-color font-bold' : 'text-sidebar '}`}
@@ -162,7 +179,7 @@ const SidebarAdmin = ({ children }) => {
 							>
 								<LogoutCurve
 									size="20"
-									variant="Regular"
+									variant="Linear"
 								/>
 								<span className="ms-3 text-sidebar">Logout</span>
 							</button>

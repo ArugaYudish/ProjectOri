@@ -80,7 +80,7 @@ const Activation = () => {
         navigate('/login', { state: data });
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       const data = {
         meta: {
           code: 500,

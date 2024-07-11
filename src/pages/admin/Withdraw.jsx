@@ -91,7 +91,7 @@ const AdminWithdraw = () => {
       }
     } catch (error) {
       // console.error('Gagal mengambil data withdrawal:', error);
-      message.error('Failed to retrieve withdrawal data');
+      // message.error('Failed to retrieve withdrawal data');
     } finally {
       setLoading(false); // Set loading menjadi false setelah selesai fetching data
     }
@@ -121,15 +121,15 @@ const AdminWithdraw = () => {
         let { id, created_at, updated_at, ...rest } = item;
         return rest;
       });
-      
+
       const worksheet = XLSX.utils.json_to_sheet(filteredData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Withdraw Data');
       // Mengexport file Excel
       XLSX.writeFile(workbook, 'withdraw_data.xlsx');
     } catch (error) {
-      console.error('Gagal mengekspor data:', error);
-      message.error('Gagal mengekspor data');
+      // console.error('Gagal mengekspor data:', error);
+      // message.error('Gagal mengekspor data');
     }
   };
 
@@ -150,22 +150,22 @@ const AdminWithdraw = () => {
         },
       );
       if (response.data.meta.status === 'success') {
-        message.success(
-          `Withdrawal ${status === 1 ? 'approved' : 'declined'} successfully`,
-        );
+        // message.success(
+        //   `Withdrawal ${status === 1 ? 'approved' : 'declined'} successfully`,
+        // );
         // Perbarui data withdrawal setelah aksi
         fetchData(startDate, endDate);
       } else {
-        message.error(response.data.meta.message);
+        // message.error(response.data.meta.message);
       }
     } catch (error) {
-      console.error(
-        `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal:`,
-        error,
-      );
-      message.error(
-        `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal`,
-      );
+      // console.error(
+      //   `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal:`,
+      //   error,
+      // );
+      // message.error(
+      //   `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal`,
+      // );
     } finally {
       setLoading(false); // Set loading menjadi false setelah selesai aksi
     }
@@ -273,7 +273,7 @@ const AdminWithdraw = () => {
             <div className='pt-3'>
               <div className='card'>
                 {loading ? ( // Tampilkan spinner jika loading true, atau tabel jika false
-                  <Spin tip='Loading...' />
+                  <Spin size='large' />
                 ) : (
                   <div className='overflow-hidden overflow-x-auto'>
                     <Table

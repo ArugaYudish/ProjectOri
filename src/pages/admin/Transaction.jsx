@@ -48,8 +48,8 @@ const Transaction = () => {
         setData(response.data.data.transaction);
       }
     } catch (error) {
-      console.error('Failed to fetch transactions:', error);
-      message.error('Failed to fetch transactions');
+      // console.error('Failed to fetch transactions:', error);
+      // message.error('Failed to fetch transactions');
     } finally {
       setLoading(false);
     }
@@ -76,8 +76,8 @@ const Transaction = () => {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Transactions');
       XLSX.writeFile(workbook, 'transactions.xlsx');
     } catch (error) {
-      console.error('Failed to export data:', error);
-      message.error('Failed to export data');
+      // console.error('Failed to export data:', error);
+      // message.error('Failed to export data');
     }
   };
 
@@ -151,7 +151,7 @@ const Transaction = () => {
         <p>Are you sure you want to export?</p>
       </Modal>
       <SidebarAdmin>
-        <div>
+        <div className='mt-5'>
           <div className='text-3xl py-2 border-b'>Transaction</div>
           <div className='mt-5'>
             <div className='block md:flex justify-between'>
@@ -188,7 +188,7 @@ const Transaction = () => {
             <div className='pt-3'>
               <div className='card'>
                 {loading ? (
-                  <Spin tip='Loading...' />
+                  <Spin size='large' />
                 ) : (
                   <div className='overflow-hidden overflow-x-auto'>
                     <Table

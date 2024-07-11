@@ -32,7 +32,7 @@ const Content = () => {
         setPackages(response.data.data.packages);
       }
     } catch (error) {
-      console.error('Gagal mengambil data paket:', error);
+      // console.error('Gagal mengambil data paket:', error);
     }
   };
 
@@ -45,7 +45,7 @@ const Content = () => {
   const handleSubmit = async () => {
     // Validate input
     if (!selectedPackage || !price) {
-      message.error('Please select a package and enter price.');
+      // message.error('Please select a package and enter price.');
       return;
     }
 
@@ -55,7 +55,7 @@ const Content = () => {
         pkg => pkg.package_name === selectedPackage,
       );
       if (!selectedPackageObj) {
-        message.error('Selected package not found.');
+        // message.error('Selected package not found.');
         return;
       }
 
@@ -75,21 +75,21 @@ const Content = () => {
 
       // Check if response status is not in 2xx range (indicating error)
       if (response.status < 200 || response.status >= 300) {
-        throw new Error(`Failed to update package: ${response.statusText}`);
+        // throw new Error(`Failed to update package: ${response.statusText}`);
       }
 
       // console.log("Package updated successfully:", response.data)
 
       // Optionally, show success message or navigate to another page
-      message.success('Package updated successfully.');
+      // message.success('Package updated successfully.');
 
       // You may want to refetch packages after update
       fetchPackages();
       setSelectedPackage('');
       setPrice('');
     } catch (error) {
-      console.error('Failed to update package:', error);
-      message.error('Failed to update package. Please try again later.');
+      // console.error('Failed to update package:', error);
+      // message.error('Failed to update package. Please try again later.');
     }
   };
 
@@ -105,7 +105,7 @@ const Content = () => {
       </Modal>
 
       <SidebarAdmin>
-        <div>
+        <div className='mt-4'>
           <div className='text-3xl py-2 border-b '>Manajemen Konten</div>
 
           <div>

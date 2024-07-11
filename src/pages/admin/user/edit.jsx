@@ -24,8 +24,8 @@ const EditUserForm = () => {
           setRole(user.role);
         }
       } catch (error) {
-        console.error('Failed to fetch users:', error);
-        message.error('Failed to fetch users');
+        // console.error('Failed to fetch users:', error);
+        // message.error('Failed to fetch users');
         navigate('/asdhakdls/users');
       }
     };
@@ -58,10 +58,10 @@ const EditUserForm = () => {
         role: role,
       });
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data && response.data.meta.code === 200) {
-        message.success('User updated successfully');
+        // message.success('User updated successfully');
         navigate('/asdhakdls/users'); // Redirect to the users management page after success
       } else {
         setErrors({ global: 'Failed to update user' });
@@ -97,9 +97,8 @@ const EditUserForm = () => {
             <input
               type='text'
               id='name'
-              className={`border ${
-                errors.name ? 'border-red-500' : 'border-gray-300'
-              } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              className={`border ${errors.name ? 'border-red-500' : 'border-gray-300'
+                } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
               placeholder='Full Name'
               value={name}
               onChange={e => setName(e.target.value)}
@@ -118,9 +117,8 @@ const EditUserForm = () => {
             <input
               type='email'
               id='email'
-              className={`border ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
-              } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              className={`border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
               placeholder='Email'
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -138,9 +136,8 @@ const EditUserForm = () => {
             </label>
             <select
               id='role'
-              className={`border ${
-                errors.role ? 'border-red-500' : 'border-gray-300'
-              } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              className={`border ${errors.role ? 'border-red-500' : 'border-gray-300'
+                } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
               value={role}
               onChange={e => setRole(e.target.value)}
               required>
