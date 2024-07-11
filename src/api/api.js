@@ -52,7 +52,7 @@ api.interceptors.response.use(
           return api(originalRequest);
         }
       } catch (refreshError) {
-        console.error('Failed to refresh token:', refreshError);
+        // console.error('Failed to refresh token:', refreshError);
         return Promise.reject(refreshError);
       }
     }
@@ -83,8 +83,8 @@ export const refreshToken = async () => {
       return newAccessToken;
     }
   } catch (error) {
-    console.error('Failed to refresh token:', error);
-    throw error;
+    // console.error('Failed to refresh token:', error);
+    // throw error;
   }
 };
 

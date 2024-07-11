@@ -68,7 +68,7 @@ const Wallets = ({ children }) => {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch balance:', error);
+        // console.error('Failed to fetch balance:', error);
       } finally {
         setLoading(false);
       }
@@ -92,24 +92,24 @@ const Wallets = ({ children }) => {
         });
 
         if (response.data.meta.status === 'success') {
-          message.success('Withdrawal request submitted successfully');
+          // message.success('Withdrawal request submitted successfully');
           const newBalance = balance - parseFloat(amount);
           setBalance(newBalance);
           sessionStorage.setItem('Balance', newBalance.toString());
           setWalletAddress('');
           setAmount('');
         } else {
-          message.error(response.data.meta.reason);
+          // message.error(response.data.meta.reason);
         }
       } catch (error) {
         if (error.response && error.response.data && error.response.data.meta) {
-          message.error(error.response.data.meta.reason);
+          // message.error(error.response.data.meta.reason);
         } else {
-          message.error('Failed to submit withdrawal request');
+          // message.error('Failed to submit withdrawal request');
         }
       }
     } else {
-      message.error('Minimum withdraw $10');
+      // message.error('Minimum withdraw $10');
       setWalletAddress('');
       setAmount('');
     }
@@ -164,41 +164,37 @@ const Wallets = ({ children }) => {
                 <div className='inline-flex rounded-md shadow-sm' role='group'>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${
-                      activeButton === 'BTC'
-                        ? 'bg-color-orineko text-white'
-                        : 'text-gray-'
-                    } border border-gray-400 rounded-s-lg`}
+                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'BTC'
+                      ? 'bg-color-orineko text-white'
+                      : 'text-gray-'
+                      } border border-gray-400 rounded-s-lg`}
                     onClick={() => handleButtonClick('BTC')}>
                     BTC
                   </button>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${
-                      activeButton === 'USDT.TRC20'
-                        ? 'bg-color-orineko text-white'
-                        : 'text-gray-'
-                    } border-t border-b border-gray-400`}
+                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'USDT.TRC20'
+                      ? 'bg-color-orineko text-white'
+                      : 'text-gray-'
+                      } border-t border-b border-gray-400`}
                     onClick={() => handleButtonClick('USDT.TRC20')}>
                     USDT (TRC20)
                   </button>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${
-                      activeButton === 'LTC'
-                        ? 'bg-color-orineko text-white'
-                        : 'text-gray-'
-                    } border border-gray-400 rounded-e-lg`}
+                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'LTC'
+                      ? 'bg-color-orineko text-white'
+                      : 'text-gray-'
+                      } border border-gray-400 rounded-e-lg`}
                     onClick={() => handleButtonClick('LTC')}>
                     LTC
                   </button>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${
-                      activeButton === 'LTCT'
-                        ? 'bg-color-orineko text-white'
-                        : 'text-gray-'
-                    } border border-gray-400 rounded-e-lg`}
+                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'LTCT'
+                      ? 'bg-color-orineko text-white'
+                      : 'text-gray-'
+                      } border border-gray-400 rounded-e-lg`}
                     onClick={() => handleButtonClick('LTCT')}>
                     LTCT
                   </button>

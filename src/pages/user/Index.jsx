@@ -41,7 +41,7 @@ const Wallets = () => {
           setWithdrawals(response.data.data.withdrawals);
         }
       } catch (error) {
-        console.error('Failed to fetch withdrawals:', error);
+        // console.error('Failed to fetch withdrawals:', error);
       } finally {
         setLoading(false);
       }
@@ -59,7 +59,7 @@ const Wallets = () => {
           }
         }
       } catch (error) {
-        console.error('Failed to fetch balance:', error);
+        // console.error('Failed to fetch balance:', error);
       } finally {
         setLoading(false);
       }
@@ -121,7 +121,7 @@ const Wallets = () => {
     ),
     onFilter: (value, record) =>
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+    onFilterDropdownOpenChange: visible => {
       if (visible) {
         setTimeout(() => searchInput.current.select());
       }
@@ -203,7 +203,7 @@ const Wallets = () => {
 
           <Card className='card'>
             {loading ? (
-              <Spin tip='Loading...' />
+              <Spin size='large' />
             ) : (
               <div className='overflow-hidden overflow-x-auto'>
                 <Table
