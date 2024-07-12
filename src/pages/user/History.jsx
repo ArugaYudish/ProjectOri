@@ -48,10 +48,12 @@ const History = () => {
       if (response.data.meta.code === 200) {
         // console.log("success", response.data)
         const transactionsData = response.data.data.transaction
-        setTransactions(transactionsData.map((item, index) => ({
-          ...item,
-          key: index
-        })));
+        if (transactionsData !== null) {
+          setTransactions(transactionsData.map((item, index) => ({
+            ...item,
+            key: index
+          })));
+        }
       } else {
         navigate('/');
         // console.error('Failed to fetch transactions:', response.data);

@@ -27,7 +27,7 @@ const Navbar = () => {
 		{
 			key: "1",
 			label: (
-				<a href="/wallet" className="p-1 flex justify-center">
+				<a href="/history" className="p-1 flex justify-center">
 					Dashboard
 				</a>
 			)
