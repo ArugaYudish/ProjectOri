@@ -42,6 +42,7 @@ const Sidebar = ({ children }) => {
 
   const handleOk = async () => {
     await handleLogout();
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
