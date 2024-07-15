@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarAdmin from '../../../component/common/admin/Sidebar';
-import axios from 'axios';
 import '../../../assets/css/auth.css';
 
 const AddUserForm = () => {
@@ -44,7 +43,9 @@ const AddUserForm = () => {
           setFieldError(data.data[0].Field);
         }
       } else {
-        navigate('/asdhakdls/users');
+        navigate('/asdhakdls/users', {
+          state: { message: data.meta.message, alert: 'success' },
+        });
       }
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to create user');

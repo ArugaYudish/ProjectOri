@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SidebarAdmin from '../../component/common/admin/Sidebar';
 import '../../assets/css/user.css';
-import { Table, Button, message, DatePicker, Spin, Modal } from 'antd';
+import { Table, Button, message, DatePicker, Spin, Modal, Alert } from 'antd';
 import moment from 'moment';
 import * as XLSX from 'xlsx'; // Import xlsx for Excel export
 import axios from 'axios'; // Menggunakan axios untuk permintaan API
@@ -16,6 +16,8 @@ const AdminWithdraw = () => {
   const [isModalExportOpen, setIsModalExportOpen] = useState(false);
   const [record, setRecord] = useState(null);
   const [action, setAction] = useState(null);
+  const [message, SetMessage] = useState(undefined);
+  const [alert, setAlert] = useState(undefined)
 
   const showModal = (record, action) => {
     setRecord(record); // store the record for use in handleOk
@@ -154,11 +156,17 @@ const AdminWithdraw = () => {
         //   `Withdrawal ${status === 1 ? 'approved' : 'declined'} successfully`,
         // );
         // Perbarui data withdrawal setelah aksi
+        SetMessage(response.data.meta.message)
+        setAlert("success")
         fetchData(startDate, endDate);
       } else {
+        SetMessage(response.data.meta.message)
+        setAlert("error")
         // message.error(response.data.meta.message);
       }
     } catch (error) {
+      SetMessage(error.message)
+      setAlert("error")
       // console.error(
       //   `Failed ${status === 1 ? 'approved' : 'declined'} withdrawal:`,
       //   error,
@@ -220,6 +228,20 @@ const AdminWithdraw = () => {
 
   return (
     <>
+      {
+        message && <div style={{ zIndex: 100 }} className='fixed top-0 right-0 left-0 p-4 flex justify-center'>
+          <Alert
+            message={message && message}
+            type={alert && alert}
+            showIcon
+            closable
+            onClose={() => {
+              SetMessage(undefined)
+              setAlert(undefined)
+            }}
+          />
+        </div>
+      }
       <Modal
         title='Notifications'
         open={isModalOpen}
