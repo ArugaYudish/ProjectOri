@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../../assets/img/OriNeko-Logo.png';
+import logo from '../../assets/img/OrinekoLogo.svg';
 import { Wallet } from 'iconsax-react';
 import '../../assets/css/navbar.css';
 import api from '../../utils/api';
@@ -72,18 +72,21 @@ const Sidebar = ({ children }) => {
     label: (
       <Link
         to={item.href}
-        className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
-          }`}>
+        className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${
+          location.pathname === item.href ? 'bg-sidebar' : 'bg-sidebar-sec '
+        }`}>
         <item.icon
-          className={`${location.pathname === item.href ? 'icon-Wallet ' : ' '
-            }`}
+          className={`${
+            location.pathname === item.href ? 'icon-Wallet ' : ' '
+          }`}
           variant={location.pathname === item.href ? 'Bold' : 'Linear'}
         />
         <span
-          className={`ms-3 ${location.pathname === item.href
-            ? 'sidebar-color font-bold'
-            : 'text-sidebar '
-            }`}>
+          className={`ms-3 ${
+            location.pathname === item.href
+              ? 'sidebar-color font-bold'
+              : 'text-sidebar '
+          }`}>
           {item.label}
         </span>
       </Link>
@@ -107,7 +110,9 @@ const Sidebar = ({ children }) => {
     <div>
       <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
         <div className='sticky  mx-auto flex flex-wrap items-center justify-between mx-auto p-4'>
-          <a href='/' className='flex items-center space-x-3 rtl:space-x-reverse'>
+          <a
+            href='/'
+            className='flex items-center space-x-3 rtl:space-x-reverse'>
             <img src={logo} className='h-8' alt='Flowbite Logo' />
           </a>
           <Dropdown
@@ -231,23 +236,26 @@ const Sidebar = ({ children }) => {
               <li key={item.href}>
                 <Link
                   to={item.href}
-                  className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${location.pathname === item.href
-                    ? 'bg-sidebar'
-                    : 'bg-sidebar-sec '
-                    }`}>
+                  className={`flex items-center p-2  rounded-lg  bg-sidebar-sec ${
+                    location.pathname === item.href
+                      ? 'bg-sidebar'
+                      : 'bg-sidebar-sec '
+                  }`}>
                   <item.icon
                     size='20'
-                    className={`  ${location.pathname === item.href ? 'icon-Wallet ' : ' '
-                      }`}
+                    className={`  ${
+                      location.pathname === item.href ? 'icon-Wallet ' : ' '
+                    }`}
                     variant={
                       location.pathname === item.href ? 'Bold' : 'Linear'
                     }
                   />
                   <span
-                    className={`ms-3 ${location.pathname === item.href
-                      ? 'sidebar-color font-bold'
-                      : 'text-sidebar '
-                      }`}>
+                    className={`ms-3 ${
+                      location.pathname === item.href
+                        ? 'sidebar-color font-bold'
+                        : 'text-sidebar '
+                    }`}>
                     {item.label}
                   </span>
                 </Link>

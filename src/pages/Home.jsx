@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/style.css';
 
@@ -11,7 +11,6 @@ import Optimized from '../assets/img/Optimized.svg';
 import Precision from '../assets/img/Precision.svg';
 import Proven from '../assets/img/Proven.svg';
 import Expertise from '../assets/img/Expertise.svg';
-import Feedback from '../assets/img/Feedback.png';
 import nekoMoney from '../assets/img/tryneko.svg';
 import binance from '../assets/img/binance.svg';
 import bybit from '../assets/img/bybit.svg';
@@ -24,10 +23,8 @@ import iconPaw from '../assets/img/icon-paw.svg';
 import bgKucing from '../assets/img/Rocket.svg';
 import RightArrow from '../assets/img/DirectRight-Linear-32px 1.png';
 import PawsiteNew from '../assets/img/PawsiteNew.svg';
-import { Alert, Modal } from 'antd';
-import axios from 'axios';
-import { Weight } from 'iconsax-react';
-import RightIcon from "../assets/img/RightIcon.png"
+import { Alert } from 'antd';
+import RightIcon from '../assets/img/RightIcon.png';
 
 const Home = () => {
   const [packages, setPackages] = useState([]);
@@ -38,7 +35,7 @@ const Home = () => {
   const [referralCode, setReferralCode] = useState('');
   const [isreferralOk, setIsReferralOk] = useState(false);
   const [referralDisplay, setReferralDIsplay] = useState('none');
-  const [pack, setPack] = useState('');
+  const [setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
@@ -50,22 +47,22 @@ const Home = () => {
   const packDesc = localStorage.getItem('packDesc');
   const packId = localStorage.getItem('packId');
   const navigate = useNavigate();
-  const aboutUs = useRef(null)
-  const contactUs = useRef(null)
-  const keyFeatures = useRef(null)
-  const performance = useRef(null)
-  const subscription = useRef(null)
-  const role = sessionStorage.getItem("role")
-  const [reminder, setReminder] = useState([])
-  const [viewModal, setViewModal] = useState("buy")
-  const userId = sessionStorage.getItem("userId")
+  const aboutUs = useRef(null);
+  const contactUs = useRef(null);
+  const keyFeatures = useRef(null);
+  const performance = useRef(null);
+  const subscription = useRef(null);
+  const role = sessionStorage.getItem('role');
+  const [reminder, setReminder] = useState([]);
+  const [viewModal, setViewModal] = useState('buy');
+  const userId = sessionStorage.getItem('userId');
 
   useEffect(() => {
-    const admin = sessionStorage.getItem("role")
+    const admin = sessionStorage.getItem('role');
     if (admin === 'admin') {
-      navigate('/asdhakdls/dashboard')
+      navigate('/asdhakdls/dashboard');
     }
-  }, [navigate])
+  }, [navigate]);
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -88,19 +85,19 @@ const Home = () => {
     fetchPackages();
     if (accessToken !== null) {
       fetchCurrencies();
-      fetchReminder()
-      if (packDesc !== null && packId !== null && role === "user") {
-        subscription.current.scrollIntoView()
-        handleStartNowClick({ desc_2: packDesc, id: packId })
-        localStorage.removeItem("packDesc")
-        localStorage.removeItem("packId")
+      fetchReminder();
+      if (packDesc !== null && packId !== null && role === 'user') {
+        subscription.current.scrollIntoView();
+        handleStartNowClick({ desc_2: packDesc, id: packId });
+        localStorage.removeItem('packDesc');
+        localStorage.removeItem('packId');
       }
     }
 
-    localStorage.removeItem("packDesc")
-    localStorage.removeItem("packId")
+    localStorage.removeItem('packDesc');
+    localStorage.removeItem('packId');
 
-    const loc = window.location.href.split("/")
+    const loc = window.location.href.split('/');
     switch (loc[3]) {
       case '#about':
         aboutUs.current.scrollIntoView();
@@ -133,15 +130,15 @@ const Home = () => {
     setIsError(false);
     setPercentageFee(0);
     if (reminder.length === 0) {
-      setViewModal("buy")
+      setViewModal('buy');
     } else {
-      setViewModal("reminder")
+      setViewModal('reminder');
     }
   };
 
   const handleStartNowClick = async selectedPack => {
     if (accessToken === null) {
-      sessionStorage.clear()
+      sessionStorage.clear();
       localStorage.setItem('packDesc', selectedPack.desc_2);
       localStorage.setItem('packId', selectedPack.id);
       navigate('/login');
@@ -161,18 +158,18 @@ const Home = () => {
 
   const fetchReminder = async () => {
     if (accessToken === null) {
-      sessionStorage.clear()
+      sessionStorage.clear();
       navigate('/login');
       return;
     }
 
     const response = await fetch(`${apiUrl}/api/v1/transactions/reminder`, {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "content-type": "application/json"
-      }
-    })
+        'content-type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       sessionStorage.removeItem('accessToken');
@@ -185,40 +182,40 @@ const Home = () => {
       return;
     }
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (data.data.transaction !== null) {
-      setReminder(data.data.transaction)
-      setViewModal("reminder")
+      setReminder(data.data.transaction);
+      setViewModal('reminder');
     }
-  }
+  };
 
   const getUserById = async () => {
     const response = await fetch(`${apiUrl}/api/v1/users/${userId}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "content-type": "application/json"
-      }
-    })
+        'content-type': 'application/json',
+      },
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (!response.ok) {
       // console.log(response)
-      return data.meta.reason
+      return data.meta.reason;
     }
 
     // console.log(data.data.users[0].is_transaction)
-    sessionStorage.setItem("isTransaction", data.data.users[0].is_transaction)
+    sessionStorage.setItem('isTransaction', data.data.users[0].is_transaction);
     // console.log("get user", data)
     // console.log(data.data.users[0].is_transaction)
-    return "success"
-  }
+    return 'success';
+  };
 
   const fetchCurrencies = async () => {
     if (accessToken === null) {
-      sessionStorage.clear()
+      sessionStorage.clear();
       navigate('/login');
       return;
     }
@@ -228,7 +225,7 @@ const Home = () => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "content-type": "application/json"
+          'content-type': 'application/json',
         },
       });
 
@@ -363,8 +360,8 @@ const Home = () => {
       const data = await response.json();
       switch (data.meta.code) {
         case 200:
-          const res = await getUserById()
-          if (res !== "success") {
+          const res = await getUserById();
+          if (res !== 'success') {
             const err = res;
             setError(err);
             setIsError(true);
@@ -407,150 +404,195 @@ const Home = () => {
       <div
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', display: display }}
         className='fixed z-50 inset-0 flex justify-center items-center'>
-        {
-          viewModal === "buy" ?
-            <form
-              onSubmit={e => {
-                handleCreateTransaction(e);
-              }}
-              className='buy-modal m-2 flex flex-col text-lg rounded-sm'
-              style={{ backgroundColor: 'white' }}>
-              <div className='flex justify-between py-5 px-8'>
-                <p className='font-bold text-xl'>Choose Payment</p>
-                <button
-                  onClick={() => {
-                    handleCloseModal();
-                  }}
-                  type='button'
-                  style={{ fontSize: '2rem' }}>
-                  x
-                </button>
-              </div>
-              <hr />
-              <div className='flex flex-col py-5 px-8 gap-3'>
-                <select
+        {viewModal === 'buy' ? (
+          <form
+            onSubmit={e => {
+              handleCreateTransaction(e);
+            }}
+            className='buy-modal m-2 flex flex-col text-lg rounded-sm'
+            style={{ backgroundColor: 'white' }}>
+            <div className='flex justify-between py-5 px-8'>
+              <p className='font-bold text-xl'>Choose Payment</p>
+              <button
+                onClick={() => {
+                  handleCloseModal();
+                }}
+                type='button'
+                style={{ fontSize: '2rem' }}>
+                x
+              </button>
+            </div>
+            <hr />
+            <div className='flex flex-col py-5 px-8 gap-3'>
+              <select
+                onChange={e => {
+                  setCurrency(e.target.value);
+                }}
+                value={currency}
+                style={{
+                  backgroundColor: '#fdf5de',
+                  color: '#d2a41a',
+                  border: '2px solid #d2a41a',
+                  boxShadow: 'none',
+                  cursor: 'pointer',
+                }}
+                className='mt-3 rounded-sm py-3 font-bold text-lg'>
+                <option hidden>Choose Currency</option>
+                {currencies.map((item, index) => (
+                  <option key={index} value={item.code}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+              <div className='border-2 rounded-sm flex justify-between'>
+                <input
+                  value={referralCode}
                   onChange={e => {
-                    setCurrency(e.target.value);
+                    setReferralCode(e.target.value);
                   }}
-                  value={currency}
-                  style={{
-                    backgroundColor: '#fdf5de',
-                    color: '#d2a41a',
-                    border: '2px solid #d2a41a',
-                    boxShadow: 'none',
-                    cursor: 'pointer',
-                  }}
-                  className='mt-3 rounded-sm py-3 font-bold text-lg'>
-                  <option hidden>Choose Currency</option>
-                  {currencies.map((item, index) => (
-                    <option key={index} value={item.code}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-                <div className='border-2 rounded-sm flex justify-between'>
-                  <input
-                    value={referralCode}
-                    onChange={e => {
-                      setReferralCode(e.target.value);
-                    }}
-                    style={{ boxShadow: 'none' }}
-                    className='border-0 p-3 w-full text-lg'
-                    type='text'
-                  />
-                  <button
-                    onClick={() => {
-                      setReferralDIsplay('none');
-                      checkReferral();
-                    }}
-                    type='button'
-                    style={{
-                      borderLeftWidth: '2px',
-                      backgroundColor: '#fdf5de',
-                      color: '#FF8A65',
-                      padding: '12px 7% 12px 7%',
-                    }}
-                    className='font-bold flex gap-1 justify-center items-center'>
-                    Redeem
-                    <img src={RightArrow} alt='>' />
-                  </button>
-                </div>
-                {isreferralOk ? (
-                  <Alert
-                    message='Referral code found.'
-                    type='success'
-                    style={{ display: referralDisplay }}
-                  />
-                ) : (
-                  <Alert
-                    message='Referral code not found.'
-                    type='error'
-                    style={{ display: referralDisplay }}
-                  />
-                )}
-                <div className='flex flex-col items-end'>
-                  <p>
-                    Billed as one payment of :{' '}
-                    <span className='font-bold'>${payment}</span>
-                  </p>
-                  <p>
-                    Referral Discount ({percentageFee}%) :{' '}
-                    <span className='font-bold'>${discount}</span>
-                  </p>
-                  <p>
-                    Amount Payment :{' '}
-                    <span className='font-bold'>${totalPayment}</span>
-                  </p>
-                </div>
-                {isError ? <Alert message={error} type='error' /> : null}
-              </div>
-              <hr />
-              <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
+                  style={{ boxShadow: 'none' }}
+                  className='border-0 p-3 w-full text-lg'
+                  type='text'
+                />
                 <button
                   onClick={() => {
-                    handleCloseModal();
+                    setReferralDIsplay('none');
+                    checkReferral();
                   }}
                   type='button'
-                  className='border-2 py-2 px-5'>
-                  Cancel
+                  style={{
+                    borderLeftWidth: '2px',
+                    backgroundColor: '#fdf5de',
+                    color: '#FF8A65',
+                    padding: '12px 7% 12px 7%',
+                  }}
+                  className='font-bold flex gap-1 justify-center items-center'>
+                  Redeem
+                  <img src={RightArrow} alt='>' />
                 </button>
-                <button
-                  type='submit'
-                  className='py-2 px-5 rounded-sm'
-                  style={{ backgroundColor: '#d2a41a', color: 'white' }}>
-                  Continue Payment
-                </button>
               </div>
-            </form>
-            :
-            <div className='buy-modal m-2 flex flex-col text-lg rounded-sm' style={{ backgroundColor: 'white' }}>
-              <div className='flex justify-between px-8 py-5'>
-                <p className='font-bold'>You Have a Panding Payment</p>
-                <button onClick={() => { handleCloseModal() }}>X</button>
+              {isreferralOk ? (
+                <Alert
+                  message='Referral code found.'
+                  type='success'
+                  style={{ display: referralDisplay }}
+                />
+              ) : (
+                <Alert
+                  message='Referral code not found.'
+                  type='error'
+                  style={{ display: referralDisplay }}
+                />
+              )}
+              <div className='flex flex-col items-end'>
+                <p>
+                  Billed as one payment of :{' '}
+                  <span className='font-bold'>${payment}</span>
+                </p>
+                <p>
+                  Referral Discount ({percentageFee}%) :{' '}
+                  <span className='font-bold'>${discount}</span>
+                </p>
+                <p>
+                  Amount Payment :{' '}
+                  <span className='font-bold'>${totalPayment}</span>
+                </p>
               </div>
-              <hr />
-              <div className='p-8 modal-body'>
-                <p>It looks like you have a remaining payment for your previous purchase.</p>
-                <p className='font-semibold'>Remaining Payment Details:</p>
-                <div className='payment-item' style={{ maxHeight: "200px", overflow: "auto" }}>
-                  {
-                    reminder.map((item, key) => (
-                      <div style={{ border: "1px solid #E5E5E5" }} key={key} className='flex justify-between items-center my-2 py-2 px-5'>
-                        <p>Amount Due: <span className='font-semibold'>${item.total_payment} ({item.package_name})</span></p>
-                        <a className='flex justify-between items-center gap-1' style={{ color: "red" }} href={item.checkout_url}>Continue Payment <img style={{ width: "14px", height: "10px" }} src={RightIcon} alt='->' /></a>
-                      </div>
-                    ))
-                  }
-                </div>
-              </div>
-              <hr />
-              <div className='flex justify-end py-3 px-5 gap-3'>
-                <button onClick={() => { handleCloseModal() }} style={{ border: "1px solid #D9D9D9", borderRadius: "2px" }} className='px-5 py-1'>Cancel</button>
-                <button onClick={() => { setViewModal("buy") }} style={{ backgroundColor: "#CEA017", color: "white", borderRadius: "2px" }} className='px-5 py-1'>Create New Payment</button>
+              {isError ? <Alert message={error} type='error' /> : null}
+            </div>
+            <hr />
+            <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
+              <button
+                onClick={() => {
+                  handleCloseModal();
+                }}
+                type='button'
+                className='border-2 py-2 px-5'>
+                Cancel
+              </button>
+              <button
+                type='submit'
+                className='py-2 px-5 rounded-sm'
+                style={{ backgroundColor: '#d2a41a', color: 'white' }}>
+                Continue Payment
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div
+            className='buy-modal m-2 flex flex-col text-lg rounded-sm'
+            style={{ backgroundColor: 'white' }}>
+            <div className='flex justify-between px-8 py-5'>
+              <p className='font-bold'>You Have a Panding Payment</p>
+              <button
+                onClick={() => {
+                  handleCloseModal();
+                }}>
+                X
+              </button>
+            </div>
+            <hr />
+            <div className='p-8 modal-body'>
+              <p>
+                It looks like you have a remaining payment for your previous
+                purchase.
+              </p>
+              <p className='font-semibold'>Remaining Payment Details:</p>
+              <div
+                className='payment-item'
+                style={{ maxHeight: '200px', overflow: 'auto' }}>
+                {reminder.map((item, key) => (
+                  <div
+                    style={{ border: '1px solid #E5E5E5' }}
+                    key={key}
+                    className='flex justify-between items-center my-2 py-2 px-5'>
+                    <p>
+                      Amount Due:{' '}
+                      <span className='font-semibold'>
+                        ${item.total_payment} ({item.package_name})
+                      </span>
+                    </p>
+                    <a
+                      className='flex justify-between items-center gap-1'
+                      style={{ color: 'red' }}
+                      href={item.checkout_url}>
+                      Continue Payment{' '}
+                      <img
+                        style={{ width: '14px', height: '10px' }}
+                        src={RightIcon}
+                        alt='->'
+                      />
+                    </a>
+                  </div>
+                ))}
               </div>
             </div>
-        }
-      </div >
+            <hr />
+            <div className='flex justify-end py-3 px-5 gap-3'>
+              <button
+                onClick={() => {
+                  handleCloseModal();
+                }}
+                style={{ border: '1px solid #D9D9D9', borderRadius: '2px' }}
+                className='px-5 py-1'>
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setViewModal('buy');
+                }}
+                style={{
+                  backgroundColor: '#CEA017',
+                  color: 'white',
+                  borderRadius: '2px',
+                }}
+                className='px-5 py-1'>
+                Create New Payment
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       <Layout>
         {/* Landing Page */}
@@ -804,17 +846,17 @@ const Home = () => {
           <div className='text-center text-3xl font-bold py-6'>
             SUBSCRIPTION PLAN
           </div>
-          <div className='text-center sm:w-1/2 mx-auto subs-detail pb-4'>
+          <div className='text-center sm:w-1/2  mx-auto subs-detail pb-4'>
             <div>
               With lots of unique signal, you can easily make money without
             </div>
             <div>analysis. Be the rich one!</div>
           </div>
-          <div className='sm:grid grid-cols-3 gap-12 pb-10'>
+          <div className='sm:grid grid-cols-3 gap-12  pb-10'>
             {packages.map((pack, index) => (
               <div
                 key={pack.id}
-                className='col-span-1 mt-5 border card-subs p-6'>
+                className='col-span-1 mt-5 mb-5 border card-subs p-6'>
                 <div className='title-card-subs font-bold pb-2'>
                   {pack.package_name}
                 </div>
@@ -867,7 +909,9 @@ const Home = () => {
           </div>
           <div className='flex justify-between items-center py-5'>
             <div>
-              <img className='set-image-exchange' src={binance} alt='' />{' '}
+              <a href=''>
+                <img className='set-image-exchange' src={binance} alt='' />
+              </a>
             </div>
             <div>
               <img className='set-image-exchange' src={bybit} alt='' />

@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import Sidebar from '../../component/common/Sidebar';
 import { Table, Button, Input, Space, Spin, DatePicker } from 'antd'; // Import Spin from Ant Design
 import { SearchOutlined } from '@ant-design/icons';
 import TelegramIcon from '../../assets/img/Telegram.svg';
 import '../../assets/css/user.css';
-import moment from 'moment';
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,12 +45,14 @@ const History = () => {
 
       if (response.data.meta.code === 200) {
         // console.log("success", response.data)
-        const transactionsData = response.data.data.transaction
+        const transactionsData = response.data.data.transaction;
         if (transactionsData !== null) {
-          setTransactions(transactionsData.map((item, index) => ({
-            ...item,
-            key: index
-          })));
+          setTransactions(
+            transactionsData.map((item, index) => ({
+              ...item,
+              key: index,
+            })),
+          );
         }
       } else {
         navigate('/');
@@ -203,10 +203,11 @@ const History = () => {
           <div className='w-1/2'>
             <button
               type='button'
-              className={`text-gray-900 border bg-color-orineko-ternary border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${activeTable === 'openOrder'
-                ? 'bg-color-orineko text-white'
-                : 'bg-white'
-                }`}
+              className={`text-gray-900 border bg-color-orineko-ternary border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${
+                activeTable === 'openOrder'
+                  ? 'bg-color-orineko text-white'
+                  : 'bg-white'
+              }`}
               onClick={() => {
                 setActiveTable('openOrder');
                 fetchTransactions('openOrder');
@@ -216,10 +217,11 @@ const History = () => {
 
             <button
               type='button'
-              className={`py-2.5 px-5 me-2 mb-2 text-sm bg-color-orineko-ternary font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 ${activeTable === 'historyOrder'
-                ? 'bg-color-orineko text-white'
-                : 'bg-white'
-                }`}
+              className={`py-2.5 px-5 me-2 mb-2 text-sm bg-color-orineko-ternary font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 ${
+                activeTable === 'historyOrder'
+                  ? 'bg-color-orineko text-white'
+                  : 'bg-white'
+              }`}
               onClick={() => {
                 setActiveTable('historyOrder');
                 fetchTransactions('historyOrder');

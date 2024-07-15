@@ -175,9 +175,9 @@
 }
 
 .card-subs {
-  width: 300px;
+  /* width: 300px; */
   background-color: white;
-  margin: 0px auto;
+  /* margin: 0px auto; */
 }
 
 .pos-card {
@@ -189,11 +189,9 @@
   .buy-modal {
     width: 700px;
   }
-
   .invoice {
     width: 680px;
   }
-
   .invoice-btn {
     width: 680px;
   }
@@ -203,7 +201,6 @@
   .invoice {
     width: 1160px;
   }
-
   .invoice-btn {
     width: 1160px;
   }
@@ -213,19 +210,15 @@
   .buy-modal {
     font-size: 16px;
   }
-
   .payment-item {
     font-size: 12px;
   }
-
   .invoice-detail {
     flex-direction: column;
   }
-
   .invoice {
     width: 315px;
   }
-
   .invoice-btn {
     width: 315px;
   }

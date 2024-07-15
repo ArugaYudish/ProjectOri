@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import SidebarAdmin from '../../component/common/admin/Sidebar';
 import '../../assets/css/user.css';
 import { Table, DatePicker, Button, Space } from 'antd';
-import { CalendarSearch, Key } from 'iconsax-react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import moment from 'moment';
 import api from '../../utils/api';
 
 const { RangePicker } = DatePicker;
