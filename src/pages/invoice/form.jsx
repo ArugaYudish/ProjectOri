@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../../component/common/Layout';
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import axios from 'axios';
 import Logo from '../../assets/img/OriNeko-Logo.png';
 import api from '../../utils/api';
 
