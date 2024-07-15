@@ -1,17 +1,15 @@
-import React, { useState, useEffect, Children, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/style.css';
-
 import Layout from '../component/common/Layout';
 import Paw from '../assets/img/Necats.svg';
-import '../assets/css/style.css';
 import Efficient from '../assets/img/Efficient.svg';
 import Transparent from '../assets/img/Transparent.svg';
 import Optimized from '../assets/img/Optimized.svg';
 import Precision from '../assets/img/Precision.svg';
 import Proven from '../assets/img/Proven.svg';
 import Expertise from '../assets/img/Expertise.svg';
-import Feedback from '../assets/img/Feedback.png';
 import nekoMoney from '../assets/img/tryneko.svg';
 import binance from '../assets/img/binance.svg';
 import bybit from '../assets/img/bybit.svg';
@@ -21,12 +19,10 @@ import mexc from '../assets/img/mexc.svg';
 import coinbase from '../assets/img/coinbase.svg';
 import kucoin from '../assets/img/kucoin.svg';
 import iconPaw from '../assets/img/icon-paw.svg';
-import bgKucing from '../assets/img/Rocket.svg';
+import bgKucing from '../assets/img/Rocket-compressed.svg';
 import RightArrow from '../assets/img/DirectRight-Linear-32px 1.png';
 import PawsiteNew from '../assets/img/PawsiteNew.svg';
-import { Alert, Modal } from 'antd';
-import axios from 'axios';
-import { Weight } from 'iconsax-react';
+import { Alert } from 'antd';
 import RightIcon from "../assets/img/RightIcon.png"
 
 const Home = () => {
@@ -38,7 +34,6 @@ const Home = () => {
   const [referralCode, setReferralCode] = useState('');
   const [isreferralOk, setIsReferralOk] = useState(false);
   const [referralDisplay, setReferralDIsplay] = useState('none');
-  const [pack, setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
@@ -828,7 +823,6 @@ const Home = () => {
                   <button
                     onClick={() => {
                       handleStartNowClick(pack);
-                      setPack(pack);
                     }}
                     type='button'
                     className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>
