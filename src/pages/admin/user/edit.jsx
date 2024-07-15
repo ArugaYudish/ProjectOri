@@ -62,7 +62,12 @@ const EditUserForm = () => {
 
       if (response.data && response.data.meta.code === 200) {
         // message.success('User updated successfully');
-        navigate('/asdhakdls/users'); // Redirect to the users management page after success
+        navigate('/asdhakdls/users', {
+          state: {
+            message: response.data.meta.message,
+            alert: "success"
+          }
+        }); // Redirect to the users management page after success
       } else {
         setErrors({ global: 'Failed to update user' });
       }

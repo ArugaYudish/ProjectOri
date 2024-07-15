@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SidebarAdmin from '../../../component/common/admin/Sidebar';
 import '../../../assets/css/user.css';
 import api from '../../../utils/api'; // Pastikan path ini sesuai dengan struktur proyek Anda
-import { message, Modal } from 'antd'; // Menggunakan message dari Ant Design untuk menampilkan notifikasi
+import { Alert, message, Modal } from 'antd'; // Menggunakan message dari Ant Design untuk menampilkan notifikasi
 
 const Content = () => {
   // State untuk menyimpan daftar paket, paket yang dipilih, dan harga baru
@@ -10,6 +10,8 @@ const Content = () => {
   const [selectedPackage, setSelectedPackage] = useState('');
   const [price, setPrice] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [message, SetMessage] = useState(undefined);
+  const [alert, setAlert] = useState(undefined)
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -76,6 +78,8 @@ const Content = () => {
       // Check if response status is not in 2xx range (indicating error)
       if (response.status < 200 || response.status >= 300) {
         // throw new Error(`Failed to update package: ${response.statusText}`);
+        SetMessage(response.data.meta.message)
+        setAlert("error")
       }
 
       // console.log("Package updated successfully:", response.data)
@@ -84,10 +88,14 @@ const Content = () => {
       // message.success('Package updated successfully.');
 
       // You may want to refetch packages after update
+      SetMessage(response.data.meta.message)
+      setAlert("success")
       fetchPackages();
       setSelectedPackage('');
       setPrice('');
     } catch (error) {
+      SetMessage(error.message)
+      setAlert("error")
       // console.error('Failed to update package:', error);
       // message.error('Failed to update package. Please try again later.');
     }
@@ -95,6 +103,21 @@ const Content = () => {
 
   return (
     <>
+      {
+        message && <div style={{ zIndex: 100 }} className='fixed top-0 right-0 left-0 p-4 flex justify-center'>
+          <Alert
+            message={message && message}
+            type={alert && alert}
+            showIcon
+            closable
+            onClose={() => {
+              SetMessage(undefined)
+              setAlert(undefined)
+            }}
+          />
+        </div>
+      }
+
       <Modal
         title='Notifications'
         open={isModalOpen}

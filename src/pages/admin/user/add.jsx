@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarAdmin from '../../../component/common/admin/Sidebar';
-import axios from 'axios'
 import '../../../assets/css/auth.css';
 
 const AddUserForm = () => {
@@ -44,7 +43,7 @@ const AddUserForm = () => {
           setFieldError(data.data[0].Field);
         }
       } else {
-        navigate('/asdhakdls/users')
+        navigate('/asdhakdls/users', { state: { message: data.meta.message, alert: "success" } })
       }
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to create user');
@@ -90,8 +89,8 @@ const AddUserForm = () => {
             />
           </div>
           {error && fieldError === 'Email' ? (
-              <div className='text-red-500 pb-3'>{error}</div>
-            ) : null}
+            <div className='text-red-500 pb-3'>{error}</div>
+          ) : null}
           <div className='pb-2'>
             <label
               htmlFor='password'
@@ -110,8 +109,8 @@ const AddUserForm = () => {
           </div>
           {error !== 'Password and Password Confirm is not same!' &&
             fieldError === 'Password' ? (
-              <div className='text-red-500 pb-3'>{error}</div>
-            ) : null}
+            <div className='text-red-500 pb-3'>{error}</div>
+          ) : null}
           <div className='pb-3'>
             <label
               htmlFor='role'
@@ -130,7 +129,7 @@ const AddUserForm = () => {
           </div>
           <button
             type='submit'
-						className="text-white bg-color-orineko hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center">
+            className="text-white bg-color-orineko hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center">
             Add User
           </button>
         </form>
