@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import SidebarAdmin from '../../../component/common/admin/Sidebar';
 import '../../../assets/css/user.css';
-import { Table, Button, Spin, message, Select, Modal } from 'antd';
+import { Table, Button, Spin, message, Select, Modal, Alert } from 'antd';
 import { AddCircle, Data } from 'iconsax-react';
 import api from '../../../utils/api';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Users = () => {
   const [data, setData] = useState([]);
@@ -17,6 +17,9 @@ const Users = () => {
   const [record, setRecord] = useState(null);
   const [column, setColumn] = useState([]);
   // const [status, setStatus] = useState("Active")
+  const location = useLocation()
+  const message = location.state && location.state.message ? location.state.message : undefined
+  const alert = location.state && location.state.alert ? location.state.alert : undefined
 
   const showModal = record => {
     setRecord(record);
@@ -68,7 +71,13 @@ const Users = () => {
       });
 
       if (response.data && response.data.meta.code === 200) {
-        window.location.reload();
+        navigate("/asdhakdls/users", {
+          state: {
+            message: "Successfully Remove User!",
+            alert: "success"
+          }
+        })
+        window.location.reload()
       } else {
         setError('Failed to update user');
       }
@@ -197,6 +206,16 @@ const Users = () => {
 
   return (
     <>
+      {
+        message && <div style={{ zIndex: 100 }} className='fixed top-0 right-0 left-0 p-4 flex justify-center'>
+          <Alert
+            message={message && message}
+            type={alert && alert}
+            showIcon
+            closable
+          />
+        </div>
+      }
       <Modal
         title='Notifications'
         open={isModalOpen}

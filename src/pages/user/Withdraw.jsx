@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../component/common/Sidebar';
 import '../../assets/css/user.css';
-import { Card, Input, Spin, message, Modal } from 'antd';
+import { Card, Input, Spin, message, Modal, Alert } from 'antd';
 import { Bitcoin, Wallet } from 'iconsax-react';
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,8 @@ const Wallets = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
+  const [message, SetMessage] = useState(undefined);
+  const [alert, setAlert] = useState(undefined)
 
   useEffect(() => {
     const isTransaction = sessionStorage.getItem('isTransaction');
@@ -98,10 +100,16 @@ const Wallets = ({ children }) => {
           sessionStorage.setItem('Balance', newBalance.toString());
           setWalletAddress('');
           setAmount('');
+          SetMessage(response.data.meta.message)
+          setAlert("success")
         } else {
+          SetMessage(response.data.meta.message)
+          setAlert("error")
           // message.error(response.data.meta.reason);
         }
       } catch (error) {
+        SetMessage(error.message)
+        setAlert("error")
         if (error.response && error.response.data && error.response.data.meta) {
           // message.error(error.response.data.meta.reason);
         } else {
@@ -129,6 +137,21 @@ const Wallets = ({ children }) => {
 
   return (
     <>
+      {
+        message && <div style={{ zIndex: 100 }} className='fixed top-0 right-0 left-0 p-4 flex justify-center'>
+          <Alert
+            message={message && message}
+            type={alert && alert}
+            showIcon
+            closable
+            onClose={() => {
+              SetMessage(undefined)
+              setAlert(undefined)
+            }}
+          />
+        </div>
+      }
+
       <Sidebar>
         <div>
           <div className='text-3xl py-2 font-bold border-b '>Withdraw</div>
