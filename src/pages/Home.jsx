@@ -2,25 +2,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/style.css';
 import Layout from '../component/common/Layout';
-import Paw from '../assets/img/Necats.svg';
-import Efficient from '../assets/img/Efficient.svg';
-import Transparent from '../assets/img/Transparent.svg';
-import Optimized from '../assets/img/Optimized.svg';
-import Precision from '../assets/img/Precision.svg';
-import Proven from '../assets/img/Proven.svg';
-import Expertise from '../assets/img/Expertise.svg';
-import nekoMoney from '../assets/img/tryneko.svg';
-import binance from '../assets/img/binance.svg';
-import bybit from '../assets/img/bybit.svg';
-import bitget from '../assets/img/bitget.svg';
-import okx from '../assets/img/okx.svg';
-import mexc from '../assets/img/mexc.svg';
-import coinbase from '../assets/img/coinbase.svg';
-import kucoin from '../assets/img/kucoin.svg';
-import iconPaw from '../assets/img/icon-paw.svg';
-import bgKucing from '../assets/img/Rocket-compressed.svg';
+import Paw from '../assets/img-compressed/Necats.svg';
+import Efficient from '../assets/img-compressed/Efficient.svg';
+import Transparent from '../assets/img-compressed/Transparent.svg';
+import Optimized from '../assets/img-compressed/Optimized.svg';
+import Precision from '../assets/img-compressed/Precision.svg';
+import Proven from '../assets/img-compressed/Proven.svg';
+import Expertise from '../assets/img-compressed/Expertise.svg';
+import nekoMoney from '../assets/img-compressed/tryneko.svg';
+import binance from '../assets/img-compressed/binance.svg';
+import bybit from '../assets/img-compressed/bybit.svg';
+import bitget from '../assets/img-compressed/bitget.svg';
+import okx from '../assets/img-compressed/okx.svg';
+import mexc from '../assets/img-compressed/mexc.svg';
+import coinbase from '../assets/img-compressed/coinbase.svg';
+import kucoin from '../assets/img-compressed/kucoin.svg';
+import iconPaw from '../assets/img-compressed/icon-paw.svg';
+import bgKucing from '../assets/img-compressed/Rocket.svg';
 import RightArrow from '../assets/img/DirectRight-Linear-32px 1.png';
-import PawsiteNew from '../assets/img/PawsiteNew.svg';
+import PawsiteNew from '../assets/img-compressed/PawsiteNew.svg';
 import { Alert, Spin } from 'antd';
 import RightIcon from '../assets/img/RightIcon.png';
 
@@ -862,7 +862,7 @@ const Home = () => {
               <Spin />
               :
               <div className='sm:grid grid-cols-3 gap-12  pb-10'>
-                {packages.map((pack, index) => (
+                {packages.map((pack) => (
                   <div
                     key={pack.id}
                     className='col-span-1 mt-5 mb-5 border card-subs p-6'>
