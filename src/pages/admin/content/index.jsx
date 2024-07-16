@@ -129,12 +129,12 @@ const Content = () => {
 
       <SidebarAdmin>
         <div className='mt-4'>
-          <div className='text-3xl py-2 border-b '>Manajemen Konten</div>
+          <div className='text-3xl py-2 border-b '>Content Management</div>
 
           <div>
             <div className='mt-5'>
               <div>
-                <div className='font-bold py-2'>Ubah Daftar Harga</div>
+                {/* <div className='font-bold py-2'>Ubah Daftar Harga</div> */}
 
                 <form>
                   <div className='py-2'>

@@ -230,7 +230,7 @@ const Users = () => {
           <div className='mt-5'>
             <div className='flex justify-between'>
               <div className='font-bold py-2'>Users</div>
-              <div className='flex justify-between items-center'>
+              <div className='flex gap-5 justify-between items-center'>
                 <Select
                   onChange={e => {
                     handleStatusFilter(e);

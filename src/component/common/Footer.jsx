@@ -1,14 +1,10 @@
 import React from 'react';
 import logo from '../../assets/img/Neko_logo.svg';
-import IconYoutube from '../../assets/img/IconYoutube.svg';
 import IconInstagram from '../../assets/img/IconInstagram.svg';
 import IconTradingView from '../../assets/img/IconTradingView.svg';
 import IconTwitter from '../../assets/img/IconTwitter.svg';
 import IconTelegram from '../../assets/img/IconTelegram.svg';
 
-import { Facebook } from 'iconsax-react';
-import { Youtube } from 'iconsax-react';
-import { Instagram } from 'iconsax-react';
 import '../../assets/css/navbar.css';
 
 const Footer = () => {

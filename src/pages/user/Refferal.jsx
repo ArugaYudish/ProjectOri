@@ -11,14 +11,14 @@ const Refferal = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalReferral, setTotalReferral] = useState(0);
   const apiUrl = process.env.REACT_APP_API_URL;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const isTransaction = sessionStorage.getItem("isTransaction")
+    const isTransaction = sessionStorage.getItem('isTransaction');
     if (isTransaction === 'false') {
-      navigate('*')
+      navigate('*');
     }
-  }, [navigate])
+  }, [navigate]);
 
   useEffect(() => {
     const fetchReferralData = async () => {
@@ -61,7 +61,7 @@ const Refferal = () => {
       // render: date_time => new Date(date_time).toLocaleString(),
     },
     {
-      title: 'Amount Payment',
+      title: 'Total Commission',
       dataIndex: 'amount',
       width: 150,
       render: amount => `$${amount.toFixed(2)}`,

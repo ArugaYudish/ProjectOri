@@ -15,7 +15,6 @@ const Wallets = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [message, SetMessage] = useState(undefined);
   const [alert, setAlert] = useState(undefined)
@@ -187,37 +186,41 @@ const Wallets = ({ children }) => {
                 <div className='inline-flex rounded-md shadow-sm' role='group'>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'BTC'
-                      ? 'bg-color-orineko text-white'
-                      : 'text-gray-'
-                      } border border-gray-400 rounded-s-lg`}
+                    className={`px-4 py-2 text-sm font-medium ${
+                      activeButton === 'BTC'
+                        ? 'bg-color-orineko text-white'
+                        : 'text-gray-'
+                    } border border-gray-400 rounded-s-lg`}
                     onClick={() => handleButtonClick('BTC')}>
                     BTC
                   </button>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'USDT.TRC20'
-                      ? 'bg-color-orineko text-white'
-                      : 'text-gray-'
-                      } border-t border-b border-gray-400`}
+                    className={`px-4 py-2 text-sm font-medium ${
+                      activeButton === 'USDT.TRC20'
+                        ? 'bg-color-orineko text-white'
+                        : 'text-gray-'
+                    } border-t border-b border-gray-400`}
                     onClick={() => handleButtonClick('USDT.TRC20')}>
                     USDT (TRC20)
                   </button>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'LTC'
-                      ? 'bg-color-orineko text-white'
-                      : 'text-gray-'
-                      } border border-gray-400 rounded-e-lg`}
+                    className={`px-4 py-2 text-sm font-medium ${
+                      activeButton === 'LTC'
+                        ? 'bg-color-orineko text-white'
+                        : 'text-gray-'
+                    } border border-gray-400 rounded-e-lg`}
                     onClick={() => handleButtonClick('LTC')}>
                     LTC
                   </button>
                   <button
                     type='button'
-                    className={`px-4 py-2 text-sm font-medium ${activeButton === 'LTCT'
-                      ? 'bg-color-orineko text-white'
-                      : 'text-gray-'
-                      } border border-gray-400 rounded-e-lg`}
+                    className={`px-4 py-2 text-sm font-medium ${
+                      activeButton === 'LTCT'
+                        ? 'bg-color-orineko text-white'
+                        : 'text-gray-'
+                    } border border-gray-400 rounded-e-lg`}
                     onClick={() => handleButtonClick('LTCT')}>
                     LTCT
                   </button>

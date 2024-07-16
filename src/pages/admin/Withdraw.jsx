@@ -210,7 +210,7 @@ const AdminWithdraw = () => {
       title: 'Action',
       dataIndex: 'action',
       render: (text, record) => (
-        <div className='flex gap-2'>
+        <div className='flex justify-center gap-2'>
           <Button
             className='bg-orineko-primary text-white border justify-center flex gap-2 items-center rounded-lg text-sm'
             onClick={() => showModal(record, 1)}>

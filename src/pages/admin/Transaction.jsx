@@ -48,8 +48,7 @@ const Transaction = () => {
         setData(response.data.data.transaction);
       }
     } catch (error) {
-      // console.error('Failed to fetch transactions:', error);
-      // message.error('Failed to fetch transactions');
+      message.error('Failed to fetch transactions');
     } finally {
       setLoading(false);
     }
@@ -67,7 +66,8 @@ const Transaction = () => {
   const handleExport = () => {
     try {
       let filteredData = data.map(item => {
-        let { id, user_id, expired_time, telegram_url, checkout_url, ...rest } = item;
+        let { id, user_id, expired_time, telegram_url, checkout_url, ...rest } =
+          item;
         return rest;
       });
 
@@ -76,8 +76,7 @@ const Transaction = () => {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Transactions');
       XLSX.writeFile(workbook, 'transactions.xlsx');
     } catch (error) {
-      // console.error('Failed to export data:', error);
-      // message.error('Failed to export data');
+      message.error('Failed to export data');
     }
   };
 
