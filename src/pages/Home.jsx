@@ -53,7 +53,6 @@ const Home = () => {
   const [reminder, setReminder] = useState([]);
   const [viewModal, setViewModal] = useState('buy');
   const userId = sessionStorage.getItem('userId');
-  const [isModalReady, setIsModalReady] = useState(false)
 
   useEffect(() => {
     if (role !== null && role === 'admin') {
@@ -80,54 +79,26 @@ const Home = () => {
       default:
         break;
     }
-  }, []);
 
-  useEffect(() => {
-    const fetchPackages = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/v1/packages`);
-        const data = await response.json();
-        // Urutkan paket-paket berdasarkan package_name di sini
-        const sortedPackages = data.data.packages.sort((a, b) => {
-          if (a.package_name < b.package_name) return -1;
-          if (a.package_name > b.package_name) return 1;
-          return 0;
-        });
-        setPackages(sortedPackages);
-        // console.log(data.data);
-      } catch (error) {
-        // console.error('Error fetching packages:', error);
-      }
-    };
-
-    fetchPackages();
-  }, []);
-
-  useEffect(() => {
-    if (accessToken !== null && packages.length !== 0) {
-      fetchCurrencies();
-    }
-  }, [packages])
-
-  useEffect(() => {
-    if (packages.length !== 0) {
+    const fetchData = async () => {
       if (accessToken !== null) {
-        fetchReminder();
-        setIsModalReady(true)
+        await Promise.all([fetchPackages(), fetchCurrencies(), fetchReminder()])
+
         if (packDesc !== null && packId !== null && role === 'user') {
           subscription.current.scrollIntoView();
           handleStartNowClick({ desc_2: packDesc, id: packId });
           localStorage.removeItem('packDesc');
           localStorage.removeItem('packId');
         }
-      }
-
-      if (packDesc !== null && packId !== null) {
+      } else {
         localStorage.removeItem('packDesc');
         localStorage.removeItem('packId');
+        fetchPackages()
       }
     }
-  }, [packages])
+
+    fetchData()
+  }, []);
 
   const handleCloseModal = () => {
     setDisplay('none');
@@ -143,6 +114,23 @@ const Home = () => {
       setViewModal('buy');
     } else {
       setViewModal('reminder');
+    }
+  };
+
+  const fetchPackages = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/api/v1/packages`);
+      const data = await response.json();
+      // Urutkan paket-paket berdasarkan package_name di sini
+      const sortedPackages = data.data.packages.sort((a, b) => {
+        if (a.package_name < b.package_name) return -1;
+        if (a.package_name > b.package_name) return 1;
+        return 0;
+      });
+      setPackages(sortedPackages);
+      // console.log(data.data);
+    } catch (error) {
+      // console.error('Error fetching packages:', error);
     }
   };
 
@@ -401,7 +389,7 @@ const Home = () => {
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
           className='fixed z-50 inset-0 flex justify-center items-center'>
           {
-            isModalReady && currencies.length !== 0 ?
+            currencies.length !== 0 ?
               <>
                 {viewModal === 'buy' ? (
                   <form
