@@ -1,29 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/style.css';
-
 import Layout from '../component/common/Layout';
-import Paw from '../assets/img/Necats.svg';
-import '../assets/css/style.css';
-import Efficient from '../assets/img/Efficient.svg';
-import Transparent from '../assets/img/Transparent.svg';
-import Optimized from '../assets/img/Optimized.svg';
-import Precision from '../assets/img/Precision.svg';
-import Proven from '../assets/img/Proven.svg';
-import Expertise from '../assets/img/Expertise.svg';
-import nekoMoney from '../assets/img/tryneko.svg';
-import binance from '../assets/img/binance.svg';
-import bybit from '../assets/img/bybit.svg';
-import bitget from '../assets/img/bitget.svg';
-import okx from '../assets/img/okx.svg';
-import mexc from '../assets/img/mexc.svg';
-import coinbase from '../assets/img/coinbase.svg';
-import kucoin from '../assets/img/kucoin.svg';
-import iconPaw from '../assets/img/icon-paw.svg';
-import bgKucing from '../assets/img/Rocket.svg';
+import Paw from '../assets/img-compressed/Necats.svg';
+import Efficient from '../assets/img-compressed/Efficient.svg';
+import Transparent from '../assets/img-compressed/Transparent.svg';
+import Optimized from '../assets/img-compressed/Optimized.svg';
+import Precision from '../assets/img-compressed/Precision.svg';
+import Proven from '../assets/img-compressed/Proven.svg';
+import Expertise from '../assets/img-compressed/Expertise.svg';
+import nekoMoney from '../assets/img-compressed/tryneko.svg';
+import binance from '../assets/img-compressed/binance.svg';
+import bybit from '../assets/img-compressed/bybit.svg';
+import bitget from '../assets/img-compressed/bitget.svg';
+import okx from '../assets/img-compressed/okx.svg';
+import mexc from '../assets/img-compressed/mexc.svg';
+import coinbase from '../assets/img-compressed/coinbase.svg';
+import kucoin from '../assets/img-compressed/kucoin.svg';
+import iconPaw from '../assets/img-compressed/icon-paw.svg';
+import bgKucing from '../assets/img-compressed/Rocket.svg';
 import RightArrow from '../assets/img/DirectRight-Linear-32px 1.png';
-import PawsiteNew from '../assets/img/PawsiteNew.svg';
-import { Alert } from 'antd';
+import PawsiteNew from '../assets/img-compressed/PawsiteNew.svg';
+import { Alert, Spin } from 'antd';
 import RightIcon from '../assets/img/RightIcon.png';
 
 const Home = () => {
@@ -35,7 +33,6 @@ const Home = () => {
   const [referralCode, setReferralCode] = useState('');
   const [isreferralOk, setIsReferralOk] = useState(false);
   const [referralDisplay, setReferralDIsplay] = useState('none');
-  const [setPack] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   const accessToken = sessionStorage.getItem('accessToken');
   const [error, setError] = useState('');
@@ -58,44 +55,9 @@ const Home = () => {
   const userId = sessionStorage.getItem('userId');
 
   useEffect(() => {
-    const admin = sessionStorage.getItem('role');
-    if (admin === 'admin') {
+    if (role !== null && role === 'admin') {
       navigate('/asdhakdls/dashboard');
     }
-  }, [navigate]);
-
-  useEffect(() => {
-    const fetchPackages = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/v1/packages`);
-        const data = await response.json();
-        // Urutkan paket-paket berdasarkan package_name di sini
-        const sortedPackages = data.data.packages.sort((a, b) => {
-          if (a.package_name < b.package_name) return -1;
-          if (a.package_name > b.package_name) return 1;
-          return 0;
-        });
-        setPackages(sortedPackages);
-        // console.log(data.data);
-      } catch (error) {
-        // console.error('Error fetching packages:', error);
-      }
-    };
-
-    fetchPackages();
-    if (accessToken !== null) {
-      fetchCurrencies();
-      fetchReminder();
-      if (packDesc !== null && packId !== null && role === 'user') {
-        subscription.current.scrollIntoView();
-        handleStartNowClick({ desc_2: packDesc, id: packId });
-        localStorage.removeItem('packDesc');
-        localStorage.removeItem('packId');
-      }
-    }
-
-    localStorage.removeItem('packDesc');
-    localStorage.removeItem('packId');
 
     const loc = window.location.href.split('/');
     switch (loc[3]) {
@@ -117,6 +79,25 @@ const Home = () => {
       default:
         break;
     }
+
+    const fetchData = async () => {
+      if (accessToken !== null) {
+        await Promise.all([fetchPackages(), fetchCurrencies(), fetchReminder()])
+
+        if (packDesc !== null && packId !== null && role === 'user') {
+          subscription.current.scrollIntoView();
+          handleStartNowClick({ desc_2: packDesc, id: packId });
+          localStorage.removeItem('packDesc');
+          localStorage.removeItem('packId');
+        }
+      } else {
+        localStorage.removeItem('packDesc');
+        localStorage.removeItem('packId');
+        fetchPackages()
+      }
+    }
+
+    fetchData()
   }, []);
 
   const handleCloseModal = () => {
@@ -133,6 +114,23 @@ const Home = () => {
       setViewModal('buy');
     } else {
       setViewModal('reminder');
+    }
+  };
+
+  const fetchPackages = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/api/v1/packages`);
+      const data = await response.json();
+      // Urutkan paket-paket berdasarkan package_name di sini
+      const sortedPackages = data.data.packages.sort((a, b) => {
+        if (a.package_name < b.package_name) return -1;
+        if (a.package_name > b.package_name) return 1;
+        return 0;
+      });
+      setPackages(sortedPackages);
+      // console.log(data.data);
+    } catch (error) {
+      // console.error('Error fetching packages:', error);
     }
   };
 
@@ -157,7 +155,7 @@ const Home = () => {
   };
 
   const fetchReminder = async () => {
-    if (accessToken === null) {
+    if (accessToken === null && userId !== null) {
       sessionStorage.clear();
       navigate('/login');
       return;
@@ -172,12 +170,7 @@ const Home = () => {
     });
 
     if (!response.ok) {
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('role');
-      sessionStorage.removeItem('userName');
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('Ballance');
-      sessionStorage.removeItem('email');
+      sessionStorage.clear()
       navigate('/login');
       return;
     }
@@ -214,12 +207,6 @@ const Home = () => {
   };
 
   const fetchCurrencies = async () => {
-    if (accessToken === null) {
-      sessionStorage.clear();
-      navigate('/login');
-      return;
-    }
-
     try {
       const response = await fetch(`${apiUrl}/api/v1/transactions/rates`, {
         method: 'POST',
@@ -232,12 +219,7 @@ const Home = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        sessionStorage.removeItem('accessToken');
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('userName');
-        sessionStorage.removeItem('userId');
-        sessionStorage.removeItem('Ballance');
-        sessionStorage.removeItem('email');
+        sessionStorage.clear()
         navigate('/login');
         return;
       }
@@ -401,198 +383,209 @@ const Home = () => {
   return (
     <>
       {/* Buy Popup */}
-      <div
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', display: display }}
-        className='fixed z-50 inset-0 flex justify-center items-center'>
-        {viewModal === 'buy' ? (
-          <form
-            onSubmit={e => {
-              handleCreateTransaction(e);
-            }}
-            className='buy-modal m-2 flex flex-col text-lg rounded-sm'
-            style={{ backgroundColor: 'white' }}>
-            <div className='flex justify-between py-5 px-8'>
-              <p className='font-bold text-xl'>Choose Payment</p>
-              <button
-                onClick={() => {
-                  handleCloseModal();
-                }}
-                type='button'
-                style={{ fontSize: '2rem' }}>
-                x
-              </button>
-            </div>
-            <hr />
-            <div className='flex flex-col py-5 px-8 gap-3'>
-              <select
-                onChange={e => {
-                  setCurrency(e.target.value);
-                }}
-                value={currency}
-                style={{
-                  backgroundColor: '#fdf5de',
-                  color: '#d2a41a',
-                  border: '2px solid #d2a41a',
-                  boxShadow: 'none',
-                  cursor: 'pointer',
-                }}
-                className='mt-3 rounded-sm py-3 font-bold text-lg'>
-                <option hidden>Choose Currency</option>
-                {currencies.map((item, index) => (
-                  <option key={index} value={item.code}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-              <div className='border-2 rounded-sm flex justify-between'>
-                <input
-                  value={referralCode}
-                  onChange={e => {
-                    setReferralCode(e.target.value);
-                  }}
-                  style={{ boxShadow: 'none' }}
-                  className='border-0 p-3 w-full text-lg'
-                  type='text'
-                />
-                <button
-                  onClick={() => {
-                    setReferralDIsplay('none');
-                    checkReferral();
-                  }}
-                  type='button'
-                  style={{
-                    borderLeftWidth: '2px',
-                    backgroundColor: '#fdf5de',
-                    color: '#FF8A65',
-                    padding: '12px 7% 12px 7%',
-                  }}
-                  className='font-bold flex gap-1 justify-center items-center'>
-                  Redeem
-                  <img src={RightArrow} alt='>' />
-                </button>
-              </div>
-              {isreferralOk ? (
-                <Alert
-                  message='Referral code found.'
-                  type='success'
-                  style={{ display: referralDisplay }}
-                />
-              ) : (
-                <Alert
-                  message='Referral code not found.'
-                  type='error'
-                  style={{ display: referralDisplay }}
-                />
-              )}
-              <div className='flex flex-col items-end'>
-                <p>
-                  Billed as one payment of :{' '}
-                  <span className='font-bold'>${payment}</span>
-                </p>
-                <p>
-                  Referral Discount ({percentageFee}%) :{' '}
-                  <span className='font-bold'>${discount}</span>
-                </p>
-                <p>
-                  Amount Payment :{' '}
-                  <span className='font-bold'>${totalPayment}</span>
-                </p>
-              </div>
-              {isError ? <Alert message={error} type='error' /> : null}
-            </div>
-            <hr />
-            <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
-              <button
-                onClick={() => {
-                  handleCloseModal();
-                }}
-                type='button'
-                className='border-2 py-2 px-5'>
-                Cancel
-              </button>
-              <button
-                type='submit'
-                className='py-2 px-5 rounded-sm'
-                style={{ backgroundColor: '#d2a41a', color: 'white' }}>
-                Continue Payment
-              </button>
-            </div>
-          </form>
-        ) : (
-          <div
-            className='buy-modal m-2 flex flex-col text-lg rounded-sm'
-            style={{ backgroundColor: 'white' }}>
-            <div className='flex justify-between px-8 py-5'>
-              <p className='font-bold'>You Have a Panding Payment</p>
-              <button
-                onClick={() => {
-                  handleCloseModal();
-                }}>
-                X
-              </button>
-            </div>
-            <hr />
-            <div className='p-8 modal-body'>
-              <p>
-                It looks like you have a remaining payment for your previous
-                purchase.
-              </p>
-              <p className='font-semibold'>Remaining Payment Details:</p>
-              <div
-                className='payment-item'
-                style={{ maxHeight: '200px', overflow: 'auto' }}>
-                {reminder.map((item, key) => (
+      {
+        display !== "none" &&
+        <div
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+          className='fixed z-50 inset-0 flex justify-center items-center'>
+          {
+            currencies.length !== 0 ?
+              <>
+                {viewModal === 'buy' ? (
+                  <form
+                    onSubmit={e => {
+                      handleCreateTransaction(e);
+                    }}
+                    className='buy-modal m-2 flex flex-col text-lg rounded-sm'
+                    style={{ backgroundColor: 'white' }}>
+                    <div className='flex justify-between py-5 px-8'>
+                      <p className='font-bold text-xl'>Choose Payment</p>
+                      <button
+                        onClick={() => {
+                          handleCloseModal();
+                        }}
+                        type='button'
+                        style={{ fontSize: '2rem' }}>
+                        x
+                      </button>
+                    </div>
+                    <hr />
+                    <div className='flex flex-col py-5 px-8 gap-3'>
+                      <select
+                        onChange={e => {
+                          setCurrency(e.target.value);
+                        }}
+                        value={currency}
+                        style={{
+                          backgroundColor: '#fdf5de',
+                          color: '#d2a41a',
+                          border: '2px solid #d2a41a',
+                          boxShadow: 'none',
+                          cursor: 'pointer',
+                        }}
+                        className='mt-3 rounded-sm py-3 font-bold text-lg'>
+                        <option hidden>Choose Currency</option>
+                        {currencies.map((item, index) => (
+                          <option key={index} value={item.code}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                      <div className='border-2 rounded-sm flex justify-between'>
+                        <input
+                          value={referralCode}
+                          onChange={e => {
+                            setReferralCode(e.target.value);
+                          }}
+                          style={{ boxShadow: 'none' }}
+                          className='border-0 p-3 w-full text-lg'
+                          type='text'
+                        />
+                        <button
+                          onClick={() => {
+                            setReferralDIsplay('none');
+                            checkReferral();
+                          }}
+                          type='button'
+                          style={{
+                            borderLeftWidth: '2px',
+                            backgroundColor: '#fdf5de',
+                            color: '#FF8A65',
+                            padding: '12px 7% 12px 7%',
+                          }}
+                          className='font-bold flex gap-1 justify-center items-center'>
+                          Redeem
+                          <img src={RightArrow} alt='>' />
+                        </button>
+                      </div>
+                      {isreferralOk ? (
+                        <Alert
+                          message='Referral code found.'
+                          type='success'
+                          style={{ display: referralDisplay }}
+                        />
+                      ) : (
+                        <Alert
+                          message='Referral code not found.'
+                          type='error'
+                          style={{ display: referralDisplay }}
+                        />
+                      )}
+                      <div className='flex flex-col items-end'>
+                        <p>
+                          Billed as one payment of :{' '}
+                          <span className='font-bold'>${payment}</span>
+                        </p>
+                        <p>
+                          Referral Discount ({percentageFee}%) :{' '}
+                          <span className='font-bold'>${discount}</span>
+                        </p>
+                        <p>
+                          Amount Payment :{' '}
+                          <span className='font-bold'>${totalPayment}</span>
+                        </p>
+                      </div>
+                      {isError ? <Alert message={error} type='error' /> : null}
+                    </div>
+                    <hr />
+                    <div className='flex justify-end py-3 px-5 gap-3 rounded-sm'>
+                      <button
+                        onClick={() => {
+                          handleCloseModal();
+                        }}
+                        type='button'
+                        className='border-2 py-2 px-5'>
+                        Cancel
+                      </button>
+                      <button
+                        type='submit'
+                        className='py-2 px-5 rounded-sm'
+                        style={{ backgroundColor: '#d2a41a', color: 'white' }}>
+                        Continue Payment
+                      </button>
+                    </div>
+                  </form>
+                ) : (
                   <div
-                    style={{ border: '1px solid #E5E5E5' }}
-                    key={key}
-                    className='flex justify-between items-center my-2 py-2 px-5'>
-                    <p>
-                      Amount Due:{' '}
-                      <span className='font-semibold'>
-                        ${item.total_payment} ({item.package_name})
-                      </span>
-                    </p>
-                    <a
-                      className='flex justify-between items-center gap-1'
-                      style={{ color: 'red' }}
-                      href={item.checkout_url}>
-                      Continue Payment{' '}
-                      <img
-                        style={{ width: '14px', height: '10px' }}
-                        src={RightIcon}
-                        alt='->'
-                      />
-                    </a>
+                    className='buy-modal m-2 flex flex-col text-lg rounded-sm'
+                    style={{ backgroundColor: 'white' }}>
+                    <div className='flex justify-between px-8 py-5'>
+                      <p className='font-bold'>You Have a Panding Payment</p>
+                      <button
+                        onClick={() => {
+                          handleCloseModal();
+                        }}>
+                        X
+                      </button>
+                    </div>
+                    <hr />
+                    <div className='p-8 modal-body'>
+                      <p>
+                        It looks like you have a remaining payment for your previous
+                        purchase.
+                      </p>
+                      <p className='font-semibold'>Remaining Payment Details:</p>
+                      <div
+                        className='payment-item'
+                        style={{ maxHeight: '200px', overflow: 'auto' }}>
+                        {reminder.map((item, key) => (
+                          <div
+                            style={{ border: '1px solid #E5E5E5' }}
+                            key={key}
+                            className='flex justify-between items-center my-2 py-2 px-5'>
+                            <p>
+                              Amount Due:{' '}
+                              <span className='font-semibold'>
+                                ${item.total_payment} ({item.package_name})
+                              </span>
+                            </p>
+                            <a
+                              className='flex justify-between items-center gap-1'
+                              style={{ color: 'red' }}
+                              href={item.checkout_url}>
+                              Continue Payment{' '}
+                              <img
+                                style={{ width: '14px', height: '10px' }}
+                                src={RightIcon}
+                                alt='->'
+                              />
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <hr />
+                    <div className='flex justify-end py-3 px-5 gap-3'>
+                      <button
+                        onClick={() => {
+                          handleCloseModal();
+                        }}
+                        style={{ border: '1px solid #D9D9D9', borderRadius: '2px' }}
+                        className='px-5 py-1'>
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          setViewModal('buy');
+                        }}
+                        style={{
+                          backgroundColor: '#CEA017',
+                          color: 'white',
+                          borderRadius: '2px',
+                        }}
+                        className='px-5 py-1'>
+                        Create New Payment
+                      </button>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-            <hr />
-            <div className='flex justify-end py-3 px-5 gap-3'>
-              <button
-                onClick={() => {
-                  handleCloseModal();
-                }}
-                style={{ border: '1px solid #D9D9D9', borderRadius: '2px' }}
-                className='px-5 py-1'>
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  setViewModal('buy');
-                }}
-                style={{
-                  backgroundColor: '#CEA017',
-                  color: 'white',
-                  borderRadius: '2px',
-                }}
-                className='px-5 py-1'>
-                Create New Payment
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+                )
+                }
+              </>
+              :
+              <Spin />
+          }
+        </div>
+      }
 
       <Layout>
         {/* Landing Page */}
@@ -852,52 +845,57 @@ const Home = () => {
             </div>
             <div>analysis. Be the rich one!</div>
           </div>
-          <div className='sm:grid grid-cols-3 gap-12  pb-10'>
-            {packages.map((pack, index) => (
-              <div
-                key={pack.id}
-                className='col-span-1 mt-5 mb-5 border card-subs p-6'>
-                <div className='title-card-subs font-bold pb-2'>
-                  {pack.package_name}
-                </div>
-                <div className='w-full'>
-                  <p className='py-2'>
-                    <span className='font-bold'>$</span>
-                    <span className='text-3xl font-bold'>{pack.price}</span>
-                    <span className=''>month </span>
-                  </p>
-                  <p className='subs-detail'>{pack.desc_1}</p>
-                  <button
-                    onClick={() => {
-                      handleStartNowClick(pack);
-                      setPack(pack);
-                    }}
-                    type='button'
-                    className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>
-                    <span className='flex justify-between'>
-                      Start Now
-                      <svg
-                        className='w-4 h-6 text-blue dark:text-white'
-                        aria-hidden='true'
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 14 10'>
-                        <path
-                          stroke='currentColor'
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth='2'
-                          d='M1 5h12m0 0L9 1m4 4L9 9'
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                  <p className='subs-detail pb-4'>{pack.desc_2}</p>
-                </div>
+          {
+            packages.length === 0 ?
+              <Spin />
+              :
+              <div className='sm:grid grid-cols-3 gap-12  pb-10'>
+                {packages.map((pack) => (
+                  <div
+                    key={pack.id}
+                    className='col-span-1 mt-5 mb-5 border card-subs p-6'>
+                    <div className='title-card-subs font-bold pb-2'>
+                      {pack.package_name}
+                    </div>
+                    <div className='w-full'>
+                      <p className='py-2'>
+                        <span className='font-bold'>$</span>
+                        <span className='text-3xl font-bold'>{pack.price}</span>
+                        <span className=''>month </span>
+                      </p>
+                      <p className='subs-detail'>{pack.desc_1}</p>
+                      <button
+                        onClick={() => {
+                          handleStartNowClick(pack);
+                        }}
+                        type='button'
+                        className='my-4 text-justify btn-card-subs text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 '>
+                        <span className='flex justify-between'>
+                          Start Now
+                          <svg
+                            className='w-4 h-6 text-blue dark:text-white'
+                            aria-hidden='true'
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 14 10'>
+                            <path
+                              stroke='currentColor'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth='2'
+                              d='M1 5h12m0 0L9 1m4 4L9 9'
+                            />
+                          </svg>
+                        </span>
+                      </button>
+                      <p className='subs-detail pb-4'>{pack.desc_2}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+          }
         </div>
+
         {/* Exchange */}
 
         <div className='padding-general mx-auto px-16 sm:px-0'>
@@ -909,9 +907,7 @@ const Home = () => {
           </div>
           <div className='flex justify-between items-center py-5'>
             <div>
-              <a href=''>
-                <img className='set-image-exchange' src={binance} alt='' />
-              </a>
+              <img className='set-image-exchange' src={binance} alt='' />
             </div>
             <div>
               <img className='set-image-exchange' src={bybit} alt='' />
